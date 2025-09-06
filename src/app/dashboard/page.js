@@ -1,132 +1,9 @@
 'use client';
 
-import { useState } from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
+import Sidebar from '../../components/Sidebar';
 
-const Sidebar = ({ activeItem, setActiveItem }) => {
-  const menuItems = [
-    { id: 'dashboard', label: 'Dashboard', href: '/dashboard' },
-    { id: 'reference', label: 'Reference', href: '/reference', hasSubmenu: true },
-  ];
-
-  return (
-    <div style={{
-      width: '280px',
-      backgroundColor: 'white',
-      borderRight: '1px solid #e5e7eb',
-      minHeight: '100vh',
-      position: 'fixed',
-      left: 0,
-      top: 0
-    }}>
-      <div style={{ padding: '2rem' }}>
-        {/* ALAMA Logo */}
-        <div style={{
-          display: 'flex',
-          alignItems: 'center',
-          marginBottom: '3rem'
-        }}>
-          <Image
-            src="/alama_dark_logo_lt_bnjlIcW.png"
-            alt="Alama"
-            width={40}
-            height={40}
-            style={{
-              width: '40px',
-              height: '40px',
-              marginRight: '0.75rem'
-            }}
-          />
-          <span style={{
-            fontSize: '1.5rem',
-            fontWeight: '700',
-            color: '#000000'
-          }}>
-            ALAMA
-          </span>
-        </div>
-
-        <nav style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-          {menuItems.map((item) => (
-            <div key={item.id}>
-              <Link
-                href={item.href}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  padding: '0.75rem 1rem',
-                  borderRadius: '0.5rem',
-                  transition: 'all 0.2s ease-in-out',
-                  textDecoration: 'none',
-                  backgroundColor: activeItem === item.id ? '#eff6ff' : 'transparent',
-                  color: activeItem === item.id ? '#2563eb' : '#374151',
-                  borderLeft: activeItem === item.id ? '4px solid #2563eb' : '4px solid transparent',
-                  fontWeight: '500'
-                }}
-                onClick={() => setActiveItem(item.id)}
-                onMouseOver={(e) => {
-                  if (activeItem !== item.id) {
-                    e.target.style.backgroundColor = '#f9fafb';
-                  }
-                }}
-                onMouseOut={(e) => {
-                  if (activeItem !== item.id) {
-                    e.target.style.backgroundColor = 'transparent';
-                  }
-                }}
-              >
-                <span>{item.label}</span>
-                {item.hasSubmenu && (
-                  <svg
-                    style={{ width: '1rem', height: '1rem' }}
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M9 5l7 7-7 7"
-                    />
-                  </svg>
-                )}
-              </Link>
-              {item.hasSubmenu && activeItem === item.id && (
-                <div style={{ marginLeft: '1rem', marginTop: '0.5rem' }}>
-                  <Link
-                    href="/reference/countries"
-                    style={{
-                      display: 'block',
-                      padding: '0.5rem 1rem',
-                      fontSize: '0.875rem',
-                      color: '#6b7280',
-                      textDecoration: 'none',
-                      borderRadius: '0.25rem',
-                      transition: 'all 0.2s ease-in-out'
-                    }}
-                    onMouseOver={(e) => {
-                      e.target.style.color = '#2563eb';
-                      e.target.style.backgroundColor = '#eff6ff';
-                    }}
-                    onMouseOut={(e) => {
-                      e.target.style.color = '#6b7280';
-                      e.target.style.backgroundColor = 'transparent';
-                    }}
-                  >
-                    Countries
-                  </Link>
-                </div>
-              )}
-            </div>
-          ))}
-        </nav>
-      </div>
-    </div>
-  );
-};
 
 const DashboardCard = ({ title, description, href, icon }) => (
   <Link href={href} style={{ textDecoration: 'none' }}>
@@ -178,11 +55,18 @@ const DashboardCard = ({ title, description, href, icon }) => (
 
 export default function Dashboard() {
   const [activeItem, setActiveItem] = useState('dashboard');
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  // Animation trigger
+  React.useEffect(() => {
+    const timer = setTimeout(() => setIsLoaded(true), 100);
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
     <div style={{
       minHeight: '100vh',
-      backgroundColor: '#f9fafb'
+      background: 'linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%)'
     }}>
       <Sidebar activeItem={activeItem} setActiveItem={setActiveItem} />
       
@@ -191,97 +75,180 @@ export default function Dashboard() {
         padding: '2rem'
       }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-          <div style={{ marginBottom: '2rem' }}>
+
+          {/* Dashboard Overview */}
+          <div style={{
+            marginBottom: '2rem'
+          }}>
             <h1 style={{
               fontSize: '2rem',
-              fontWeight: '700',
-              color: '#000000',
-              margin: '0 0 0.5rem 0'
-            }}>Dashboard</h1>
-            <p style={{
-              color: '#6b7280',
-              margin: 0
-            }}>Welcome to your admin dashboard</p>
-          </div>
-
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-            gap: '1.5rem'
-          }}>
-            <DashboardCard
-              title="Countries"
-              description="Manage country references and details"
-              href="/reference/countries"
-              icon={
-                <svg style={{ width: '1.5rem', height: '1.5rem', color: '#2563eb' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-              }
-            />
-            
-            <DashboardCard
-              title="Institutions"
-              description="Manage institutional data and mappings"
-              href="/reference/institutions"
-              icon={
-                <svg style={{ width: '1.5rem', height: '1.5rem', color: '#2563eb' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-                </svg>
-              }
-            />
-
-            <DashboardCard
-              title="Resources"
-              description="Manage resources and observations"
-              href="/reference/resources"
-              icon={
-                <svg style={{ width: '1.5rem', height: '1.5rem', color: '#2563eb' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                </svg>
-              }
-            />
-          </div>
-
-          <div style={{
-            marginTop: '3rem',
-            backgroundColor: 'white',
-            borderRadius: '0.5rem',
-            border: '1px solid #e5e7eb',
-            padding: '1.5rem'
-          }}>
-            <h2 style={{
-              fontSize: '1.25rem',
               fontWeight: '600',
-              color: '#000000',
-              margin: '0 0 1rem 0'
-            }}>Recent Activity</h2>
-            <div>
+              color: '#1f2937',
+              margin: '0 0 0.5rem 0'
+            }}>Dashboard Overview</h1>
+          </div>
+
+          {/* Manage Countries Button */}
+          <div style={{
+            display: 'flex',
+            justifyContent: 'center',
+            marginBottom: '2rem'
+          }}>
+            <Link
+              href="/reference/countries"
+              style={{
+                textDecoration: 'none'
+              }}
+            >
               <div style={{
+                background: 'linear-gradient(135deg, #4f46e5 0%, #3b82f6 100%)',
+                padding: '2rem 3rem',
+                borderRadius: '1.5rem',
+                color: 'white',
+                cursor: 'pointer',
+                transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                boxShadow: '0 10px 30px -10px rgba(79, 70, 229, 0.4)',
                 display: 'flex',
                 alignItems: 'center',
-                gap: '0.75rem',
-                padding: '0.75rem',
-                backgroundColor: '#f9fafb',
-                borderRadius: '0.25rem'
-              }}>
-                <div style={{
-                  width: '0.5rem',
-                  height: '0.5rem',
-                  backgroundColor: '#2563eb',
-                  borderRadius: '50%'
-                }}></div>
-                <span style={{ color: '#374151' }}>System initialized successfully</span>
-                <span style={{
-                  fontSize: '0.875rem',
-                  color: '#6b7280',
-                  marginLeft: 'auto'
-                }}>Just now</span>
+                gap: '1rem',
+                transform: isLoaded ? 'translateY(0)' : 'translateY(30px)',
+                opacity: isLoaded ? 1 : 0,
+                position: 'relative',
+                overflow: 'hidden'
+              }}
+              onMouseOver={(e) => {
+                e.currentTarget.style.transform = 'translateY(-5px) scale(1.02)';
+                e.currentTarget.style.boxShadow = '0 20px 40px -10px rgba(79, 70, 229, 0.6)';
+              }}
+              onMouseOut={(e) => {
+                e.currentTarget.style.transform = 'translateY(0) scale(1)';
+                e.currentTarget.style.boxShadow = '0 10px 30px -10px rgba(79, 70, 229, 0.4)';
+              }}
+              >
+                <div>
+                  <h2 style={{
+                    fontSize: '1.5rem',
+                    fontWeight: '700',
+                    margin: '0 0 0.25rem 0'
+                  }}>Manage Countries</h2>
+                  <p style={{
+                    margin: 0,
+                    opacity: 0.9,
+                    fontSize: '1rem'
+                  }}>Create, edit, view and delete countries</p>
+                </div>
               </div>
+            </Link>
+          </div>
+
+          {/* Recent Activity - Enhanced */}
+          <div style={{
+            background: 'rgba(255, 255, 255, 0.95)',
+            backdropFilter: 'blur(20px)',
+            borderRadius: '2rem',
+            border: '1px solid rgba(255, 255, 255, 0.2)',
+            padding: '2rem',
+            boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.1)',
+            transform: isLoaded ? 'translateY(0)' : 'translateY(50px)',
+            opacity: isLoaded ? 1 : 0,
+            transition: 'all 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.6s'
+          }}>
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '1rem',
+              marginBottom: '1.5rem'
+            }}>
+              <h2 style={{
+                fontSize: '1.5rem',
+                fontWeight: '700',
+                background: 'linear-gradient(135deg, #1f2937 0%, #4f46e5 100%)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                margin: 0,
+                letterSpacing: '-0.01em'
+              }}>Recent Activity</h2>
+            </div>
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '1rem',
+              padding: '1.25rem',
+              background: 'linear-gradient(135deg, rgba(79, 70, 229, 0.05) 0%, rgba(59, 130, 246, 0.05) 100%)',
+              borderRadius: '1rem',
+              border: '1px solid rgba(79, 70, 229, 0.1)',
+              position: 'relative',
+              overflow: 'hidden'
+            }}>
+              <div style={{
+                position: 'absolute',
+                left: 0,
+                top: 0,
+                bottom: 0,
+                width: '4px',
+                background: 'linear-gradient(135deg, #4f46e5 0%, #3b82f6 100%)'
+              }}></div>
+              <div style={{
+                width: '12px',
+                height: '12px',
+                background: 'linear-gradient(135deg, #4f46e5 0%, #3b82f6 100%)',
+                borderRadius: '50%',
+                boxShadow: '0 0 10px rgba(79, 70, 229, 0.5)',
+                animation: 'pulse 2s infinite'
+              }}></div>
+              <div style={{ flex: 1 }}>
+                <span style={{
+                  color: '#1f2937',
+                  fontWeight: '600',
+                  fontSize: '1rem'
+                }}>System initialized successfully</span>
+                <div style={{
+                  color: '#6b7280',
+                  fontSize: '0.875rem',
+                  marginTop: '0.25rem'
+                }}>Welcome to ALAMA Dashboard - Ready to manage country data</div>
+              </div>
+              <span style={{
+                fontSize: '0.875rem',
+                color: '#6b7280',
+                fontWeight: '500',
+                background: 'rgba(255, 255, 255, 0.8)',
+                padding: '0.25rem 0.75rem',
+                borderRadius: '1rem'
+              }}>Just now</span>
             </div>
           </div>
         </div>
       </div>
+      
+      {/* CSS Animations */}
+      <style jsx>{`
+        @keyframes float {
+          0%, 100% { transform: translateY(0px) rotate(0deg); }
+          50% { transform: translateY(-20px) rotate(180deg); }
+        }
+        
+        @keyframes pulse {
+          0%, 100% { opacity: 1; }
+          50% { opacity: 0.5; }
+        }
+        
+        @keyframes slideInUp {
+          from {
+            transform: translateY(30px);
+            opacity: 0;
+          }
+          to {
+            transform: translateY(0);
+            opacity: 1;
+          }
+        }
+        
+        @keyframes shimmer {
+          0% { background-position: -200% 0; }
+          100% { background-position: 200% 0; }
+        }
+      `}</style>
     </div>
   );
 }

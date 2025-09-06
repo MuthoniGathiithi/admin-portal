@@ -2,15 +2,16 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
+import Sidebar from '../../../components/Sidebar';
 
 export default function CreateCountryPage() {
   const [formData, setFormData] = useState({
     name: '',
-    code: '',
-    currency: '',
-    regions: '',
-    flagColors: '#000000,#FF0000,#FFFFFF'
+    flagsvg: '',
+    continent: '',
+    telcode: '',
+    centerLat: '',
+    centerLongitude: ''
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -41,135 +42,61 @@ export default function CreateCountryPage() {
   return (
     <div style={{
       minHeight: '100vh',
-      backgroundColor: '#f9fafb'
+      backgroundColor: '#f8fafc'
     }}>
-      {/* Sidebar */}
-      <div style={{
-        width: '280px',
-        backgroundColor: 'white',
-        borderRight: '1px solid #e5e7eb',
-        minHeight: '100vh',
-        position: 'fixed',
-        left: 0,
-        top: 0,
-        display: 'flex',
-        flexDirection: 'column'
-      }}>
-        <div style={{ padding: '2rem' }}>
-          {/* ALAMA Logo */}
-          <Link href="/dashboard" style={{ textDecoration: 'none' }}>
-            <div style={{
-              display: 'flex',
-              alignItems: 'center',
-              marginBottom: '3rem'
-            }}>
-              <Image
-                src="/alama_dark_logo_lt_bnjlIcW.png"
-                alt="Alama"
-                width={40}
-                height={40}
-                style={{
-                  width: '40px',
-                  height: '40px',
-                  marginRight: '0.75rem'
-                }}
-              />
-              <span style={{
-                fontSize: '1.5rem',
-                fontWeight: '700',
-                color: '#000000'
-              }}>
-                ALAMA
-              </span>
-            </div>
-          </Link>
-
-          {/* Navigation */}
-          <div style={{ marginBottom: '2rem' }}>
-            <h3 style={{
-              fontSize: '0.875rem',
-              fontWeight: '600',
-              color: '#6b7280',
-              textTransform: 'uppercase',
-              letterSpacing: '0.05em',
-              margin: '0 0 1rem 0'
-            }}>
-              Create Country
-            </h3>
-            <div style={{
-              padding: '0.75rem 1rem',
-              backgroundColor: '#eff6ff',
-              borderRadius: '0.5rem',
-              borderLeft: '4px solid #2563eb'
-            }}>
-              <span style={{
-                color: '#2563eb',
-                fontWeight: '500'
-              }}>
-                New Country Form
-              </span>
-            </div>
-          </div>
-
-          {/* Back to Countries */}
-          <div style={{ marginTop: 'auto', paddingTop: '2rem' }}>
-            <Link
-              href="/reference/countries"
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                color: '#6b7280',
-                textDecoration: 'none',
-                fontSize: '0.875rem',
-                transition: 'color 0.2s ease-in-out'
-              }}
-              onMouseOver={(e) => e.target.style.color = '#2563eb'}
-              onMouseOut={(e) => e.target.style.color = '#6b7280'}
-            >
-              <svg style={{ width: '1rem', height: '1rem', marginRight: '0.5rem' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-              </svg>
-              Back to Countries
-            </Link>
-          </div>
-        </div>
-      </div>
-
-      {/* Main Content */}
+      <Sidebar activeItem="countries" />
+      
       <div style={{
         marginLeft: '280px',
         padding: '2rem'
       }}>
         <div style={{ maxWidth: '800px', margin: '0 auto' }}>
+          {/* Back Button */}
+          <Link
+            href="/reference/countries"
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '0.5rem',
+              color: '#4f46e5',
+              textDecoration: 'none',
+              fontSize: '0.875rem',
+              fontWeight: '600',
+              marginBottom: '2rem',
+              padding: '0.5rem 1rem',
+              borderRadius: '0.5rem',
+              border: '1px solid #e5e7eb',
+              backgroundColor: 'white'
+            }}
+          >
+            ← Back to Countries
+          </Link>
+
           {/* Header */}
           <div style={{ marginBottom: '2rem' }}>
             <h1 style={{
               fontSize: '2rem',
               fontWeight: '700',
               color: '#1f2937',
-              margin: '0 0 0.5rem 0'
-            }}>
-              Create New Country
-            </h1>
-            <p style={{
-              color: '#6b7280',
               margin: 0
             }}>
-              Add a new country to the reference system with institutional data
-            </p>
+              Add New Country
+            </h1>
           </div>
 
-          {/* Form Card */}
+          {/* Form */}
           <div style={{
             backgroundColor: 'white',
             borderRadius: '1rem',
+            padding: '2.5rem',
             border: '1px solid #e5e7eb',
-            padding: '2rem'
+            boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1)'
           }}>
             <form onSubmit={handleSubmit}>
-              <div style={{
-                display: 'grid',
-                gap: '1.5rem'
+              <div style={{ 
+                display: 'grid', 
+                gridTemplateColumns: 'repeat(2, 1fr)',
+                gap: '2rem'
               }}>
                 {/* Country Name */}
                 <div>
@@ -188,28 +115,22 @@ export default function CreateCountryPage() {
                     value={formData.name}
                     onChange={handleInputChange}
                     required
-                    placeholder="Enter country name"
                     style={{
                       width: '100%',
-                      padding: '0.75rem 1rem',
-                      border: '1px solid #d1d5db',
+                      padding: '0.875rem',
+                      border: '2px solid #e5e7eb',
                       borderRadius: '0.5rem',
                       fontSize: '0.875rem',
-                      transition: 'all 0.2s ease-in-out',
-                      outline: 'none'
+                      outline: 'none',
+                      transition: 'border-color 0.2s'
                     }}
-                    onFocus={(e) => {
-                      e.target.style.borderColor = '#2563eb';
-                      e.target.style.boxShadow = '0 0 0 3px rgba(37, 99, 235, 0.1)';
-                    }}
-                    onBlur={(e) => {
-                      e.target.style.borderColor = '#d1d5db';
-                      e.target.style.boxShadow = 'none';
-                    }}
+                    placeholder="Enter country name"
+                    onFocus={(e) => e.target.style.borderColor = '#4f46e5'}
+                    onBlur={(e) => e.target.style.borderColor = '#e5e7eb'}
                   />
                 </div>
 
-                {/* Country Code */}
+                {/* Flag SVG */}
                 <div>
                   <label style={{
                     display: 'block',
@@ -218,38 +139,30 @@ export default function CreateCountryPage() {
                     color: '#374151',
                     marginBottom: '0.5rem'
                   }}>
-                    Country Code *
+                    Flag SVG *
                   </label>
                   <input
                     type="text"
-                    name="code"
-                    value={formData.code}
+                    name="flagsvg"
+                    value={formData.flagsvg}
                     onChange={handleInputChange}
                     required
-                    placeholder="e.g., MW, KE, UG"
-                    maxLength={3}
                     style={{
                       width: '100%',
-                      padding: '0.75rem 1rem',
-                      border: '1px solid #d1d5db',
+                      padding: '0.875rem',
+                      border: '2px solid #e5e7eb',
                       borderRadius: '0.5rem',
                       fontSize: '0.875rem',
-                      transition: 'all 0.2s ease-in-out',
                       outline: 'none',
-                      textTransform: 'uppercase'
+                      transition: 'border-color 0.2s'
                     }}
-                    onFocus={(e) => {
-                      e.target.style.borderColor = '#2563eb';
-                      e.target.style.boxShadow = '0 0 0 3px rgba(37, 99, 235, 0.1)';
-                    }}
-                    onBlur={(e) => {
-                      e.target.style.borderColor = '#d1d5db';
-                      e.target.style.boxShadow = 'none';
-                    }}
+                    placeholder="SVG code or URL"
+                    onFocus={(e) => e.target.style.borderColor = '#4f46e5'}
+                    onBlur={(e) => e.target.style.borderColor = '#e5e7eb'}
                   />
                 </div>
 
-                {/* Currency */}
+                {/* Continent */}
                 <div>
                   <label style={{
                     display: 'block',
@@ -258,73 +171,70 @@ export default function CreateCountryPage() {
                     color: '#374151',
                     marginBottom: '0.5rem'
                   }}>
-                    Currency
+                    Continent *
+                  </label>
+                  <select
+                    name="continent"
+                    value={formData.continent}
+                    onChange={handleInputChange}
+                    required
+                    style={{
+                      width: '100%',
+                      padding: '0.875rem',
+                      border: '2px solid #e5e7eb',
+                      borderRadius: '0.5rem',
+                      fontSize: '0.875rem',
+                      outline: 'none',
+                      transition: 'border-color 0.2s',
+                      backgroundColor: 'white'
+                    }}
+                    onFocus={(e) => e.target.style.borderColor = '#4f46e5'}
+                    onBlur={(e) => e.target.style.borderColor = '#e5e7eb'}
+                  >
+                    <option value="">Select continent</option>
+                    <option value="Africa">Africa</option>
+                    <option value="Asia">Asia</option>
+                    <option value="Europe">Europe</option>
+                    <option value="North America">North America</option>
+                    <option value="South America">South America</option>
+                    <option value="Oceania">Oceania</option>
+                    <option value="Antarctica">Antarctica</option>
+                  </select>
+                </div>
+
+                {/* Tel Code */}
+                <div>
+                  <label style={{
+                    display: 'block',
+                    fontSize: '0.875rem',
+                    fontWeight: '600',
+                    color: '#374151',
+                    marginBottom: '0.5rem'
+                  }}>
+                    Tel Code *
                   </label>
                   <input
                     type="text"
-                    name="currency"
-                    value={formData.currency}
+                    name="telcode"
+                    value={formData.telcode}
                     onChange={handleInputChange}
-                    placeholder="e.g., MWK, KES, UGX"
+                    required
                     style={{
                       width: '100%',
-                      padding: '0.75rem 1rem',
-                      border: '1px solid #d1d5db',
+                      padding: '0.875rem',
+                      border: '2px solid #e5e7eb',
                       borderRadius: '0.5rem',
                       fontSize: '0.875rem',
-                      transition: 'all 0.2s ease-in-out',
-                      outline: 'none'
-                    }}
-                    onFocus={(e) => {
-                      e.target.style.borderColor = '#2563eb';
-                      e.target.style.boxShadow = '0 0 0 3px rgba(37, 99, 235, 0.1)';
-                    }}
-                    onBlur={(e) => {
-                      e.target.style.borderColor = '#d1d5db';
-                      e.target.style.boxShadow = 'none';
-                    }}
-                  />
-                </div>
-
-                {/* Regions */}
-                <div>
-                  <label style={{
-                    display: 'block',
-                    fontSize: '0.875rem',
-                    fontWeight: '600',
-                    color: '#374151',
-                    marginBottom: '0.5rem'
-                  }}>
-                    Regions
-                  </label>
-                  <textarea
-                    name="regions"
-                    value={formData.regions}
-                    onChange={handleInputChange}
-                    placeholder="Enter regions separated by commas (e.g., Northern, Central, Southern)"
-                    rows={3}
-                    style={{
-                      width: '100%',
-                      padding: '0.75rem 1rem',
-                      border: '1px solid #d1d5db',
-                      borderRadius: '0.5rem',
-                      fontSize: '0.875rem',
-                      transition: 'all 0.2s ease-in-out',
                       outline: 'none',
-                      resize: 'vertical'
+                      transition: 'border-color 0.2s'
                     }}
-                    onFocus={(e) => {
-                      e.target.style.borderColor = '#2563eb';
-                      e.target.style.boxShadow = '0 0 0 3px rgba(37, 99, 235, 0.1)';
-                    }}
-                    onBlur={(e) => {
-                      e.target.style.borderColor = '#d1d5db';
-                      e.target.style.boxShadow = 'none';
-                    }}
+                    placeholder="e.g., +265, +254"
+                    onFocus={(e) => e.target.style.borderColor = '#4f46e5'}
+                    onBlur={(e) => e.target.style.borderColor = '#e5e7eb'}
                   />
                 </div>
 
-                {/* Flag Colors */}
+                {/* Center Latitude */}
                 <div>
                   <label style={{
                     display: 'block',
@@ -333,122 +243,114 @@ export default function CreateCountryPage() {
                     color: '#374151',
                     marginBottom: '0.5rem'
                   }}>
-                    Flag Colors
+                    Center Latitude *
                   </label>
                   <input
-                    type="text"
-                    name="flagColors"
-                    value={formData.flagColors}
+                    type="number"
+                    name="centerLat"
+                    value={formData.centerLat}
                     onChange={handleInputChange}
-                    placeholder="Enter hex colors separated by commas (e.g., #000000,#FF0000,#FFFFFF)"
+                    required
+                    step="any"
                     style={{
                       width: '100%',
-                      padding: '0.75rem 1rem',
-                      border: '1px solid #d1d5db',
+                      padding: '0.875rem',
+                      border: '2px solid #e5e7eb',
                       borderRadius: '0.5rem',
                       fontSize: '0.875rem',
-                      transition: 'all 0.2s ease-in-out',
-                      outline: 'none'
+                      outline: 'none',
+                      transition: 'border-color 0.2s'
                     }}
-                    onFocus={(e) => {
-                      e.target.style.borderColor = '#2563eb';
-                      e.target.style.boxShadow = '0 0 0 3px rgba(37, 99, 235, 0.1)';
-                    }}
-                    onBlur={(e) => {
-                      e.target.style.borderColor = '#d1d5db';
-                      e.target.style.boxShadow = 'none';
-                    }}
+                    placeholder="e.g., -13.254308"
+                    onFocus={(e) => e.target.style.borderColor = '#4f46e5'}
+                    onBlur={(e) => e.target.style.borderColor = '#e5e7eb'}
                   />
-                  <p style={{
-                    fontSize: '0.75rem',
-                    color: '#6b7280',
-                    margin: '0.5rem 0 0 0'
+                </div>
+
+                {/* Center Longitude */}
+                <div>
+                  <label style={{
+                    display: 'block',
+                    fontSize: '0.875rem',
+                    fontWeight: '600',
+                    color: '#374151',
+                    marginBottom: '0.5rem'
                   }}>
-                    Preview colors will appear here once you enter valid hex codes
-                  </p>
+                    Center Longitude *
+                  </label>
+                  <input
+                    type="number"
+                    name="centerLongitude"
+                    value={formData.centerLongitude}
+                    onChange={handleInputChange}
+                    required
+                    step="any"
+                    style={{
+                      width: '100%',
+                      padding: '0.875rem',
+                      border: '2px solid #e5e7eb',
+                      borderRadius: '0.5rem',
+                      fontSize: '0.875rem',
+                      outline: 'none',
+                      transition: 'border-color 0.2s'
+                    }}
+                    placeholder="e.g., 34.301525"
+                    onFocus={(e) => e.target.style.borderColor = '#4f46e5'}
+                    onBlur={(e) => e.target.style.borderColor = '#e5e7eb'}
+                  />
                 </div>
               </div>
 
-              {/* Form Actions */}
+              {/* Submit Buttons */}
               <div style={{
                 display: 'flex',
                 justifyContent: 'flex-end',
                 gap: '1rem',
-                marginTop: '2rem',
+                marginTop: '3rem',
                 paddingTop: '2rem',
                 borderTop: '1px solid #e5e7eb'
               }}>
-                <button
-                  type="button"
-                  onClick={handleCancel}
+                <Link
+                  href="/reference/countries"
                   style={{
-                    padding: '0.75rem 1.5rem',
-                    border: '1px solid #d1d5db',
+                    padding: '0.875rem 2rem',
+                    border: '2px solid #e5e7eb',
                     borderRadius: '0.5rem',
-                    backgroundColor: 'white',
+                    textDecoration: 'none',
                     color: '#374151',
                     fontSize: '0.875rem',
                     fontWeight: '600',
-                    cursor: 'pointer',
-                    transition: 'all 0.2s ease-in-out'
-                  }}
-                  onMouseOver={(e) => e.target.style.backgroundColor = '#f9fafb'}
-                  onMouseOut={(e) => e.target.style.backgroundColor = 'white'}
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  disabled={isSubmitting || !formData.name || !formData.code}
-                  style={{
-                    padding: '0.75rem 1.5rem',
-                    border: 'none',
-                    borderRadius: '0.5rem',
-                    backgroundColor: isSubmitting || !formData.name || !formData.code ? '#9ca3af' : '#2563eb',
-                    color: 'white',
-                    fontSize: '0.875rem',
-                    fontWeight: '600',
-                    cursor: isSubmitting || !formData.name || !formData.code ? 'not-allowed' : 'pointer',
-                    transition: 'all 0.2s ease-in-out',
-                    display: 'flex',
-                    alignItems: 'center'
+                    backgroundColor: 'white',
+                    transition: 'all 0.2s'
                   }}
                   onMouseOver={(e) => {
-                    if (!isSubmitting && formData.name && formData.code) {
-                      e.target.style.backgroundColor = '#1d4ed8';
-                    }
+                    e.target.style.borderColor = '#d1d5db';
+                    e.target.style.backgroundColor = '#f9fafb';
                   }}
                   onMouseOut={(e) => {
-                    if (!isSubmitting && formData.name && formData.code) {
-                      e.target.style.backgroundColor = '#2563eb';
-                    }
+                    e.target.style.borderColor = '#e5e7eb';
+                    e.target.style.backgroundColor = 'white';
                   }}
                 >
-                  {isSubmitting ? (
-                    <>
-                      <svg style={{
-                        width: '1rem',
-                        height: '1rem',
-                        marginRight: '0.5rem',
-                        animation: 'spin 1s linear infinite'
-                      }} fill="none" viewBox="0 0 24 24">
-                        <circle style={{ opacity: 0.25 }} cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                        <path style={{ opacity: 0.75 }} fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                      </svg>
-                      Creating...
-                    </>
-                  ) : (
-                    <>
-                      <svg style={{
-                        width: '1rem',
-                        height: '1rem',
-                        marginRight: '0.5rem'
-                      }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                      </svg>
-                      Create Country
-                    </>
-                  )}
+                  Cancel
+                </Link>
+                <button
+                  type="submit"
+                  style={{
+                    padding: '0.875rem 2rem',
+                    backgroundColor: '#4f46e5',
+                    color: 'white',
+                    border: 'none',
+                    borderRadius: '0.5rem',
+                    fontSize: '0.875rem',
+                    fontWeight: '600',
+                    cursor: 'pointer',
+                    transition: 'background-color 0.2s'
+                  }}
+                  onMouseOver={(e) => e.target.style.backgroundColor = '#4338ca'}
+                  onMouseOut={(e) => e.target.style.backgroundColor = '#4f46e5'}
+                >
+                  Add Country
                 </button>
               </div>
             </form>

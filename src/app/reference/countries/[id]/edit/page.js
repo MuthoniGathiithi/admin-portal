@@ -3,75 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import Link from 'next/link';
-
-const ColorPicker = ({ colors, onChange, label }) => {
-  const [isOpen, setIsOpen] = useState(false);
-  const predefinedColors = [
-    '#FF0000', '#00FF00', '#0000FF', '#FFFF00', '#FF00FF', '#00FFFF',
-    '#000000', '#FFFFFF', '#800000', '#008000', '#000080', '#808000',
-    '#800080', '#008080', '#C0C0C0', '#808080', '#FFA500', '#A52A2A',
-    '#DDA0DD', '#98FB98', '#F0E68C', '#DEB887', '#5F9EA0', '#FF1493'
-  ];
-
-  const addColor = (color) => {
-    if (!colors.includes(color)) {
-      onChange([...colors, color]);
-    }
-    setIsOpen(false);
-  };
-
-  const removeColor = (index) => {
-    const newColors = colors.filter((_, i) => i !== index);
-    onChange(newColors);
-  };
-
-  return (
-    <div>
-      <label className="block text-sm font-medium text-black mb-2">{label}</label>
-      <div className="space-y-3">
-        <div className="flex flex-wrap gap-2">
-          {colors.map((color, index) => (
-            <div key={index} className="relative group">
-              <div
-                className="w-10 h-10 rounded border-2 border-gray-300 cursor-pointer"
-                style={{ backgroundColor: color }}
-              />
-              <button
-                onClick={() => removeColor(index)}
-                className="absolute -top-2 -right-2 w-5 h-5 bg-red-500 text-white rounded-full text-xs opacity-0 group-hover:opacity-100 transition-opacity"
-              >
-                ×
-              </button>
-            </div>
-          ))}
-          <button
-            onClick={() => setIsOpen(!isOpen)}
-            className="w-10 h-10 border-2 border-dashed border-gray-400 rounded flex items-center justify-center text-gray-400 hover:border-blue-500 hover:text-blue-500 transition-colors"
-          >
-            +
-          </button>
-        </div>
-
-        {isOpen && (
-          <div className="p-4 border border-gray-200 rounded-lg bg-white">
-            <h4 className="text-sm font-medium text-black mb-3">Select Color</h4>
-            <div className="grid grid-cols-8 gap-2">
-              {predefinedColors.map((color) => (
-                <button
-                  key={color}
-                  onClick={() => addColor(color)}
-                  className="w-8 h-8 rounded border border-gray-300 hover:scale-110 transition-transform"
-                  style={{ backgroundColor: color }}
-                  title={color}
-                />
-              ))}
-            </div>
-          </div>
-        )}
-      </div>
-    </div>
-  );
-};
+import Sidebar from '../../../../components/Sidebar';
 
 export default function EditCountryPage() {
   const router = useRouter();
@@ -80,52 +12,44 @@ export default function EditCountryPage() {
 
   const [formData, setFormData] = useState({
     name: '',
-    code: '',
-    currency: '',
-    flagSvg: '',
-    latitude: '',
-    longitude: '',
-    flagColors: []
+    flagsvg: '',
+    continent: '',
+    telcode: '',
+    centerLat: '',
+    centerLongitude: ''
   });
-
-  const [institutions, setInstitutions] = useState([]);
-  const [newInstitution, setNewInstitution] = useState('');
 
   useEffect(() => {
     // Mock data loading based on country ID
     const mockData = {
       malawi: {
         name: 'Malawi',
-        code: 'MW',
-        currency: 'MWK',
-        flagSvg: '<svg>...</svg>',
-        latitude: '-13.2543',
-        longitude: '34.3015',
-        flagColors: ['#000000', '#FF0000', '#00FF00']
+        flagsvg: '<svg>...</svg>',
+        continent: 'Africa',
+        telcode: '+265',
+        centerLat: '-13.254308',
+        centerLongitude: '34.301525'
       },
       kenya: {
         name: 'Kenya',
-        code: 'KE',
-        currency: 'KES',
-        flagSvg: '<svg>...</svg>',
-        latitude: '-0.0236',
-        longitude: '37.9062',
-        flagColors: ['#000000', '#FF0000', '#FFFFFF', '#00FF00']
+        flagsvg: '<svg>...</svg>',
+        continent: 'Africa',
+        telcode: '+254',
+        centerLat: '-0.023559',
+        centerLongitude: '37.906193'
       }
     };
 
     const data = mockData[countryId] || {
       name: '',
-      code: '',
-      currency: '',
-      flagSvg: '',
-      latitude: '',
-      longitude: '',
-      flagColors: []
+      flagsvg: '',
+      continent: '',
+      telcode: '',
+      centerLat: '',
+      centerLongitude: ''
     };
 
     setFormData(data);
-    setInstitutions(['University of Malawi', 'Mzuzu University']); // Mock institutions
   }, [countryId]);
 
   const handleInputChange = (e) => {
@@ -135,229 +59,328 @@ export default function EditCountryPage() {
     });
   };
 
-  const handleFlagColorsChange = (colors) => {
-    setFormData({
-      ...formData,
-      flagColors: colors
-    });
-  };
-
-  const addInstitution = () => {
-    if (newInstitution.trim()) {
-      setInstitutions([...institutions, newInstitution.trim()]);
-      setNewInstitution('');
-    }
-  };
-
-  const removeInstitution = (index) => {
-    setInstitutions(institutions.filter((_, i) => i !== index));
-  };
-
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Here you would typically save the data
-    console.log('Saving country data:', { ...formData, institutions });
+    console.log('Saving country data:', formData);
     router.push('/reference/countries');
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <div className="bg-white border-b border-gray-200 px-8 py-4">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-4">
-            <Link
-              href="/reference/countries"
-              className="flex items-center space-x-2 text-gray-600 hover:text-blue-600 transition-colors"
-            >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-              </svg>
-              <span>Back to Countries</span>
-            </Link>
-            <div className="text-gray-400">|</div>
-            <h1 className="text-2xl font-bold text-black">Edit Country</h1>
-          </div>
-        </div>
-      </div>
+    <div style={{
+      minHeight: '100vh',
+      backgroundColor: '#f8fafc'
+    }}>
+      <Sidebar activeItem="countries" />
+      
+      <div style={{
+        marginLeft: '280px',
+        padding: '2rem'
+      }}>
+        <div style={{ maxWidth: '800px', margin: '0 auto' }}>
+          {/* Back Button */}
+          <Link
+            href="/reference/countries"
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '0.5rem',
+              color: '#4f46e5',
+              textDecoration: 'none',
+              fontSize: '0.875rem',
+              fontWeight: '600',
+              marginBottom: '2rem',
+              padding: '0.5rem 1rem',
+              borderRadius: '0.5rem',
+              border: '1px solid #e5e7eb',
+              backgroundColor: 'white'
+            }}
+          >
+            ← Back to Countries
+          </Link>
 
-      <div className="p-8">
-        <div className="max-w-4xl mx-auto">
-          <form onSubmit={handleSubmit} className="space-y-8">
-            {/* Basic Information */}
-            <div className="bg-white p-6 rounded-lg border border-gray-200">
-              <h2 className="text-xl font-semibold text-black mb-6">Basic Information</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* Header */}
+          <div style={{ marginBottom: '2rem' }}>
+            <h1 style={{
+              fontSize: '2rem',
+              fontWeight: '700',
+              color: '#1f2937',
+              margin: 0
+            }}>
+              Edit Country
+            </h1>
+          </div>
+
+          {/* Form */}
+          <div style={{
+            backgroundColor: 'white',
+            borderRadius: '1rem',
+            padding: '2.5rem',
+            border: '1px solid #e5e7eb',
+            boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1)'
+          }}>
+            <form onSubmit={handleSubmit}>
+              <div style={{ 
+                display: 'grid', 
+                gridTemplateColumns: 'repeat(2, 1fr)',
+                gap: '2rem'
+              }}>
+                {/* Country Name */}
                 <div>
-                  <label htmlFor="name" className="block text-sm font-medium text-black mb-2">
-                    Country Name
+                  <label style={{
+                    display: 'block',
+                    fontSize: '0.875rem',
+                    fontWeight: '600',
+                    color: '#374151',
+                    marginBottom: '0.5rem'
+                  }}>
+                    Country Name *
                   </label>
                   <input
                     type="text"
-                    id="name"
                     name="name"
                     value={formData.name}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    required
+                    style={{
+                      width: '100%',
+                      padding: '0.875rem',
+                      border: '2px solid #e5e7eb',
+                      borderRadius: '0.5rem',
+                      fontSize: '0.875rem',
+                      outline: 'none',
+                      transition: 'border-color 0.2s'
+                    }}
                     placeholder="Enter country name"
+                    onFocus={(e) => e.target.style.borderColor = '#4f46e5'}
+                    onBlur={(e) => e.target.style.borderColor = '#e5e7eb'}
+                  />
+                </div>
+
+                {/* Flag SVG */}
+                <div>
+                  <label style={{
+                    display: 'block',
+                    fontSize: '0.875rem',
+                    fontWeight: '600',
+                    color: '#374151',
+                    marginBottom: '0.5rem'
+                  }}>
+                    Flag SVG *
+                  </label>
+                  <input
+                    type="text"
+                    name="flagsvg"
+                    value={formData.flagsvg}
+                    onChange={handleInputChange}
                     required
-                  />
-                </div>
-
-                <div>
-                  <label htmlFor="code" className="block text-sm font-medium text-black mb-2">
-                    Country Code
-                  </label>
-                  <input
-                    type="text"
-                    id="code"
-                    name="code"
-                    value={formData.code}
-                    onChange={handleInputChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    placeholder="e.g., MW"
-                    maxLength="3"
-                    required
-                  />
-                </div>
-
-                <div>
-                  <label htmlFor="currency" className="block text-sm font-medium text-black mb-2">
-                    Currency
-                  </label>
-                  <input
-                    type="text"
-                    id="currency"
-                    name="currency"
-                    value={formData.currency}
-                    onChange={handleInputChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    placeholder="e.g., MWK"
-                  />
-                </div>
-
-                <div>
-                  <label htmlFor="flagSvg" className="block text-sm font-medium text-black mb-2">
-                    Flag SVG
-                  </label>
-                  <input
-                    type="text"
-                    id="flagSvg"
-                    name="flagSvg"
-                    value={formData.flagSvg}
-                    onChange={handleInputChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    style={{
+                      width: '100%',
+                      padding: '0.875rem',
+                      border: '2px solid #e5e7eb',
+                      borderRadius: '0.5rem',
+                      fontSize: '0.875rem',
+                      outline: 'none',
+                      transition: 'border-color 0.2s'
+                    }}
                     placeholder="SVG code or URL"
+                    onFocus={(e) => e.target.style.borderColor = '#4f46e5'}
+                    onBlur={(e) => e.target.style.borderColor = '#e5e7eb'}
                   />
                 </div>
-              </div>
-            </div>
 
-            {/* Coordinates */}
-            <div className="bg-white p-6 rounded-lg border border-gray-200">
-              <h2 className="text-xl font-semibold text-black mb-6">Coordinates</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* Continent */}
                 <div>
-                  <label htmlFor="latitude" className="block text-sm font-medium text-black mb-2">
-                    Latitude
+                  <label style={{
+                    display: 'block',
+                    fontSize: '0.875rem',
+                    fontWeight: '600',
+                    color: '#374151',
+                    marginBottom: '0.5rem'
+                  }}>
+                    Continent *
                   </label>
-                  <input
-                    type="number"
-                    step="any"
-                    id="latitude"
-                    name="latitude"
-                    value={formData.latitude}
+                  <select
+                    name="continent"
+                    value={formData.continent}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    placeholder="e.g., -13.2543"
-                  />
+                    required
+                    style={{
+                      width: '100%',
+                      padding: '0.875rem',
+                      border: '2px solid #e5e7eb',
+                      borderRadius: '0.5rem',
+                      fontSize: '0.875rem',
+                      outline: 'none',
+                      transition: 'border-color 0.2s',
+                      backgroundColor: 'white'
+                    }}
+                    onFocus={(e) => e.target.style.borderColor = '#4f46e5'}
+                    onBlur={(e) => e.target.style.borderColor = '#e5e7eb'}
+                  >
+                    <option value="">Select continent</option>
+                    <option value="Africa">Africa</option>
+                    <option value="Asia">Asia</option>
+                    <option value="Europe">Europe</option>
+                    <option value="North America">North America</option>
+                    <option value="South America">South America</option>
+                    <option value="Oceania">Oceania</option>
+                    <option value="Antarctica">Antarctica</option>
+                  </select>
                 </div>
 
+                {/* Tel Code */}
                 <div>
-                  <label htmlFor="longitude" className="block text-sm font-medium text-black mb-2">
-                    Longitude
+                  <label style={{
+                    display: 'block',
+                    fontSize: '0.875rem',
+                    fontWeight: '600',
+                    color: '#374151',
+                    marginBottom: '0.5rem'
+                  }}>
+                    Tel Code *
                   </label>
-                  <input
-                    type="number"
-                    step="any"
-                    id="longitude"
-                    name="longitude"
-                    value={formData.longitude}
-                    onChange={handleInputChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    placeholder="e.g., 34.3015"
-                  />
-                </div>
-              </div>
-            </div>
-
-            {/* Flag Colors */}
-            <div className="bg-white p-6 rounded-lg border border-gray-200">
-              <h2 className="text-xl font-semibold text-black mb-6">Flag Colors</h2>
-              <ColorPicker
-                colors={formData.flagColors}
-                onChange={handleFlagColorsChange}
-                label="Select flag colors"
-              />
-            </div>
-
-            {/* Institutions */}
-            <div className="bg-white p-6 rounded-lg border border-gray-200">
-              <h2 className="text-xl font-semibold text-black mb-6">Institutions</h2>
-              
-              <div className="mb-4">
-                <div className="flex space-x-2">
                   <input
                     type="text"
-                    value={newInstitution}
-                    onChange={(e) => setNewInstitution(e.target.value)}
-                    className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    placeholder="Add new institution"
+                    name="telcode"
+                    value={formData.telcode}
+                    onChange={handleInputChange}
+                    required
+                    style={{
+                      width: '100%',
+                      padding: '0.875rem',
+                      border: '2px solid #e5e7eb',
+                      borderRadius: '0.5rem',
+                      fontSize: '0.875rem',
+                      outline: 'none',
+                      transition: 'border-color 0.2s'
+                    }}
+                    placeholder="e.g., +265, +254"
+                    onFocus={(e) => e.target.style.borderColor = '#4f46e5'}
+                    onBlur={(e) => e.target.style.borderColor = '#e5e7eb'}
                   />
-                  <button
-                    type="button"
-                    onClick={addInstitution}
-                    className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors"
-                  >
-                    Add
-                  </button>
+                </div>
+
+                {/* Center Latitude */}
+                <div>
+                  <label style={{
+                    display: 'block',
+                    fontSize: '0.875rem',
+                    fontWeight: '600',
+                    color: '#374151',
+                    marginBottom: '0.5rem'
+                  }}>
+                    Center Latitude *
+                  </label>
+                  <input
+                    type="number"
+                    name="centerLat"
+                    value={formData.centerLat}
+                    onChange={handleInputChange}
+                    required
+                    step="any"
+                    style={{
+                      width: '100%',
+                      padding: '0.875rem',
+                      border: '2px solid #e5e7eb',
+                      borderRadius: '0.5rem',
+                      fontSize: '0.875rem',
+                      outline: 'none',
+                      transition: 'border-color 0.2s'
+                    }}
+                    placeholder="e.g., -13.254308"
+                    onFocus={(e) => e.target.style.borderColor = '#4f46e5'}
+                    onBlur={(e) => e.target.style.borderColor = '#e5e7eb'}
+                  />
+                </div>
+
+                {/* Center Longitude */}
+                <div>
+                  <label style={{
+                    display: 'block',
+                    fontSize: '0.875rem',
+                    fontWeight: '600',
+                    color: '#374151',
+                    marginBottom: '0.5rem'
+                  }}>
+                    Center Longitude *
+                  </label>
+                  <input
+                    type="number"
+                    name="centerLongitude"
+                    value={formData.centerLongitude}
+                    onChange={handleInputChange}
+                    required
+                    step="any"
+                    style={{
+                      width: '100%',
+                      padding: '0.875rem',
+                      border: '2px solid #e5e7eb',
+                      borderRadius: '0.5rem',
+                      fontSize: '0.875rem',
+                      outline: 'none',
+                      transition: 'border-color 0.2s'
+                    }}
+                    placeholder="e.g., 34.301525"
+                    onFocus={(e) => e.target.style.borderColor = '#4f46e5'}
+                    onBlur={(e) => e.target.style.borderColor = '#e5e7eb'}
+                  />
                 </div>
               </div>
 
-              <div className="space-y-2">
-                {institutions.map((institution, index) => (
-                  <div key={index} className="flex items-center justify-between p-3 bg-gray-50 rounded border-l-4 border-blue-600">
-                    <span className="text-black">{institution}</span>
-                    <button
-                      type="button"
-                      onClick={() => removeInstitution(index)}
-                      className="text-red-600 hover:text-red-700 transition-colors"
-                    >
-                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                      </svg>
-                    </button>
-                  </div>
-                ))}
+              {/* Submit Buttons */}
+              <div style={{
+                display: 'flex',
+                justifyContent: 'flex-end',
+                gap: '1rem',
+                marginTop: '3rem',
+                paddingTop: '2rem',
+                borderTop: '1px solid #e5e7eb'
+              }}>
+                <Link
+                  href="/reference/countries"
+                  style={{
+                    padding: '0.875rem 2rem',
+                    border: '2px solid #e5e7eb',
+                    borderRadius: '0.5rem',
+                    textDecoration: 'none',
+                    color: '#374151',
+                    fontSize: '0.875rem',
+                    fontWeight: '600',
+                    backgroundColor: 'white',
+                    transition: 'all 0.2s'
+                  }}
+                  onMouseOver={(e) => {
+                    e.target.style.borderColor = '#d1d5db';
+                    e.target.style.backgroundColor = '#f9fafb';
+                  }}
+                  onMouseOut={(e) => {
+                    e.target.style.borderColor = '#e5e7eb';
+                    e.target.style.backgroundColor = 'white';
+                  }}
+                >
+                  Cancel
+                </Link>
+                <button
+                  type="submit"
+                  style={{
+                    padding: '0.875rem 2rem',
+                    backgroundColor: '#4f46e5',
+                    color: 'white',
+                    border: 'none',
+                    borderRadius: '0.5rem',
+                    fontSize: '0.875rem',
+                    fontWeight: '600',
+                    cursor: 'pointer',
+                    transition: 'background-color 0.2s'
+                  }}
+                  onMouseOver={(e) => e.target.style.backgroundColor = '#4338ca'}
+                  onMouseOut={(e) => e.target.style.backgroundColor = '#4f46e5'}
+                >
+                  Save Changes
+                </button>
               </div>
-            </div>
-
-            {/* Action Buttons */}
-            <div className="flex justify-end space-x-4">
-              <Link
-                href="/reference/countries"
-                className="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
-              >
-                Cancel
-              </Link>
-              <button
-                type="submit"
-                className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors"
-              >
-                Save Changes
-              </button>
-            </div>
-          </form>
+            </form>
+          </div>
         </div>
       </div>
     </div>

@@ -2,9 +2,9 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
+import Sidebar from '../../../components/Sidebar';
 
-const Sidebar = ({ countries, activeCountry, setActiveCountry }) => {
+const CountriesSidebar = ({ countries, activeCountry, setActiveCountry }) => {
   return (
     <div style={{
       width: '280px',
@@ -139,7 +139,7 @@ const Sidebar = ({ countries, activeCountry, setActiveCountry }) => {
                   fontSize: '0.875rem',
                   margin: 0
                 }}>
-                  No countries added yet
+                  Create a country to get started
                 </p>
               </div>
             )}
@@ -200,14 +200,14 @@ const EmptyState = ({ onCreateCountry }) => {
           color: '#1f2937',
           marginBottom: '0.5rem'
         }}>
-          No Countries Added Yet
+          Create a Country
         </h2>
         <p style={{
           color: '#6b7280',
           marginBottom: '2rem',
           lineHeight: '1.5'
         }}>
-          Get started by adding your first country to the reference system. You can manage country details, institutions, and regional information.
+          Get started by creating your first country. You can manage country details, institutions, and regional information.
         </p>
         <button
           onClick={onCreateCountry}
@@ -405,11 +405,7 @@ export default function CountriesPage() {
       minHeight: '100vh',
       backgroundColor: '#f9fafb'
     }}>
-      <Sidebar 
-        countries={countries} 
-        activeCountry={activeCountry} 
-        setActiveCountry={setActiveCountry} 
-      />
+      <Sidebar activeItem="countries" />
       
       <div style={{
         marginLeft: '280px',
