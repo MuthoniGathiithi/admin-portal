@@ -242,15 +242,16 @@ export default function LoginPage() {
         {/* Right Side - Logo Section */}
         <div style={{
           flex: isMobile ? 'none' : 1,
-          display: isMobile ? 'none' : 'flex',
+          display: 'flex',
           backgroundColor: 'white',
           flexDirection: 'column',
           alignItems: 'center',
           justifyContent: 'center',
           textAlign: 'center',
-          padding: '3rem',
-          borderTopRightRadius: '2rem',
-          borderBottomRightRadius: '2rem'
+          padding: isMobile ? '2rem 1.5rem' : '3rem',
+          borderTopRightRadius: isMobile ? '0' : '2rem',
+          borderBottomRightRadius: isMobile ? '1rem' : '2rem',
+          borderBottomLeftRadius: isMobile ? '1rem' : '0'
         }}>
           {/* Logo and ALAMA text */}
           <div style={{
@@ -266,14 +267,14 @@ export default function LoginPage() {
               height={450}
               style={{
                 width: '100%',
-                maxWidth: '400px',
+                maxWidth: isMobile ? '200px' : '400px',
                 height: 'auto',
                 marginBottom: '1rem'
               }}
               priority
             />
             <h2 style={{
-              fontSize: '3rem',
+              fontSize: isMobile ? '2rem' : '3rem',
               fontWeight: '800',
               color: '#000000',
               margin: '0 0 0.5rem 0',
@@ -292,7 +293,7 @@ export default function LoginPage() {
             marginTop: '0.5rem'
           }}>
             <p style={{
-              fontSize: '1.5rem',
+              fontSize: isMobile ? '1rem' : '1.5rem',
               fontWeight: '700',
               color: '#3b82f6',
               margin: 0,
