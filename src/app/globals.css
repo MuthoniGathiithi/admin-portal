@@ -54,3 +54,47 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/* Mobile-first responsive utilities */
+@media (max-width: 768px) {
+  .mobile-hidden {
+    display: none !important;
+  }
+  
+  .mobile-full-width {
+    width: 100% !important;
+  }
+  
+  .mobile-padding {
+    padding: 1rem !important;
+  }
+  
+  .mobile-text-sm {
+    font-size: 0.875rem !important;
+  }
+  
+  .mobile-margin-reduced {
+    margin: 0.5rem !important;
+  }
+}
+
+/* Responsive layout adjustments */
+.main-content {
+  margin-left: 280px;
+  transition: margin-left 0.3s ease-in-out;
+}
+
+@media (max-width: 768px) {
+  .main-content {
+    margin-left: 0;
+    padding-top: 4rem;
+  }
+}
+
+/* Touch-friendly buttons */
+@media (max-width: 768px) {
+  button, .button {
+    min-height: 44px;
+    min-width: 44px;
+  }
+}

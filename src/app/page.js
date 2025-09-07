@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 
@@ -9,7 +9,19 @@ export default function LoginPage() {
     email: '',
     password: ''
   });
+  const [isMobile, setIsMobile] = useState(false);
   const router = useRouter();
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   const handleInputChange = (e) => {
     setFormData({
@@ -43,7 +55,7 @@ export default function LoginPage() {
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      padding: '2rem',
+      padding: isMobile ? '1rem' : '2rem',
       fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
       position: 'relative',
       overflow: 'hidden'
@@ -52,10 +64,11 @@ export default function LoginPage() {
       {/* Unified Elevated Card Container */}
       <div style={{
         display: 'flex',
+        flexDirection: isMobile ? 'column' : 'row',
         width: '100%',
         maxWidth: '1400px',
-        minHeight: '600px',
-        borderRadius: '2rem',
+        minHeight: isMobile ? 'auto' : '600px',
+        borderRadius: isMobile ? '1rem' : '2rem',
         background: 'white',
         boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(0, 0, 0, 0.05)',
         border: '1px solid rgba(0, 0, 0, 0.05)',
@@ -70,17 +83,18 @@ export default function LoginPage() {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          padding: '3rem',
-          borderTopLeftRadius: '2rem',
-          borderBottomLeftRadius: '2rem'
+          padding: isMobile ? '2rem 1.5rem' : '3rem',
+          borderTopLeftRadius: isMobile ? '1rem' : '2rem',
+          borderBottomLeftRadius: isMobile ? '0' : '2rem',
+          borderTopRightRadius: isMobile ? '1rem' : '0'
         }}>
           <div style={{
             width: '100%',
             maxWidth: '400px'
           }}>
-            <div style={{ marginBottom: '3rem', textAlign: 'center' }}>
+            <div style={{ marginBottom: isMobile ? '2rem' : '3rem', textAlign: 'center' }}>
               <h1 style={{
-                fontSize: '2.5rem',
+                fontSize: isMobile ? '1.875rem' : '2.5rem',
                 fontWeight: '700',
                 color: 'white',
                 marginBottom: '0.5rem',
@@ -227,9 +241,9 @@ export default function LoginPage() {
 
         {/* Right Side - Logo Section */}
         <div style={{
-          flex: 1,
+          flex: isMobile ? 'none' : 1,
+          display: isMobile ? 'none' : 'flex',
           backgroundColor: 'white',
-          display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
           justifyContent: 'center',

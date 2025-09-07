@@ -57,13 +57,26 @@ export default function Dashboard() {
   const [activeItem, setActiveItem] = useState('dashboard');
   const [isLoaded, setIsLoaded] = useState(false);
   const [countries, setCountries] = useState([]);
+  const [isMobile, setIsMobile] = useState(false);
 
   // Load countries and animation trigger
   useEffect(() => {
     const savedCountries = JSON.parse(localStorage.getItem('countries') || '[]');
     setCountries(savedCountries);
     const timer = setTimeout(() => setIsLoaded(true), 100);
-    return () => clearTimeout(timer);
+    
+    // Check if mobile
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener('resize', checkMobile);
+    };
   }, []);
 
   return (
@@ -73,9 +86,10 @@ export default function Dashboard() {
     }}>
       <Sidebar activeItem={activeItem} setActiveItem={setActiveItem} />
       
-      <div style={{
-        marginLeft: '280px',
-        padding: '2rem'
+      <div className="main-content" style={{
+        marginLeft: isMobile ? '0' : '280px',
+        padding: isMobile ? '1rem' : '2rem',
+        paddingTop: isMobile ? '5rem' : '2rem'
       }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
 
@@ -84,12 +98,12 @@ export default function Dashboard() {
             marginBottom: '2rem'
           }}>
             <h1 style={{
-              fontSize: '2rem',
+              fontSize: isMobile ? '1.5rem' : '2rem',
               fontWeight: '700',
               color: '#1f2937',
               marginBottom: '0.5rem',
               letterSpacing: '-0.025em',
-              marginLeft: '-0.5rem'
+              marginLeft: isMobile ? '0' : '-0.5rem'
             }}>
               Dashboard
             </h1>
@@ -98,9 +112,9 @@ export default function Dashboard() {
           {/* Statistics Cards */}
           <div style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-            gap: '1.5rem',
-            marginBottom: '2rem'
+            gridTemplateColumns: isMobile ? '1fr' : 'repeat(auto-fit, minmax(280px, 1fr))',
+            gap: isMobile ? '1rem' : '1.5rem',
+            marginBottom: isMobile ? '1.5rem' : '2rem'
           }}>
             <div style={{
               background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
@@ -219,7 +233,7 @@ export default function Dashboard() {
             }}>
               Quick Actions
             </h3>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1rem' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1rem' }}>
               <Link
                 href="/reference/countries/create"
                 style={{

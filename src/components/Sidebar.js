@@ -5,11 +5,23 @@ import Link from 'next/link';
 
 const Sidebar = ({ activeItem, setActiveItem }) => {
   const [userEmail, setUserEmail] = useState('');
+  const [isMobile, setIsMobile] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   useEffect(() => {
     // Get user email from localStorage
     const email = localStorage.getItem('userEmail') || 'admin@example.com';
     setUserEmail(email);
+    
+    // Check if mobile
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    
+    return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
   const menuItems = [
@@ -42,18 +54,65 @@ const Sidebar = ({ activeItem, setActiveItem }) => {
   };
 
   return (
-    <div style={{
-      position: 'fixed',
-      left: 0,
-      top: 0,
-      height: '100vh',
-      width: '280px',
-      background: 'linear-gradient(180deg, #667eea 0%, #764ba2 100%)',
-      display: 'flex',
-      flexDirection: 'column',
-      zIndex: 1000,
-      boxShadow: '4px 0 20px rgba(0, 0, 0, 0.1)'
-    }}>
+    <>
+      {/* Mobile Menu Button */}
+      {isMobile && (
+        <button
+          onClick={() => setIsMenuOpen(!isMenuOpen)}
+          style={{
+            position: 'fixed',
+            top: '1rem',
+            left: '1rem',
+            zIndex: 1001,
+            backgroundColor: '#4f46e5',
+            color: 'white',
+            border: 'none',
+            borderRadius: '0.5rem',
+            padding: '0.75rem',
+            cursor: 'pointer',
+            boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
+          }}
+        >
+          <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            {isMenuOpen ? (
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            ) : (
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+            )}
+          </svg>
+        </button>
+      )}
+      
+      {/* Overlay for mobile */}
+      {isMobile && isMenuOpen && (
+        <div
+          onClick={() => setIsMenuOpen(false)}
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: 'rgba(0, 0, 0, 0.5)',
+            zIndex: 999
+          }}
+        />
+      )}
+      
+      {/* Sidebar */}
+      <div style={{
+        position: 'fixed',
+        left: isMobile ? (isMenuOpen ? '0' : '-280px') : '0',
+        top: 0,
+        height: '100vh',
+        width: '280px',
+        background: 'linear-gradient(180deg, #667eea 0%, #764ba2 100%)',
+        display: 'flex',
+        flexDirection: 'column',
+        zIndex: 1000,
+        boxShadow: '4px 0 20px rgba(0, 0, 0, 0.1)',
+        transition: 'left 0.3s ease-in-out'
+      }}>
       {/* Logo/Header */}
       <div style={{
         padding: '2rem 1.5rem',
@@ -262,6 +321,7 @@ const Sidebar = ({ activeItem, setActiveItem }) => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 
