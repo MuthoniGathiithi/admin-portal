@@ -21,8 +21,18 @@ export default function LoginPage() {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (formData.email && formData.password) {
-      // Force navigation to dashboard
-      window.location.href = '/dashboard';
+      try {
+        // Save user email to localStorage for profile display
+        localStorage.setItem('userEmail', formData.email);
+        // Use Next.js router for navigation instead of window.location
+        router.push('/dashboard');
+      } catch (error) {
+        console.error('Login error:', error);
+        // Fallback to window.location if router fails
+        window.location.href = '/dashboard';
+      }
+    } else {
+      alert('Please enter both email and password');
     }
   };
 

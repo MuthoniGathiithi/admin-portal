@@ -1,176 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Sidebar from '../../../components/Sidebar';
-
-const CountriesSidebar = ({ countries, activeCountry, setActiveCountry }) => {
-  return (
-    <div style={{
-      width: '280px',
-      backgroundColor: 'white',
-      borderRight: '1px solid #e5e7eb',
-      minHeight: '100vh',
-      position: 'fixed',
-      left: 0,
-      top: 0,
-      display: 'flex',
-      flexDirection: 'column'
-    }}>
-      <div style={{ padding: '2rem' }}>
-        {/* ALAMA Logo */}
-        <Link href="/dashboard" style={{ textDecoration: 'none' }}>
-          <div style={{
-            display: 'flex',
-            alignItems: 'center',
-            marginBottom: '3rem'
-          }}>
-            <Image
-              src="/alama_dark_logo_lt_bnjlIcW.png"
-              alt="Alama"
-              width={40}
-              height={40}
-              style={{
-                width: '40px',
-                height: '40px',
-                marginRight: '0.75rem'
-              }}
-            />
-            <span style={{
-              fontSize: '1.5rem',
-              fontWeight: '700',
-              color: '#000000'
-            }}>
-              ALAMA
-            </span>
-          </div>
-        </Link>
-
-        {/* Countries Section */}
-        <div style={{ marginBottom: '2rem' }}>
-          <div style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            marginBottom: '1rem'
-          }}>
-            <h3 style={{
-              fontSize: '0.875rem',
-              fontWeight: '600',
-              color: '#6b7280',
-              textTransform: 'uppercase',
-              letterSpacing: '0.05em',
-              margin: 0
-            }}>
-              Countries
-            </h3>
-            <span style={{
-              fontSize: '0.75rem',
-              color: '#9ca3af',
-              backgroundColor: '#f3f4f6',
-              padding: '0.25rem 0.5rem',
-              borderRadius: '0.375rem'
-            }}>
-              {countries.length}
-            </span>
-          </div>
-
-          {/* Countries List */}
-          <div style={{ maxHeight: '400px', overflowY: 'auto' }}>
-            {countries.length > 0 ? (
-              countries.map((country) => (
-                <button
-                  key={country.id}
-                  onClick={() => setActiveCountry(country)}
-                  style={{
-                    width: '100%',
-                    textAlign: 'left',
-                    padding: '0.75rem 1rem',
-                    borderRadius: '0.5rem',
-                    transition: 'all 0.2s ease-in-out',
-                    border: 'none',
-                    backgroundColor: activeCountry?.id === country.id ? '#eff6ff' : 'transparent',
-                    color: activeCountry?.id === country.id ? '#2563eb' : '#374151',
-                    borderLeft: activeCountry?.id === country.id ? '4px solid #2563eb' : '4px solid transparent',
-                    marginBottom: '0.25rem',
-                    cursor: 'pointer'
-                  }}
-                  onMouseOver={(e) => {
-                    if (activeCountry?.id !== country.id) {
-                      e.target.style.backgroundColor = '#f9fafb';
-                    }
-                  }}
-                  onMouseOut={(e) => {
-                    if (activeCountry?.id !== country.id) {
-                      e.target.style.backgroundColor = 'transparent';
-                    }
-                  }}
-                >
-                  <div style={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center'
-                  }}>
-                    <span style={{ fontWeight: '500' }}>{country.name}</span>
-                    <span style={{
-                      fontSize: '0.75rem',
-                      color: '#9ca3af'
-                    }}>
-                      {country.code}
-                    </span>
-                  </div>
-                </button>
-              ))
-            ) : (
-              <div style={{
-                textAlign: 'center',
-                padding: '2rem 1rem',
-                color: '#9ca3af'
-              }}>
-                <svg style={{
-                  width: '3rem',
-                  height: '3rem',
-                  margin: '0 auto 1rem',
-                  color: '#d1d5db'
-                }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                <p style={{
-                  fontSize: '0.875rem',
-                  margin: 0
-                }}>
-                  Create a country to get started
-                </p>
-              </div>
-            )}
-          </div>
-        </div>
-
-        {/* Back to Dashboard */}
-        <div style={{ marginTop: 'auto', paddingTop: '2rem' }}>
-          <Link
-            href="/dashboard"
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              color: '#6b7280',
-              textDecoration: 'none',
-              fontSize: '0.875rem',
-              transition: 'color 0.2s ease-in-out'
-            }}
-            onMouseOver={(e) => e.target.style.color = '#2563eb'}
-            onMouseOut={(e) => e.target.style.color = '#6b7280'}
-          >
-            <svg style={{ width: '1rem', height: '1rem', marginRight: '0.5rem' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-            </svg>
-            Back to Dashboard
-          </Link>
-        </div>
-      </div>
-    </div>
-  );
-};
 
 const EmptyState = ({ onCreateCountry }) => {
   return (
@@ -183,50 +15,56 @@ const EmptyState = ({ onCreateCountry }) => {
       borderRadius: '1rem',
       border: '1px solid #e5e7eb'
     }}>
-      <div style={{ textAlign: 'center', maxWidth: '400px', padding: '2rem' }}>
-        <div style={{ marginBottom: '2rem' }}>
-          <svg style={{
-            width: '5rem',
-            height: '5rem',
-            margin: '0 auto',
-            color: '#d1d5db'
-          }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-          </svg>
-        </div>
-        <h2 style={{
-          fontSize: '1.5rem',
+      <div style={{ textAlign: 'center' }}>
+        <svg style={{
+          width: '4rem',
+          height: '4rem',
+          margin: '0 auto 1rem',
+          color: '#d1d5db'
+        }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        <h3 style={{
+          fontSize: '1.25rem',
           fontWeight: '600',
           color: '#1f2937',
           marginBottom: '0.5rem'
         }}>
-          Create a Country
-        </h2>
+          No countries yet
+        </h3>
         <p style={{
           color: '#6b7280',
-          marginBottom: '2rem',
-          lineHeight: '1.5'
+          fontSize: '1rem',
+          marginBottom: '2rem'
         }}>
-          Get started by creating your first country. You can manage country details, institutions, and regional information.
+          Get started by adding your first country to the system.
         </p>
         <button
           onClick={onCreateCountry}
           style={{
-            backgroundColor: '#2563eb',
+            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
             color: 'white',
-            padding: '0.75rem 1.5rem',
-            borderRadius: '0.5rem',
+            padding: '1rem 2rem',
+            borderRadius: '12px',
             border: 'none',
             fontSize: '0.875rem',
             fontWeight: '600',
             cursor: 'pointer',
-            transition: 'all 0.2s ease-in-out',
+            transition: 'all 0.3s ease',
             display: 'flex',
             alignItems: 'center',
-            margin: '0 auto'
+            margin: '0 auto',
+            boxShadow: '0 4px 15px rgba(102, 126, 234, 0.3)',
+            border: '1px solid rgba(255, 255, 255, 0.1)'
           }}
-          onMouseOver={(e) => e.target.style.backgroundColor = '#1d4ed8'}
-          onMouseOut={(e) => e.target.style.backgroundColor = '#2563eb'}
+          onMouseOver={(e) => {
+            e.currentTarget.style.transform = 'translateY(-2px)';
+            e.currentTarget.style.boxShadow = '0 8px 25px rgba(102, 126, 234, 0.4)';
+          }}
+          onMouseOut={(e) => {
+            e.currentTarget.style.transform = 'translateY(0)';
+            e.currentTarget.style.boxShadow = '0 4px 15px rgba(102, 126, 234, 0.3)';
+          }}
         >
           <svg style={{
             width: '1rem',
@@ -243,134 +81,134 @@ const EmptyState = ({ onCreateCountry }) => {
 };
 
 const CountryDetails = ({ country, onEditCountry, onDeleteCountry }) => {
-  if (!country) {
-    return null;
-  }
-
-  const mockData = {
-    malawi: {
-      name: 'Malawi',
-      code: 'MW',
-      currency: 'MWK',
-      institutions: ['University of Malawi', 'Mzuzu University', 'Lilongwe University'],
-      regions: ['Northern', 'Central', 'Southern'],
-      flagColors: ['#000000', '#FF0000', '#00FF00']
-    },
-    kenya: {
-      name: 'Kenya',
-      code: 'KE',
-      currency: 'KES',
-      institutions: ['University of Nairobi', 'Kenyatta University', 'Moi University'],
-      regions: ['Nairobi', 'Central', 'Coast', 'Eastern', 'North Eastern', 'Nyanza', 'Rift Valley', 'Western'],
-      flagColors: ['#000000', '#FF0000', '#FFFFFF', '#00FF00']
-    }
-  };
-
-  const data = mockData[country.id] || {
-    name: country.name,
-    code: country.code,
-    currency: 'N/A',
-    institutions: [],
-    regions: [],
-    flagColors: ['#000000', '#FF0000', '#FFFFFF']
-  };
-
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
+    <div style={{
+      backgroundColor: 'white',
+      borderRadius: '1rem',
+      border: '1px solid #e5e7eb',
+      padding: '2rem'
+    }}>
+      <div style={{
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'flex-start',
+        marginBottom: '2rem'
+      }}>
         <div>
-          <h1 className="text-3xl font-bold text-black">{data.name}</h1>
-          <p className="text-gray-600">Country Code: {data.code}</p>
+          <h2 style={{
+            fontSize: '1.875rem',
+            fontWeight: '700',
+            color: '#1f2937',
+            marginBottom: '0.5rem'
+          }}>
+            {country.name}
+          </h2>
+          <p style={{
+            color: '#6b7280',
+            fontSize: '1rem'
+          }}>
+            {country.continent} • Tel: {country.telcode}
+          </p>
         </div>
-        <Link
-          href={`/reference/countries/${country.id}/edit`}
-          className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors"
-        >
-          Edit Country
-        </Link>
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Basic Information */}
-        <div className="bg-white p-6 rounded-lg border border-gray-200">
-          <h2 className="text-xl font-semibold text-black mb-4">Basic Information</h2>
-          <div className="space-y-3">
-            <div>
-              <label className="text-sm font-medium text-gray-500">Country Name</label>
-              <p className="text-black">{data.name}</p>
-            </div>
-            <div>
-              <label className="text-sm font-medium text-gray-500">Country Code</label>
-              <p className="text-black">{data.code}</p>
-            </div>
-            <div>
-              <label className="text-sm font-medium text-gray-500">Currency</label>
-              <p className="text-black">{data.currency}</p>
-            </div>
-          </div>
-        </div>
-
-        {/* Flag Colors */}
-        <div className="bg-white p-6 rounded-lg border border-gray-200">
-          <h2 className="text-xl font-semibold text-black mb-4">Flag Colors</h2>
-          <div className="flex space-x-2">
-            {data.flagColors.map((color, index) => (
-              <div
-                key={index}
-                className="w-12 h-12 rounded border border-gray-300"
-                style={{ backgroundColor: color }}
-                title={color}
-              />
-            ))}
-          </div>
-          <div className="mt-2 text-sm text-gray-600">
-            Colors: {data.flagColors.join(', ')}
-          </div>
-        </div>
-
-        {/* Institutions */}
-        <div className="bg-white p-6 rounded-lg border border-gray-200">
-          <h2 className="text-xl font-semibold text-black mb-4">Institutions</h2>
-          <div className="space-y-2">
-            {data.institutions.length > 0 ? (
-              data.institutions.map((institution, index) => (
-                <div key={index} className="p-3 bg-gray-50 rounded border-l-4 border-blue-600">
-                  <p className="text-black">{institution}</p>
-                </div>
-              ))
-            ) : (
-              <p className="text-gray-500">No institutions registered</p>
-            )}
-          </div>
-        </div>
-
-        {/* Regions */}
-        <div className="bg-white p-6 rounded-lg border border-gray-200">
-          <h2 className="text-xl font-semibold text-black mb-4">Regions</h2>
-          <div className="grid grid-cols-2 gap-2">
-            {data.regions.length > 0 ? (
-              data.regions.map((region, index) => (
-                <div key={index} className="p-2 bg-gray-50 rounded text-center">
-                  <p className="text-black text-sm">{region}</p>
-                </div>
-              ))
-            ) : (
-              <p className="text-gray-500 col-span-2">No regions defined</p>
-            )}
-          </div>
+        <div style={{ display: 'flex', gap: '0.75rem' }}>
+          <button
+            onClick={() => onEditCountry(country)}
+            style={{
+              backgroundColor: '#4f46e5',
+              color: 'white',
+              padding: '0.5rem 1rem',
+              borderRadius: '0.5rem',
+              border: 'none',
+              fontSize: '0.875rem',
+              fontWeight: '500',
+              cursor: 'pointer'
+            }}
+          >
+            Edit
+          </button>
+          <button
+            onClick={() => onDeleteCountry(country)}
+            style={{
+              backgroundColor: '#dc2626',
+              color: 'white',
+              padding: '0.5rem 1rem',
+              borderRadius: '0.5rem',
+              border: 'none',
+              fontSize: '0.875rem',
+              fontWeight: '500',
+              cursor: 'pointer'
+            }}
+          >
+            Delete
+          </button>
         </div>
       </div>
-
-      {/* Institutions Map Placeholder */}
-      <div className="bg-white p-6 rounded-lg border border-gray-200">
-        <h2 className="text-xl font-semibold text-black mb-4">Institutions Map</h2>
-        <div className="h-64 bg-gray-100 rounded-lg flex items-center justify-center">
-          <div className="text-center">
-            <svg className="w-16 h-16 mx-auto text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-            </svg>
-            <p className="text-gray-500">Interactive map will be displayed here</p>
+      
+      <div style={{
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+        gap: '1rem',
+        marginBottom: '2rem'
+      }}>
+        <div style={{
+          backgroundColor: '#f9fafb',
+          padding: '1rem',
+          borderRadius: '0.5rem'
+        }}>
+          <div style={{ fontSize: '0.875rem', color: '#6b7280', marginBottom: '0.25rem' }}>Latitude</div>
+          <div style={{ fontWeight: '600', color: '#1f2937' }}>{country.centerLat}</div>
+        </div>
+        <div style={{
+          backgroundColor: '#f9fafb',
+          padding: '1rem',
+          borderRadius: '0.5rem'
+        }}>
+          <div style={{ fontSize: '0.875rem', color: '#6b7280', marginBottom: '0.25rem' }}>Longitude</div>
+          <div style={{ fontWeight: '600', color: '#1f2937' }}>{country.centerLongitude}</div>
+        </div>
+      </div>
+      
+      <div style={{
+        backgroundColor: '#f9fafb',
+        padding: '1.5rem',
+        borderRadius: '0.5rem'
+      }}>
+        <h3 style={{
+          fontSize: '1.125rem',
+          fontWeight: '600',
+          color: '#1f2937',
+          marginBottom: '1rem'
+        }}>
+          Quick Actions
+        </h3>
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+          gap: '1rem'
+        }}>
+          <Link
+            href={`/reference/countries/${country.id}`}
+            style={{
+              display: 'block',
+              backgroundColor: 'white',
+              padding: '1rem',
+              borderRadius: '0.5rem',
+              textDecoration: 'none',
+              border: '1px solid #e5e7eb',
+              transition: 'all 0.2s ease'
+            }}
+          >
+            <div style={{ fontWeight: '500', color: '#1f2937', marginBottom: '0.25rem' }}>View Details</div>
+            <div style={{ fontSize: '0.875rem', color: '#6b7280' }}>See institutions, resources & more</div>
+          </Link>
+          <div style={{
+            backgroundColor: 'white',
+            padding: '1rem',
+            borderRadius: '0.5rem',
+            border: '1px solid #e5e7eb'
+          }}>
+            <div style={{ fontWeight: '500', color: '#1f2937', marginBottom: '0.25rem' }}>Institutions</div>
+            <div style={{ fontSize: '0.875rem', color: '#6b7280' }}>0 registered</div>
           </div>
         </div>
       </div>
@@ -379,11 +217,19 @@ const CountryDetails = ({ country, onEditCountry, onDeleteCountry }) => {
 };
 
 export default function CountriesPage() {
-  const [countries, setCountries] = useState([]); // Start with empty array
+  const [countries, setCountries] = useState([]);
   const [activeCountry, setActiveCountry] = useState(null);
 
+  // Load countries from localStorage on component mount
+  useEffect(() => {
+    const savedCountries = JSON.parse(localStorage.getItem('countries') || '[]');
+    setCountries(savedCountries);
+    if (savedCountries.length > 0) {
+      setActiveCountry(savedCountries[0]);
+    }
+  }, []);
+
   const handleCreateCountry = () => {
-    // Navigate to create country page
     window.location.href = '/reference/countries/create';
   };
 
@@ -393,9 +239,11 @@ export default function CountriesPage() {
 
   const handleDeleteCountry = (country) => {
     if (confirm(`Are you sure you want to delete ${country.name}?`)) {
-      setCountries(countries.filter(c => c.id !== country.id));
+      const updatedCountries = countries.filter(c => c.id !== country.id);
+      setCountries(updatedCountries);
+      localStorage.setItem('countries', JSON.stringify(updatedCountries));
       if (activeCountry?.id === country.id) {
-        setActiveCountry(null);
+        setActiveCountry(updatedCountries.length > 0 ? updatedCountries[0] : null);
       }
     }
   };
@@ -403,7 +251,7 @@ export default function CountriesPage() {
   return (
     <div style={{
       minHeight: '100vh',
-      backgroundColor: '#f9fafb'
+      background: 'linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%)'
     }}>
       <Sidebar activeItem="countries" />
       
@@ -435,71 +283,224 @@ export default function CountriesPage() {
                 Manage country references and institutional data
               </p>
             </div>
-            {countries.length > 0 && (
-              <button
-                onClick={handleCreateCountry}
-                style={{
-                  backgroundColor: '#2563eb',
-                  color: 'white',
-                  padding: '0.75rem 1.5rem',
-                  borderRadius: '0.5rem',
-                  border: 'none',
-                  fontSize: '0.875rem',
-                  fontWeight: '600',
-                  cursor: 'pointer',
-                  transition: 'all 0.2s ease-in-out',
-                  display: 'flex',
-                  alignItems: 'center'
-                }}
-                onMouseOver={(e) => e.target.style.backgroundColor = '#1d4ed8'}
-                onMouseOut={(e) => e.target.style.backgroundColor = '#2563eb'}
-              >
-                <svg style={{
-                  width: '1rem',
-                  height: '1rem',
-                  marginRight: '0.5rem'
-                }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                </svg>
-                Add Country
-              </button>
-            )}
+            <button
+              onClick={handleCreateCountry}
+              style={{
+                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                color: 'white',
+                padding: '0.875rem 1.75rem',
+                borderRadius: '12px',
+                border: 'none',
+                fontSize: '0.875rem',
+                fontWeight: '600',
+                cursor: 'pointer',
+                transition: 'all 0.3s ease',
+                display: 'flex',
+                alignItems: 'center',
+                boxShadow: '0 4px 15px rgba(102, 126, 234, 0.3)',
+                border: '1px solid rgba(255, 255, 255, 0.1)'
+              }}
+              onMouseOver={(e) => {
+                e.currentTarget.style.transform = 'translateY(-2px)';
+                e.currentTarget.style.boxShadow = '0 8px 25px rgba(102, 126, 234, 0.4)';
+              }}
+              onMouseOut={(e) => {
+                e.currentTarget.style.transform = 'translateY(0)';
+                e.currentTarget.style.boxShadow = '0 4px 15px rgba(102, 126, 234, 0.3)';
+              }}
+            >
+              <svg style={{
+                width: '1rem',
+                height: '1rem',
+                marginRight: '0.5rem'
+              }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+              </svg>
+              Add Country
+            </button>
           </div>
 
-          {/* Main Content */}
+          {/* Countries List */}
           {countries.length === 0 ? (
             <EmptyState onCreateCountry={handleCreateCountry} />
-          ) : activeCountry ? (
-            <CountryDetails 
-              country={activeCountry} 
-              onEditCountry={handleEditCountry}
-              onDeleteCountry={handleDeleteCountry}
-            />
           ) : (
             <div style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              minHeight: '60vh',
               backgroundColor: 'white',
-              borderRadius: '1rem',
-              border: '1px solid #e5e7eb'
+              borderRadius: '20px',
+              border: '1px solid #e5e7eb',
+              overflow: 'hidden',
+              boxShadow: '0 10px 30px rgba(0, 0, 0, 0.08)',
+              backdropFilter: 'blur(20px)'
             }}>
-              <div style={{ textAlign: 'center' }}>
-                <svg style={{
-                  width: '4rem',
-                  height: '4rem',
-                  margin: '0 auto 1rem',
-                  color: '#d1d5db'
-                }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                <p style={{
-                  color: '#6b7280',
-                  fontSize: '1.125rem'
+              <div style={{
+                padding: '2rem',
+                borderBottom: '1px solid #e5e7eb',
+                background: 'linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%)'
+              }}>
+                <h3 style={{
+                  fontSize: '1.25rem',
+                  fontWeight: '700',
+                  color: '#1f2937',
+                  margin: 0,
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.75rem'
                 }}>
-                  Select a country from the sidebar to view details
-                </p>
+                  <svg style={{ width: '24px', height: '24px', color: '#667eea' }} fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                  </svg>
+                  Countries ({countries.length})
+                </h3>
+              </div>
+              
+              <div style={{ padding: '0' }}>
+                {countries.map((country, index) => (
+                  <div
+                    key={country.id}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      padding: '2rem',
+                      borderBottom: index < countries.length - 1 ? '1px solid #f3f4f6' : 'none',
+                      transition: 'all 0.3s ease',
+                      position: 'relative'
+                    }}
+                    onMouseOver={(e) => {
+                      e.currentTarget.style.backgroundColor = '#f8fafc';
+                      e.currentTarget.style.transform = 'translateX(4px)';
+                      e.currentTarget.style.borderLeft = '4px solid #667eea';
+                    }}
+                    onMouseOut={(e) => {
+                      e.currentTarget.style.backgroundColor = 'transparent';
+                      e.currentTarget.style.transform = 'translateX(0)';
+                      e.currentTarget.style.borderLeft = 'none';
+                    }}
+                  >
+                    <div style={{ flex: 1 }}>
+                      <div style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '1rem',
+                        marginBottom: '0.5rem'
+                      }}>
+                        <h4 style={{
+                          fontSize: '1.125rem',
+                          fontWeight: '600',
+                          color: '#1f2937',
+                          margin: 0
+                        }}>
+                          {country.name}
+                        </h4>
+                        <span style={{
+                          background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
+                          color: 'white',
+                          padding: '0.375rem 1rem',
+                          borderRadius: '20px',
+                          fontSize: '0.75rem',
+                          fontWeight: '600',
+                          boxShadow: '0 2px 8px rgba(16, 185, 129, 0.3)',
+                          border: '1px solid rgba(255, 255, 255, 0.2)'
+                        }}>
+                          Active
+                        </span>
+                      </div>
+                      <div style={{
+                        display: 'flex',
+                        gap: '2rem',
+                        fontSize: '0.875rem',
+                        color: '#6b7280'
+                      }}>
+                        <span><strong>Continent:</strong> {country.continent}</span>
+                        <span><strong>Tel Code:</strong> {country.telcode}</span>
+                        <span><strong>Coordinates:</strong> {country.centerLat}, {country.centerLongitude}</span>
+                      </div>
+                    </div>
+                    
+                    <div style={{ display: 'flex', gap: '0.75rem' }}>
+                      <Link
+                        href={`/reference/countries/${country.id}`}
+                        style={{
+                          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                          color: 'white',
+                          padding: '0.625rem 1.25rem',
+                          borderRadius: '10px',
+                          textDecoration: 'none',
+                          fontSize: '0.875rem',
+                          fontWeight: '600',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '0.5rem',
+                          transition: 'all 0.3s ease',
+                          boxShadow: '0 3px 12px rgba(102, 126, 234, 0.3)',
+                          border: '1px solid rgba(255, 255, 255, 0.1)'
+                        }}
+                        onMouseOver={(e) => {
+                          e.target.style.transform = 'translateY(-1px)';
+                          e.target.style.boxShadow = '0 6px 20px rgba(102, 126, 234, 0.4)';
+                        }}
+                        onMouseOut={(e) => {
+                          e.target.style.transform = 'translateY(0)';
+                          e.target.style.boxShadow = '0 3px 12px rgba(102, 126, 234, 0.3)';
+                        }}
+                      >
+                        View
+                      </Link>
+                      <button
+                        onClick={() => handleEditCountry(country)}
+                        style={{
+                          background: 'linear-gradient(135deg, #6b7280 0%, #4b5563 100%)',
+                          color: 'white',
+                          padding: '0.625rem 1.25rem',
+                          borderRadius: '10px',
+                          border: 'none',
+                          fontSize: '0.875rem',
+                          fontWeight: '600',
+                          cursor: 'pointer',
+                          transition: 'all 0.3s ease',
+                          boxShadow: '0 3px 12px rgba(107, 114, 128, 0.3)',
+                          border: '1px solid rgba(255, 255, 255, 0.1)'
+                        }}
+                        onMouseOver={(e) => {
+                          e.target.style.transform = 'translateY(-1px)';
+                          e.target.style.boxShadow = '0 6px 20px rgba(107, 114, 128, 0.4)';
+                        }}
+                        onMouseOut={(e) => {
+                          e.target.style.transform = 'translateY(0)';
+                          e.target.style.boxShadow = '0 3px 12px rgba(107, 114, 128, 0.3)';
+                        }}
+                      >
+                        Edit
+                      </button>
+                      <button
+                        onClick={() => handleDeleteCountry(country)}
+                        style={{
+                          background: 'linear-gradient(135deg, #dc2626 0%, #b91c1c 100%)',
+                          color: 'white',
+                          padding: '0.625rem 1.25rem',
+                          borderRadius: '10px',
+                          border: 'none',
+                          fontSize: '0.875rem',
+                          fontWeight: '600',
+                          cursor: 'pointer',
+                          transition: 'all 0.3s ease',
+                          boxShadow: '0 3px 12px rgba(220, 38, 38, 0.3)',
+                          border: '1px solid rgba(255, 255, 255, 0.1)'
+                        }}
+                        onMouseOver={(e) => {
+                          e.target.style.transform = 'translateY(-1px)';
+                          e.target.style.boxShadow = '0 6px 20px rgba(220, 38, 38, 0.4)';
+                        }}
+                        onMouseOut={(e) => {
+                          e.target.style.transform = 'translateY(0)';
+                          e.target.style.boxShadow = '0 3px 12px rgba(220, 38, 38, 0.3)';
+                        }}
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
           )}

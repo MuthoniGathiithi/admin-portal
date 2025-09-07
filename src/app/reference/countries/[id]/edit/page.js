@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import Link from 'next/link';
-import Sidebar from '../../../../components/Sidebar';
+import Sidebar from '../../../../../components/Sidebar';
 
 export default function EditCountryPage() {
   const router = useRouter();
@@ -61,8 +61,25 @@ export default function EditCountryPage() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('Saving country data:', formData);
-    router.push('/reference/countries');
+    
+    // Validate required fields
+    if (!formData.name || !formData.continent || !formData.telcode) {
+      alert('Please fill in all required fields');
+      return;
+    }
+
+    // Update country in localStorage
+    const countries = JSON.parse(localStorage.getItem('countries') || '[]');
+    const updatedCountries = countries.map(country => 
+      country.id === countryId ? { ...country, ...formData } : country
+    );
+    
+    localStorage.setItem('countries', JSON.stringify(updatedCountries));
+    
+    console.log('Country updated:', formData);
+    
+    // Navigate back to the country view page
+    router.push(`/reference/countries/${countryId}`);
   };
 
   return (

@@ -1,58 +1,120 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
 
 const Sidebar = ({ activeItem, setActiveItem }) => {
+  const [userEmail, setUserEmail] = useState('');
+
+  useEffect(() => {
+    // Get user email from localStorage
+    const email = localStorage.getItem('userEmail') || 'admin@example.com';
+    setUserEmail(email);
+  }, []);
+
   const menuItems = [
-    { id: 'dashboard', label: 'Dashboard', href: '/dashboard' },
-    { id: 'countries', label: 'Countries', href: '/reference/countries' },
+    { 
+      id: 'dashboard', 
+      label: 'Dashboard', 
+      href: '/dashboard',
+      icon: (
+        <svg style={{ width: '1.25rem', height: '1.25rem' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2z" />
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 5a2 2 0 012-2h4a2 2 0 012 2v14l-5-3-5 3V5z" />
+        </svg>
+      )
+    },
+    { 
+      id: 'countries', 
+      label: 'Countries', 
+      href: '/reference/countries',
+      icon: (
+        <svg style={{ width: '1.25rem', height: '1.25rem' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+        </svg>
+      )
+    }
   ];
+
+  const getInitials = (email) => {
+    return email.split('@')[0].charAt(0).toUpperCase();
+  };
 
   return (
     <div style={{
-      width: '280px',
-      background: 'linear-gradient(135deg, #4f46e5 0%, #3b82f6 100%)',
-      minHeight: '100vh',
       position: 'fixed',
       left: 0,
       top: 0,
+      height: '100vh',
+      width: '280px',
+      background: 'linear-gradient(180deg, #667eea 0%, #764ba2 100%)',
       display: 'flex',
-      flexDirection: 'column'
+      flexDirection: 'column',
+      zIndex: 1000,
+      boxShadow: '4px 0 20px rgba(0, 0, 0, 0.1)'
     }}>
-      <div style={{ padding: '2rem', flex: 1 }}>
-        {/* ALAMA Logo */}
+      {/* Logo/Header */}
+      <div style={{
+        padding: '2rem 1.5rem',
+        borderBottom: '1px solid rgba(255, 255, 255, 0.1)'
+      }}>
         <div style={{
           display: 'flex',
           alignItems: 'center',
-          marginBottom: '3rem',
-          paddingBottom: '1.5rem',
-          borderBottom: '1px solid rgba(255, 255, 255, 0.2)'
+          gap: '0.75rem'
         }}>
-          <Image
-            src="/alama_dark_logo_lt_bnjlIcW.png"
-            alt="Alama"
-            width={45}
-            height={45}
-            style={{
-              width: '45px',
-              height: '45px',
-              marginRight: '0.75rem',
-              filter: 'brightness(0) invert(1)'
-            }}
-          />
-          <span style={{
-            fontSize: '1.5rem',
+          <div style={{
+            width: '2.5rem',
+            height: '2.5rem',
+            backgroundColor: 'rgba(255, 255, 255, 0.2)',
+            borderRadius: '12px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            color: 'white',
             fontWeight: '700',
-            color: 'white'
+            fontSize: '1.25rem',
+            backdropFilter: 'blur(10px)',
+            border: '1px solid rgba(255, 255, 255, 0.2)'
           }}>
-            ALAMA
-          </span>
+            A
+          </div>
+          <div>
+            <div style={{
+              fontWeight: '700',
+              fontSize: '1.25rem',
+              color: 'white'
+            }}>
+              Admin Portal
+            </div>
+            <div style={{
+              fontSize: '0.75rem',
+              color: 'rgba(255, 255, 255, 0.7)'
+            }}>
+              Education Management
+            </div>
+          </div>
         </div>
+      </div>
 
-        {/* Navigation */}
-        <nav style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', marginBottom: '2rem' }}>
+      {/* Navigation Menu */}
+      <div style={{
+        flex: 1,
+        padding: '1.5rem 0'
+      }}>
+        <div style={{
+          fontSize: '0.75rem',
+          fontWeight: '600',
+          color: 'rgba(255, 255, 255, 0.6)',
+          textTransform: 'uppercase',
+          letterSpacing: '0.05em',
+          padding: '0 1.5rem',
+          marginBottom: '1rem'
+        }}>
+          Main Menu
+        </div>
+        <nav>
           {menuItems.map((item) => (
             <Link
               key={item.id}
@@ -61,28 +123,33 @@ const Sidebar = ({ activeItem, setActiveItem }) => {
                 display: 'flex',
                 alignItems: 'center',
                 gap: '0.75rem',
-                padding: '0.875rem 1rem',
-                borderRadius: '0.75rem',
-                transition: 'all 0.2s ease-in-out',
+                padding: '0.875rem 1.5rem',
+                margin: '0.25rem 1rem',
+                color: activeItem === item.id ? 'white' : 'rgba(255, 255, 255, 0.8)',
+                backgroundColor: activeItem === item.id ? 'rgba(255, 255, 255, 0.15)' : 'transparent',
                 textDecoration: 'none',
-                backgroundColor: activeItem === item.id ? 'rgba(255, 255, 255, 0.2)' : 'transparent',
-                color: 'white',
+                fontSize: '0.875rem',
                 fontWeight: '500',
-                fontSize: '0.95rem'
+                borderRadius: '12px',
+                transition: 'all 0.3s ease',
+                backdropFilter: activeItem === item.id ? 'blur(10px)' : 'none',
+                border: activeItem === item.id ? '1px solid rgba(255, 255, 255, 0.2)' : '1px solid transparent'
               }}
-              onClick={() => setActiveItem && setActiveItem(item.id)}
               onMouseOver={(e) => {
                 if (activeItem !== item.id) {
                   e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
+                  e.currentTarget.style.color = 'white';
                 }
               }}
               onMouseOut={(e) => {
                 if (activeItem !== item.id) {
                   e.currentTarget.style.backgroundColor = 'transparent';
+                  e.currentTarget.style.color = 'rgba(255, 255, 255, 0.8)';
                 }
               }}
             >
-              <span>{item.label}</span>
+              {item.icon}
+              {item.label}
             </Link>
           ))}
         </nav>
@@ -90,113 +157,104 @@ const Sidebar = ({ activeItem, setActiveItem }) => {
 
       {/* Profile Section */}
       <div style={{
-        padding: '2rem',
-        borderTop: '1px solid rgba(255, 255, 255, 0.15)',
-        marginTop: 'auto',
-        background: 'rgba(255, 255, 255, 0.05)',
-        backdropFilter: 'blur(10px)'
+        padding: '1.5rem',
+        borderTop: '1px solid rgba(255, 255, 255, 0.1)',
+        marginTop: 'auto'
       }}>
         <div style={{
           display: 'flex',
           alignItems: 'center',
-          gap: '1rem',
-          marginBottom: '1.5rem'
+          gap: '0.75rem',
+          padding: '1rem',
+          backgroundColor: 'rgba(255, 255, 255, 0.1)',
+          borderRadius: '12px',
+          backdropFilter: 'blur(10px)',
+          border: '1px solid rgba(255, 255, 255, 0.15)'
         }}>
           <div style={{
-            width: '48px',
-            height: '48px',
+            width: '2.5rem',
+            height: '2.5rem',
+            backgroundColor: 'rgba(255, 255, 255, 0.2)',
             borderRadius: '50%',
-            background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.1) 100%)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             color: 'white',
-            fontWeight: '700',
-            fontSize: '1.125rem',
-            border: '2px solid rgba(255, 255, 255, 0.2)',
-            boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)'
+            fontWeight: '600',
+            fontSize: '0.875rem'
           }}>
-            {typeof window !== 'undefined' ? (localStorage.getItem('userEmail')?.charAt(0).toUpperCase() || 'U') : 'U'}
+            {getInitials(userEmail)}
           </div>
-          <div style={{ flex: 1 }}>
+          <div style={{ flex: 1, minWidth: 0 }}>
             <div style={{
+              fontWeight: '600',
+              fontSize: '0.875rem',
               color: 'white',
-              fontWeight: '700',
-              fontSize: '1rem',
-              marginBottom: '0.25rem'
+              marginBottom: '0.125rem'
             }}>
-              {typeof window !== 'undefined' ? localStorage.getItem('userEmail')?.split('@')[0] || 'User' : 'User'}
+              {userEmail.split('@')[0]}
             </div>
             <div style={{
+              fontSize: '0.75rem',
               color: 'rgba(255, 255, 255, 0.7)',
-              fontSize: '0.875rem',
-              fontWeight: '500'
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap'
             }}>
-              {typeof window !== 'undefined' ? localStorage.getItem('userEmail') || 'user@alama.com' : 'user@alama.com'}
+              {userEmail}
             </div>
           </div>
         </div>
-
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-          <button
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '0.75rem',
-              padding: '0.75rem 1rem',
-              backgroundColor: 'rgba(255, 255, 255, 0.1)',
-              border: '1px solid rgba(255, 255, 255, 0.15)',
-              borderRadius: '0.75rem',
-              color: 'white',
-              fontSize: '0.875rem',
-              fontWeight: '600',
-              cursor: 'pointer',
-              transition: 'all 0.3s ease',
-              width: '100%',
-              textAlign: 'left'
-            }}
-            onMouseOver={(e) => {
-              e.target.style.backgroundColor = 'rgba(255, 255, 255, 0.15)';
-              e.target.style.transform = 'translateY(-1px)';
-              e.target.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.15)';
-            }}
-            onMouseOut={(e) => {
-              e.target.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
-              e.target.style.transform = 'translateY(0)';
-              e.target.style.boxShadow = 'none';
-            }}
-          >
+        
+        <div style={{ 
+          display: 'flex', 
+          gap: '0.5rem',
+          marginTop: '1rem'
+        }}>
+          <button style={{
+            flex: 1,
+            backgroundColor: 'rgba(255, 255, 255, 0.1)',
+            color: 'white',
+            padding: '0.75rem',
+            borderRadius: '8px',
+            border: '1px solid rgba(255, 255, 255, 0.2)',
+            fontSize: '0.75rem',
+            fontWeight: '500',
+            cursor: 'pointer',
+            transition: 'all 0.2s ease',
+            backdropFilter: 'blur(10px)'
+          }}
+          onMouseOver={(e) => {
+            e.target.style.backgroundColor = 'rgba(255, 255, 255, 0.2)';
+          }}
+          onMouseOut={(e) => {
+            e.target.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
+          }}>
             Settings
           </button>
-          <button
-            onClick={() => window.location.href = '/'}
+          <button 
+            onClick={() => {
+              localStorage.removeItem('userEmail');
+              window.location.href = '/';
+            }}
             style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '0.75rem',
-              padding: '0.75rem 1rem',
-              backgroundColor: 'rgba(220, 38, 38, 0.15)',
+              flex: 1,
+              backgroundColor: 'rgba(220, 38, 38, 0.2)',
+              color: 'white',
+              padding: '0.75rem',
+              borderRadius: '8px',
               border: '1px solid rgba(220, 38, 38, 0.3)',
-              borderRadius: '0.75rem',
-              color: '#fca5a5',
-              fontSize: '0.875rem',
-              fontWeight: '600',
+              fontSize: '0.75rem',
+              fontWeight: '500',
               cursor: 'pointer',
-              transition: 'all 0.3s ease',
-              width: '100%',
-              textAlign: 'left'
+              transition: 'all 0.2s ease',
+              backdropFilter: 'blur(10px)'
             }}
             onMouseOver={(e) => {
-              e.target.style.backgroundColor = 'rgba(220, 38, 38, 0.25)';
-              e.target.style.color = '#fef2f2';
-              e.target.style.transform = 'translateY(-1px)';
-              e.target.style.boxShadow = '0 4px 12px rgba(220, 38, 38, 0.2)';
+              e.target.style.backgroundColor = 'rgba(220, 38, 38, 0.3)';
             }}
             onMouseOut={(e) => {
-              e.target.style.backgroundColor = 'rgba(220, 38, 38, 0.15)';
-              e.target.style.color = '#fca5a5';
-              e.target.style.transform = 'translateY(0)';
-              e.target.style.boxShadow = 'none';
+              e.target.style.backgroundColor = 'rgba(220, 38, 38, 0.2)';
             }}
           >
             Logout
