@@ -37,7 +37,7 @@ export default function LoginPage() {
     });
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     setError('');
     
@@ -46,23 +46,11 @@ export default function LoginPage() {
       return;
     }
     
-    setIsLoading(true);
+    // Save user email to localStorage for profile display
+    localStorage.setItem('userEmail', formData.email);
     
-    try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      
-      // Save user email to localStorage for profile display
-      localStorage.setItem('userEmail', formData.email);
-      
-      // Use Next.js router for navigation
-      router.push('/dashboard');
-    } catch (error) {
-      console.error('Login error:', error);
-      setError('Login failed. Please try again.');
-    } finally {
-      setIsLoading(false);
-    }
+    // Immediate redirect without loading state
+    window.location.href = '/dashboard';
   };
 
   return (
@@ -80,12 +68,13 @@ export default function LoginPage() {
         display: 'flex',
         flexDirection: isMobile ? 'column' : 'row',
         width: '100%',
-        maxWidth: '1000px',
+        maxWidth: '950px',
         backgroundColor: 'white',
-        borderRadius: '20px',
+        borderRadius: '12px',
         boxShadow: '0 40px 80px rgba(0, 0, 0, 0.25), 0 20px 40px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(255, 255, 255, 0.05)',
         overflow: 'hidden',
-        minHeight: isMobile ? 'auto' : '600px',
+        minHeight: isMobile ? 'auto' : '450px',
+        height: isMobile ? 'auto' : '450px',
         position: 'relative'
       }}>
         {/* Left Side - Blue Welcome Section with Form */}
@@ -96,7 +85,7 @@ export default function LoginPage() {
           flexDirection: 'column',
           justifyContent: 'center',
           alignItems: 'center',
-          padding: isMobile ? '3rem 2rem' : '4rem 3rem',
+          padding: isMobile ? '2.5rem 2rem' : '3rem 2.5rem',
           color: 'white',
           position: 'relative',
           overflow: 'hidden'
@@ -143,7 +132,7 @@ export default function LoginPage() {
                 WebkitTextFillColor: 'transparent',
                 backgroundClip: 'text'
               }}>
-                Welcome Back
+                Sign In
               </h1>
               <p style={{
                 fontSize: isMobile ? '0.9rem' : '1rem',
@@ -217,13 +206,6 @@ export default function LoginPage() {
                       e.target.style.boxShadow = 'none';
                     }}
                   />
-                </div>
-                <div id="email-help" style={{
-                  fontSize: '0.75rem',
-                  color: 'rgba(255, 255, 255, 0.7)',
-                  marginTop: '0.5rem'
-                }}>
-                  We'll use this to send you important updates
                 </div>
               </div>
 
@@ -345,13 +327,6 @@ export default function LoginPage() {
                     )}
                   </button>
                 </div>
-                <div id="password-help" style={{
-                  fontSize: '0.75rem',
-                  color: 'rgba(255, 255, 255, 0.7)',
-                  marginTop: '0.5rem'
-                }}>
-                  Must be at least 8 characters long
-                </div>
               </div>
 
               {/* Error Message */}
@@ -432,7 +407,7 @@ export default function LoginPage() {
           flexDirection: 'column',
           justifyContent: 'center',
           alignItems: 'center',
-          padding: isMobile ? '3rem 2rem' : '4rem 3rem',
+          padding: isMobile ? '2.5rem 2rem' : '3rem 2.5rem',
           backgroundColor: 'white',
           position: 'relative',
           overflow: 'hidden',
@@ -473,21 +448,45 @@ export default function LoginPage() {
             zIndex: 1,
             position: 'relative'
           }}>
-            {/* Standalone Logo */}
+            {/* Circular Logo Container */}
             <div style={{
-              marginBottom: '3rem',
-              transition: 'transform 0.3s ease'
+              marginBottom: '2rem',
+              transition: 'transform 0.3s ease',
+              position: 'relative'
             }}>
-              <Image
-                src="/alama_dark_logo_lt_bnjlIcW.png"
-                alt="Alama Logo"
-                width={isMobile ? 200 : 280}
-                height={isMobile ? 200 : 280}
-                style={{
-                  objectFit: 'contain',
-                  filter: 'drop-shadow(0 8px 25px rgba(0, 0, 0, 0.15))'
-                }}
-              />
+              {/* White Circular Background */}
+              <div style={{
+                width: isMobile ? 180 : 220,
+                height: isMobile ? 180 : 220,
+                backgroundColor: 'white',
+                borderRadius: '50%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                boxShadow: '0 20px 40px rgba(0, 0, 0, 0.1), 0 8px 16px rgba(0, 0, 0, 0.06)',
+                border: '4px solid rgba(59, 77, 232, 0.1)',
+                position: 'relative',
+                overflow: 'hidden'
+              }}>
+                {/* Subtle gradient overlay */}
+                <div style={{
+                  position: 'absolute',
+                  inset: 0,
+                  background: 'radial-gradient(circle at 30% 30%, rgba(59, 77, 232, 0.02) 0%, transparent 50%)',
+                  borderRadius: '50%'
+                }} />
+                <Image
+                  src="/alama_dark_logo_lt_bnjlIcW.png"
+                  alt="Alama Logo"
+                  width={isMobile ? 120 : 160}
+                  height={isMobile ? 120 : 160}
+                  style={{
+                    objectFit: 'contain',
+                    position: 'relative',
+                    zIndex: 1
+                  }}
+                />
+              </div>
             </div>
             
             {/* Brand Text */}
