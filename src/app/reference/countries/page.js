@@ -3,6 +3,8 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Sidebar from '../../../components/Sidebar';
+import Breadcrumb from '../../../components/Breadcrumb';
+import LoadingSpinner from '../../../components/LoadingSpinner';
 
 const EmptyState = ({ onCreateCountry }) => {
   return (
@@ -42,7 +44,7 @@ const EmptyState = ({ onCreateCountry }) => {
         <button
           onClick={onCreateCountry}
           style={{
-            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+            background: '#1e40af',
             color: 'white',
             padding: '1rem 2rem',
             borderRadius: '12px',
@@ -54,16 +56,16 @@ const EmptyState = ({ onCreateCountry }) => {
             display: 'flex',
             alignItems: 'center',
             margin: '0 auto',
-            boxShadow: '0 4px 15px rgba(102, 126, 234, 0.3)',
+            boxShadow: '0 4px 15px rgba(30, 64, 175, 0.3)',
             border: '1px solid rgba(255, 255, 255, 0.1)'
           }}
           onMouseOver={(e) => {
             e.currentTarget.style.transform = 'translateY(-2px)';
-            e.currentTarget.style.boxShadow = '0 8px 25px rgba(102, 126, 234, 0.4)';
+            e.currentTarget.style.boxShadow = '0 8px 25px rgba(30, 64, 175, 0.4)';
           }}
           onMouseOut={(e) => {
             e.currentTarget.style.transform = 'translateY(0)';
-            e.currentTarget.style.boxShadow = '0 4px 15px rgba(102, 126, 234, 0.3)';
+            e.currentTarget.style.boxShadow = '0 4px 15px rgba(30, 64, 175, 0.3)';
           }}
         >
           <svg style={{
@@ -219,14 +221,27 @@ const CountryDetails = ({ country, onEditCountry, onDeleteCountry }) => {
 export default function CountriesPage() {
   const [countries, setCountries] = useState([]);
   const [activeCountry, setActiveCountry] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filterContinent, setFilterContinent] = useState('all');
+  const [filterStatus, setFilterStatus] = useState('all');
 
   // Load countries from localStorage on component mount
   useEffect(() => {
-    const savedCountries = JSON.parse(localStorage.getItem('countries') || '[]');
-    setCountries(savedCountries);
-    if (savedCountries.length > 0) {
-      setActiveCountry(savedCountries[0]);
-    }
+    const loadCountries = async () => {
+      setIsLoading(true);
+      // Simulate loading delay
+      await new Promise(resolve => setTimeout(resolve, 800));
+      
+      const savedCountries = JSON.parse(localStorage.getItem('countries') || '[]');
+      setCountries(savedCountries);
+      if (savedCountries.length > 0) {
+        setActiveCountry(savedCountries[0]);
+      }
+      setIsLoading(false);
+    };
+    
+    loadCountries();
   }, []);
 
   const handleCreateCountry = () => {
@@ -248,6 +263,57 @@ export default function CountriesPage() {
     }
   };
 
+  // Filter countries based on search, continent, and status
+  const filteredCountries = countries.filter(country => {
+    const matchesSearch = country.name.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesContinent = filterContinent === 'all' || country.continent === filterContinent;
+    const matchesStatus = filterStatus === 'all' || 
+      (filterStatus === 'active' && country.status !== 'inactive') ||
+      (filterStatus === 'inactive' && country.status === 'inactive');
+    return matchesSearch && matchesContinent && matchesStatus;
+  });
+
+  // Clear all filters function
+  const clearFilters = () => {
+    setSearchTerm('');
+    setFilterContinent('all');
+    setFilterStatus('all');
+  };
+
+  // Check if any filters are active
+  const hasActiveFilters = searchTerm !== '' || filterContinent !== 'all' || filterStatus !== 'all';
+
+  const continents = [...new Set(countries.map(c => c.continent))].sort();
+
+  if (isLoading) {
+    return (
+      <div style={{
+        minHeight: '100vh',
+        background: 'linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%)'
+      }}>
+        <Sidebar activeItem="countries" />
+        <div style={{
+          marginLeft: '280px',
+          padding: '2rem',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          minHeight: '60vh'
+        }}>
+          <div style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            gap: '1rem'
+          }}>
+            <LoadingSpinner size="xl" />
+            <p style={{ color: '#6b7280', fontSize: '1rem' }}>Loading countries...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div style={{
       minHeight: '100vh',
@@ -260,25 +326,219 @@ export default function CountriesPage() {
         padding: '2rem'
       }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-          {/* Header */}
+          {/* Breadcrumb Navigation */}
+          <Breadcrumb items={[
+            { label: 'Dashboard', href: '/dashboard' },
+            { label: 'Reference', href: '/reference' },
+            { label: 'Countries' }
+          ]} />
+          
+          {/* Enhanced Search and Filter Bar */}
+          {countries.length > 0 && (
+            <div style={{
+              backgroundColor: 'white',
+              padding: '2rem',
+              borderRadius: '16px',
+              marginBottom: '2rem',
+              boxShadow: '0 8px 25px rgba(0, 0, 0, 0.08)',
+              border: '1px solid #e5e7eb'
+            }}>
+              <div style={{
+                display: 'flex',
+                gap: '1rem',
+                alignItems: 'center',
+                flexWrap: 'wrap'
+              }}>
+                {/* Enhanced Search Input */}
+                <div style={{ position: 'relative', flex: '1', minWidth: '300px' }}>
+                  <input
+                    type="text"
+                    placeholder="Search countries by name..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    style={{
+                      width: '100%',
+                      padding: '1rem 1rem 1rem 3rem',
+                      border: '2px solid #e5e7eb',
+                      borderRadius: '12px',
+                      fontSize: '0.875rem',
+                      outline: 'none',
+                      transition: 'all 0.3s ease',
+                      backgroundColor: '#fafbfc'
+                    }}
+                    onFocus={(e) => {
+                      e.target.style.borderColor = '#667eea';
+                      e.target.style.boxShadow = '0 0 0 3px rgba(102, 126, 234, 0.1)';
+                      e.target.style.backgroundColor = 'white';
+                    }}
+                    onBlur={(e) => {
+                      e.target.style.borderColor = '#e5e7eb';
+                      e.target.style.boxShadow = 'none';
+                      e.target.style.backgroundColor = '#fafbfc';
+                    }}
+                  />
+                  <svg style={{
+                    position: 'absolute',
+                    left: '1rem',
+                    top: '50%',
+                    transform: 'translateY(-50%)',
+                    width: '20px',
+                    height: '20px',
+                    color: '#9ca3af'
+                  }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                  </svg>
+                </div>
+                
+                {/* Filter Controls */}
+                <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+                  {/* Continent Filter */}
+                  <div style={{ position: 'relative' }}>
+                    <select
+                      value={filterContinent}
+                      onChange={(e) => setFilterContinent(e.target.value)}
+                      style={{
+                        padding: '1rem 2.5rem 1rem 1rem',
+                        border: '2px solid #e5e7eb',
+                        borderRadius: '12px',
+                        fontSize: '0.875rem',
+                        outline: 'none',
+                        backgroundColor: '#fafbfc',
+                        cursor: 'pointer',
+                        appearance: 'none',
+                        minWidth: '150px'
+                      }}
+                    >
+                      <option value="all">All Continents</option>
+                      {continents.map(continent => (
+                        <option key={continent} value={continent}>{continent}</option>
+                      ))}
+                    </select>
+                    <svg style={{
+                      position: 'absolute',
+                      right: '0.75rem',
+                      top: '50%',
+                      transform: 'translateY(-50%)',
+                      width: '16px',
+                      height: '16px',
+                      color: '#9ca3af',
+                      pointerEvents: 'none'
+                    }} fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M7 10l5 5 5-5z"/>
+                    </svg>
+                  </div>
+
+                  {/* Status Filter */}
+                  <div style={{ position: 'relative' }}>
+                    <select
+                      value={filterStatus}
+                      onChange={(e) => setFilterStatus(e.target.value)}
+                      style={{
+                        padding: '1rem 2.5rem 1rem 1rem',
+                        border: '2px solid #e5e7eb',
+                        borderRadius: '12px',
+                        fontSize: '0.875rem',
+                        outline: 'none',
+                        backgroundColor: '#fafbfc',
+                        cursor: 'pointer',
+                        appearance: 'none',
+                        minWidth: '120px'
+                      }}
+                    >
+                      <option value="all">All Status</option>
+                      <option value="active">Active</option>
+                      <option value="inactive">Inactive</option>
+                    </select>
+                    <svg style={{
+                      position: 'absolute',
+                      right: '0.75rem',
+                      top: '50%',
+                      transform: 'translateY(-50%)',
+                      width: '16px',
+                      height: '16px',
+                      color: '#9ca3af',
+                      pointerEvents: 'none'
+                    }} fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M7 10l5 5 5-5z"/>
+                    </svg>
+                  </div>
+
+                  {/* Clear Filters Button */}
+                  {hasActiveFilters && (
+                    <button
+                      onClick={clearFilters}
+                      style={{
+                        padding: '1rem 1.5rem',
+                        border: '2px solid #e5e7eb',
+                        borderRadius: '12px',
+                        fontSize: '0.875rem',
+                        fontWeight: '600',
+                        backgroundColor: 'white',
+                        color: '#6b7280',
+                        cursor: 'pointer',
+                        transition: 'all 0.3s ease',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '0.5rem'
+                      }}
+                      onMouseOver={(e) => {
+                        e.target.style.borderColor = '#dc2626';
+                        e.target.style.color = '#dc2626';
+                        e.target.style.backgroundColor = '#fef2f2';
+                      }}
+                      onMouseOut={(e) => {
+                        e.target.style.borderColor = '#e5e7eb';
+                        e.target.style.color = '#6b7280';
+                        e.target.style.backgroundColor = 'white';
+                      }}
+                    >
+                      <svg style={{ width: '16px', height: '16px' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                      </svg>
+                      Clear
+                    </button>
+                  )}
+                </div>
+                
+                {/* Results Count */}
+                <div style={{
+                  fontSize: '0.875rem',
+                  color: '#6b7280',
+                  fontWeight: '600',
+                  padding: '1rem 1.5rem',
+                  backgroundColor: '#f8fafc',
+                  borderRadius: '12px',
+                  border: '1px solid #e5e7eb'
+                }}>
+                  {filteredCountries.length} of {countries.length} countries
+                </div>
+              </div>
+            </div>
+          )}
+          
+          {/* Enhanced Header */}
           <div style={{
             display: 'flex',
             justifyContent: 'space-between',
-            alignItems: 'center',
-            marginBottom: '2rem'
+            alignItems: 'flex-start',
+            marginBottom: '3rem',
+            paddingBottom: '2rem',
+            borderBottom: '1px solid #e5e7eb'
           }}>
             <div>
               <h1 style={{
-                fontSize: '2rem',
-                fontWeight: '700',
+                fontSize: '2.5rem',
+                fontWeight: '800',
                 color: '#1f2937',
-                margin: '0 0 0.5rem 0'
+                margin: '0 0 0.75rem 0',
+                letterSpacing: '-0.025em'
               }}>
-                Reference → Countries
+                Countries
               </h1>
               <p style={{
                 color: '#6b7280',
-                margin: 0
+                margin: 0,
+                fontSize: '1.125rem'
               }}>
                 Manage country references and institutional data
               </p>
@@ -288,31 +548,31 @@ export default function CountriesPage() {
               style={{
                 background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
                 color: 'white',
-                padding: '0.875rem 1.75rem',
-                borderRadius: '12px',
+                padding: '1.25rem 2.5rem',
+                borderRadius: '16px',
                 border: 'none',
-                fontSize: '0.875rem',
-                fontWeight: '600',
+                fontSize: '1rem',
+                fontWeight: '700',
                 cursor: 'pointer',
                 transition: 'all 0.3s ease',
                 display: 'flex',
                 alignItems: 'center',
-                boxShadow: '0 4px 15px rgba(102, 126, 234, 0.3)',
-                border: '1px solid rgba(255, 255, 255, 0.1)'
+                gap: '0.75rem',
+                boxShadow: '0 8px 25px rgba(102, 126, 234, 0.4)',
+                border: '1px solid rgba(255, 255, 255, 0.2)'
               }}
               onMouseOver={(e) => {
-                e.currentTarget.style.transform = 'translateY(-2px)';
-                e.currentTarget.style.boxShadow = '0 8px 25px rgba(102, 126, 234, 0.4)';
+                e.currentTarget.style.transform = 'translateY(-3px)';
+                e.currentTarget.style.boxShadow = '0 12px 35px rgba(102, 126, 234, 0.5)';
               }}
               onMouseOut={(e) => {
                 e.currentTarget.style.transform = 'translateY(0)';
-                e.currentTarget.style.boxShadow = '0 4px 15px rgba(102, 126, 234, 0.3)';
+                e.currentTarget.style.boxShadow = '0 8px 25px rgba(102, 126, 234, 0.4)';
               }}
             >
               <svg style={{
-                width: '1rem',
-                height: '1rem',
-                marginRight: '0.5rem'
+                width: '20px',
+                height: '20px'
               }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
               </svg>
@@ -323,6 +583,69 @@ export default function CountriesPage() {
           {/* Countries List */}
           {countries.length === 0 ? (
             <EmptyState onCreateCountry={handleCreateCountry} />
+          ) : filteredCountries.length === 0 ? (
+            <div style={{
+              backgroundColor: 'white',
+              padding: '3rem',
+              borderRadius: '16px',
+              textAlign: 'center',
+              boxShadow: '0 4px 20px rgba(0, 0, 0, 0.08)'
+            }}>
+              <div style={{
+                width: '80px',
+                height: '80px',
+                backgroundColor: '#f3f4f6',
+                borderRadius: '50%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                margin: '0 auto 1.5rem'
+              }}>
+                <svg style={{ width: '40px', height: '40px', color: '#9ca3af' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+              </div>
+              <h3 style={{
+                fontSize: '1.25rem',
+                fontWeight: '600',
+                color: '#1f2937',
+                marginBottom: '0.5rem'
+              }}>No countries found</h3>
+              <p style={{
+                color: '#6b7280',
+                marginBottom: '1.5rem'
+              }}>Try adjusting your search or filter criteria</p>
+              <button
+                onClick={clearFilters}
+                style={{
+                  background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                  color: 'white',
+                  padding: '1rem 2rem',
+                  borderRadius: '12px',
+                  border: 'none',
+                  fontSize: '0.875rem',
+                  fontWeight: '600',
+                  cursor: 'pointer',
+                  transition: 'all 0.3s ease',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.5rem'
+                }}
+                onMouseOver={(e) => {
+                  e.target.style.transform = 'translateY(-1px)';
+                  e.target.style.boxShadow = '0 6px 20px rgba(102, 126, 234, 0.4)';
+                }}
+                onMouseOut={(e) => {
+                  e.target.style.transform = 'translateY(0)';
+                  e.target.style.boxShadow = 'none';
+                }}
+              >
+                <svg style={{ width: '16px', height: '16px' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                </svg>
+                Clear Filters
+              </button>
+            </div>
           ) : (
             <div style={{
               backgroundColor: 'white',
@@ -346,15 +669,15 @@ export default function CountriesPage() {
                   alignItems: 'center',
                   gap: '0.75rem'
                 }}>
-                  <svg style={{ width: '24px', height: '24px', color: '#667eea' }} fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                  <svg style={{ width: '24px', height: '24px', color: '#667eea' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
-                  Countries ({countries.length})
+                  Countries
                 </h3>
               </div>
               
-              <div style={{ padding: '0' }}>
-                {countries.map((country, index) => (
+              <div style={{ padding: '1.5rem' }}>
+                {filteredCountries.map((country, index) => (
                   <div
                     key={country.id}
                     style={{
@@ -421,10 +744,10 @@ export default function CountriesPage() {
                       <Link
                         href={`/reference/countries/${country.id}`}
                         style={{
-                          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                          background: 'linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)',
                           color: 'white',
-                          padding: '0.625rem 1.25rem',
-                          borderRadius: '10px',
+                          padding: '0.75rem 1.5rem',
+                          borderRadius: '12px',
                           textDecoration: 'none',
                           fontSize: '0.875rem',
                           fontWeight: '600',
@@ -432,70 +755,86 @@ export default function CountriesPage() {
                           alignItems: 'center',
                           gap: '0.5rem',
                           transition: 'all 0.3s ease',
-                          boxShadow: '0 3px 12px rgba(102, 126, 234, 0.3)',
-                          border: '1px solid rgba(255, 255, 255, 0.1)'
+                          boxShadow: '0 4px 15px rgba(59, 130, 246, 0.3)',
+                          border: '1px solid rgba(255, 255, 255, 0.2)'
                         }}
                         onMouseOver={(e) => {
-                          e.target.style.transform = 'translateY(-1px)';
-                          e.target.style.boxShadow = '0 6px 20px rgba(102, 126, 234, 0.4)';
+                          e.target.style.transform = 'translateY(-2px)';
+                          e.target.style.boxShadow = '0 8px 25px rgba(59, 130, 246, 0.4)';
                         }}
                         onMouseOut={(e) => {
                           e.target.style.transform = 'translateY(0)';
-                          e.target.style.boxShadow = '0 3px 12px rgba(102, 126, 234, 0.3)';
+                          e.target.style.boxShadow = '0 4px 15px rgba(59, 130, 246, 0.3)';
                         }}
                       >
+                        <svg style={{ width: '16px', height: '16px' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                        </svg>
                         View
                       </Link>
                       <button
                         onClick={() => handleEditCountry(country)}
                         style={{
-                          background: 'linear-gradient(135deg, #6b7280 0%, #4b5563 100%)',
+                          background: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)',
                           color: 'white',
-                          padding: '0.625rem 1.25rem',
-                          borderRadius: '10px',
+                          padding: '0.75rem 1.5rem',
+                          borderRadius: '12px',
                           border: 'none',
                           fontSize: '0.875rem',
                           fontWeight: '600',
                           cursor: 'pointer',
                           transition: 'all 0.3s ease',
-                          boxShadow: '0 3px 12px rgba(107, 114, 128, 0.3)',
-                          border: '1px solid rgba(255, 255, 255, 0.1)'
+                          boxShadow: '0 4px 15px rgba(139, 92, 246, 0.3)',
+                          border: '1px solid rgba(255, 255, 255, 0.2)',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '0.5rem'
                         }}
                         onMouseOver={(e) => {
-                          e.target.style.transform = 'translateY(-1px)';
-                          e.target.style.boxShadow = '0 6px 20px rgba(107, 114, 128, 0.4)';
+                          e.target.style.transform = 'translateY(-2px)';
+                          e.target.style.boxShadow = '0 8px 25px rgba(139, 92, 246, 0.4)';
                         }}
                         onMouseOut={(e) => {
                           e.target.style.transform = 'translateY(0)';
-                          e.target.style.boxShadow = '0 3px 12px rgba(107, 114, 128, 0.3)';
+                          e.target.style.boxShadow = '0 4px 15px rgba(139, 92, 246, 0.3)';
                         }}
                       >
+                        <svg style={{ width: '16px', height: '16px' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                        </svg>
                         Edit
                       </button>
                       <button
                         onClick={() => handleDeleteCountry(country)}
                         style={{
-                          background: 'linear-gradient(135deg, #dc2626 0%, #b91c1c 100%)',
+                          background: 'linear-gradient(135deg, #ef4444 0%, #dc2626 100%)',
                           color: 'white',
-                          padding: '0.625rem 1.25rem',
-                          borderRadius: '10px',
+                          padding: '0.75rem 1.5rem',
+                          borderRadius: '12px',
                           border: 'none',
                           fontSize: '0.875rem',
                           fontWeight: '600',
                           cursor: 'pointer',
                           transition: 'all 0.3s ease',
-                          boxShadow: '0 3px 12px rgba(220, 38, 38, 0.3)',
-                          border: '1px solid rgba(255, 255, 255, 0.1)'
+                          boxShadow: '0 4px 15px rgba(239, 68, 68, 0.3)',
+                          border: '1px solid rgba(255, 255, 255, 0.2)',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '0.5rem'
                         }}
                         onMouseOver={(e) => {
-                          e.target.style.transform = 'translateY(-1px)';
-                          e.target.style.boxShadow = '0 6px 20px rgba(220, 38, 38, 0.4)';
+                          e.target.style.transform = 'translateY(-2px)';
+                          e.target.style.boxShadow = '0 8px 25px rgba(239, 68, 68, 0.4)';
                         }}
                         onMouseOut={(e) => {
                           e.target.style.transform = 'translateY(0)';
-                          e.target.style.boxShadow = '0 3px 12px rgba(220, 38, 38, 0.3)';
+                          e.target.style.boxShadow = '0 4px 15px rgba(239, 68, 68, 0.3)';
                         }}
                       >
+                        <svg style={{ width: '16px', height: '16px' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                        </svg>
                         Delete
                       </button>
                     </div>

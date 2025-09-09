@@ -637,84 +637,149 @@ export default function CountryViewPage() {
               </div>
             </div>
 
-            {/* Institution Maps */}
+            {/* Institution Maps - Redesigned */}
             <div style={{ 
               backgroundColor: 'white', 
-              padding: '1.5rem', 
-              borderRadius: '0.75rem',
-              border: '1px solid #e5e7eb'
+              padding: '2rem', 
+              borderRadius: '16px',
+              border: '1px solid #e2e8f0',
+              boxShadow: '0 4px 20px rgba(0, 0, 0, 0.08)'
             }}>
-              <h3 style={{ 
-                fontSize: '1.125rem', 
-                fontWeight: '600', 
-                color: '#1f2937',
-                marginBottom: '1rem'
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                marginBottom: '1.5rem'
               }}>
-                Institution Maps
-              </h3>
+                <h3 style={{ 
+                  fontSize: '1.25rem', 
+                  fontWeight: '700', 
+                  color: '#1f2937',
+                  margin: 0
+                }}>
+                  Institution Maps
+                </h3>
+                <div style={{
+                  background: '#1e40af',
+                  color: 'white',
+                  padding: '0.375rem 0.75rem',
+                  borderRadius: '20px',
+                  fontSize: '0.75rem',
+                  fontWeight: '600'
+                }}>
+                  0 Locations
+                </div>
+              </div>
+              
+              {/* Enhanced Map Container */}
               <div style={{ 
-                background: 'linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%)', 
-                height: '200px', 
-                borderRadius: '16px',
-                marginBottom: '1rem',
+                background: 'linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%)', 
+                height: '240px', 
+                borderRadius: '12px',
+                marginBottom: '1.5rem',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 flexDirection: 'column',
-                gap: '0.5rem',
-                border: '1px solid #e5e7eb'
+                gap: '1rem',
+                border: '2px dashed #cbd5e1',
+                position: 'relative',
+                overflow: 'hidden'
               }}>
-                <div style={{ fontSize: '0.875rem' }}>Interactive Map</div>
-                <div style={{ fontSize: '0.75rem' }}>Showing {country.name} institutions</div>
+                {/* Map Icon */}
+                <div style={{
+                  width: '60px',
+                  height: '60px',
+                  backgroundColor: '#1e40af',
+                  borderRadius: '50%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  marginBottom: '0.5rem'
+                }}>
+                  <svg style={{ width: '30px', height: '30px', color: 'white' }} fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+                  </svg>
+                </div>
+                <div style={{
+                  textAlign: 'center'
+                }}>
+                  <div style={{ 
+                    fontSize: '1rem', 
+                    fontWeight: '600',
+                    color: '#1f2937',
+                    marginBottom: '0.25rem'
+                  }}>Interactive Map View</div>
+                  <div style={{ 
+                    fontSize: '0.875rem',
+                    color: '#6b7280'
+                  }}>Showing institutions in {country.name}</div>
+                </div>
               </div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+              
+              {/* Action Buttons Grid */}
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
                 <button style={{
-                  background: 'linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)',
+                  background: '#1e40af',
                   color: 'white',
-                  padding: '1rem 1.25rem',
+                  padding: '1rem',
                   borderRadius: '12px',
                   border: 'none',
                   fontSize: '0.875rem',
                   fontWeight: '600',
                   cursor: 'pointer',
-                  width: '100%',
-                  transition: 'all 0.3s ease',
-                  boxShadow: '0 4px 15px rgba(99, 102, 241, 0.3)',
-                  border: '1px solid rgba(255, 255, 255, 0.1)'
+                  transition: 'all 0.2s ease',
+                  boxShadow: '0 4px 12px rgba(30, 64, 175, 0.3)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '0.5rem'
                 }}
                 onMouseOver={(e) => {
                   e.currentTarget.style.transform = 'translateY(-2px)';
-                  e.currentTarget.style.boxShadow = '0 8px 25px rgba(99, 102, 241, 0.4)';
+                  e.currentTarget.style.boxShadow = '0 6px 16px rgba(30, 64, 175, 0.4)';
+                  e.currentTarget.style.backgroundColor = '#1e3a8a';
                 }}
                 onMouseOut={(e) => {
                   e.currentTarget.style.transform = 'translateY(0)';
-                  e.currentTarget.style.boxShadow = '0 4px 15px rgba(99, 102, 241, 0.3)';
+                  e.currentTarget.style.boxShadow = '0 4px 12px rgba(30, 64, 175, 0.3)';
+                  e.currentTarget.style.backgroundColor = '#1e40af';
                 }}>
-                  View Full Map
+                  <svg style={{ width: '16px', height: '16px' }} fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/>
+                  </svg>
+                  View Map
                 </button>
                 <button style={{
-                  background: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)',
+                  background: '#374151',
                   color: 'white',
-                  padding: '1rem 1.25rem',
+                  padding: '1rem',
                   borderRadius: '12px',
                   border: 'none',
                   fontSize: '0.875rem',
                   fontWeight: '600',
                   cursor: 'pointer',
-                  width: '100%',
-                  transition: 'all 0.3s ease',
-                  boxShadow: '0 4px 15px rgba(139, 92, 246, 0.3)',
-                  border: '1px solid rgba(255, 255, 255, 0.1)'
+                  transition: 'all 0.2s ease',
+                  boxShadow: '0 4px 12px rgba(55, 65, 81, 0.3)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '0.5rem'
                 }}
                 onMouseOver={(e) => {
                   e.currentTarget.style.transform = 'translateY(-2px)';
-                  e.currentTarget.style.boxShadow = '0 8px 25px rgba(139, 92, 246, 0.4)';
+                  e.currentTarget.style.boxShadow = '0 6px 16px rgba(55, 65, 81, 0.4)';
+                  e.currentTarget.style.backgroundColor = '#1f2937';
                 }}
                 onMouseOut={(e) => {
                   e.currentTarget.style.transform = 'translateY(0)';
-                  e.currentTarget.style.boxShadow = '0 4px 15px rgba(139, 92, 246, 0.3)';
+                  e.currentTarget.style.boxShadow = '0 4px 12px rgba(55, 65, 81, 0.3)';
+                  e.currentTarget.style.backgroundColor = '#374151';
                 }}>
-                  Add Institution to Map
+                  <svg style={{ width: '16px', height: '16px' }} fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 4v16m8-8H4"/>
+                  </svg>
+                  Add Location
                 </button>
               </div>
             </div>

@@ -117,11 +117,11 @@ export default function Dashboard() {
             marginBottom: isMobile ? '1.5rem' : '2rem'
           }}>
             <div style={{
-              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-              padding: '2rem',
-              borderRadius: '20px',
+              background: 'linear-gradient(135deg, #1e40af 0%, #1e3a8a 100%)',
+              padding: isMobile ? '1.5rem' : '2rem',
+              borderRadius: '16px',
               color: 'white',
-              boxShadow: '0 10px 30px rgba(102, 126, 234, 0.3)',
+              boxShadow: '0 8px 25px rgba(30, 64, 175, 0.25)',
               border: '1px solid rgba(255, 255, 255, 0.1)'
             }}>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem' }}>
@@ -140,7 +140,7 @@ export default function Dashboard() {
                   backdropFilter: 'blur(10px)'
                 }}>
                   <svg style={{ width: '30px', height: '30px' }} fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zM11 19.93c-3.94-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
                   </svg>
                 </div>
               </div>
@@ -150,11 +150,11 @@ export default function Dashboard() {
             </div>
 
             <div style={{
-              background: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
-              padding: '2rem',
-              borderRadius: '20px',
+              background: 'linear-gradient(135deg, #374151 0%, #1f2937 100%)',
+              padding: isMobile ? '1.5rem' : '2rem',
+              borderRadius: '16px',
               color: 'white',
-              boxShadow: '0 10px 30px rgba(245, 87, 108, 0.3)',
+              boxShadow: '0 8px 25px rgba(55, 65, 81, 0.25)',
               border: '1px solid rgba(255, 255, 255, 0.1)'
             }}>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem' }}>
@@ -173,7 +173,7 @@ export default function Dashboard() {
                   backdropFilter: 'blur(10px)'
                 }}>
                   <svg style={{ width: '30px', height: '30px' }} fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M12 3L1 9l4 2.18v6L12 21l7-3.82v-6l2-1.09V17h2V9L12 3zm6.82 6L12 12.72 5.18 9 12 5.28 18.82 9zM17 15.99l-5 2.73-5-2.73v-3.72L12 15l5-2.73v3.72z"/>
+                    <path d="M12 3L2 12h3v8h6v-6h2v6h6v-8h3L12 3zm5 6h-2v8h-2v-6H9v6H7v-8H5l7-7 7 7h-2z"/>
                   </svg>
                 </div>
               </div>
@@ -183,12 +183,12 @@ export default function Dashboard() {
             </div>
 
             <div style={{
-              background: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
-              padding: '2rem',
-              borderRadius: '20px',
-              color: 'white',
-              boxShadow: '0 10px 30px rgba(79, 172, 254, 0.3)',
-              border: '1px solid rgba(255, 255, 255, 0.1)'
+              background: 'white',
+              padding: isMobile ? '1.5rem' : '2rem',
+              borderRadius: '16px',
+              color: '#1f2937',
+              boxShadow: '0 4px 20px rgba(0, 0, 0, 0.08)',
+              border: '2px solid #1e40af'
             }}>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem' }}>
                 <div>
@@ -219,11 +219,11 @@ export default function Dashboard() {
           {/* Quick Actions Section */}
           <div style={{
             backgroundColor: 'white',
-            padding: '2rem',
-            borderRadius: '20px',
-            border: '1px solid #e5e7eb',
+            padding: isMobile ? '1.5rem' : '2rem',
+            borderRadius: '16px',
+            border: '1px solid #e2e8f0',
             boxShadow: '0 4px 20px rgba(0, 0, 0, 0.08)',
-            marginBottom: '2rem'
+            marginBottom: isMobile ? '1.5rem' : '2rem'
           }}>
             <h3 style={{
               fontSize: '1.5rem',
@@ -233,109 +233,239 @@ export default function Dashboard() {
             }}>
               Quick Actions
             </h3>
-            <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1rem' }}>
-              <Link
-                href="/reference/countries/create"
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '1rem',
-                  padding: '1.5rem',
-                  background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                  color: 'white',
-                  textDecoration: 'none',
-                  borderRadius: '16px',
-                  fontWeight: '600',
-                  fontSize: '1rem',
-                  transition: 'all 0.3s ease',
-                  boxShadow: '0 4px 15px rgba(102, 126, 234, 0.3)',
-                  border: '1px solid rgba(255, 255, 255, 0.1)'
-                }}
-                onMouseOver={(e) => {
-                  e.currentTarget.style.transform = 'translateY(-2px)';
-                  e.currentTarget.style.boxShadow = '0 8px 25px rgba(102, 126, 234, 0.4)';
-                }}
-                onMouseOut={(e) => {
-                  e.currentTarget.style.transform = 'translateY(0)';
-                  e.currentTarget.style.boxShadow = '0 4px 15px rgba(102, 126, 234, 0.3)';
-                }}
+            <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.5rem' }}>
+              <div style={{
+                background: 'linear-gradient(135deg, #1e40af 0%, #1e3a8a 100%)',
+                padding: isMobile ? '1.5rem' : '2rem',
+                borderRadius: '16px',
+                color: 'white',
+                boxShadow: '0 8px 25px rgba(30, 64, 175, 0.25)',
+                border: '1px solid rgba(255, 255, 255, 0.1)',
+                cursor: 'pointer',
+                transition: 'all 0.3s ease',
+                position: 'relative'
+              }}
+              onMouseOver={(e) => {
+                e.currentTarget.style.transform = 'translateY(-4px)';
+                e.currentTarget.style.boxShadow = '0 12px 35px rgba(30, 64, 175, 0.35)';
+              }}
+              onMouseOut={(e) => {
+                e.currentTarget.style.transform = 'translateY(0)';
+                e.currentTarget.style.boxShadow = '0 8px 25px rgba(30, 64, 175, 0.25)';
+              }}
+              onClick={() => window.location.href = '/reference/countries/create'}
               >
-                <div style={{
-                  width: '50px',
-                  height: '50px',
-                  backgroundColor: 'rgba(255, 255, 255, 0.2)',
-                  borderRadius: '12px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  backdropFilter: 'blur(10px)'
-                }}>
-                  <svg style={{ width: '24px', height: '24px' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                  </svg>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem' }}>
+                  <div>
+                    <div style={{ fontSize: '0.875rem', opacity: 0.8, marginBottom: '0.5rem' }}>Quick Action</div>
+                    <div style={{ fontSize: '1.25rem', fontWeight: '700' }}>Add New Country</div>
+                  </div>
+                  <div style={{
+                    width: '60px',
+                    height: '60px',
+                    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+                    borderRadius: '16px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    backdropFilter: 'blur(10px)'
+                  }}>
+                    <svg style={{ width: '30px', height: '30px' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                    </svg>
+                  </div>
                 </div>
-                <div>
-                  <div style={{ fontSize: '1.1rem', fontWeight: '600' }}>Add New Country</div>
-                  <div style={{ fontSize: '0.875rem', opacity: 0.8 }}>Register a new educational system</div>
+                <div style={{ fontSize: '0.875rem', opacity: 0.8 }}>
+                  ↗ Register a new educational system
                 </div>
-              </Link>
+              </div>
               
-              <Link
-                href="/reference/countries"
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '1rem',
-                  padding: '1.5rem',
-                  background: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
-                  color: 'white',
-                  textDecoration: 'none',
-                  borderRadius: '16px',
-                  fontWeight: '600',
-                  fontSize: '1rem',
-                  transition: 'all 0.3s ease',
-                  boxShadow: '0 4px 15px rgba(245, 87, 108, 0.3)',
-                  border: '1px solid rgba(255, 255, 255, 0.1)'
-                }}
-                onMouseOver={(e) => {
-                  e.currentTarget.style.transform = 'translateY(-2px)';
-                  e.currentTarget.style.boxShadow = '0 8px 25px rgba(245, 87, 108, 0.4)';
-                }}
-                onMouseOut={(e) => {
-                  e.currentTarget.style.transform = 'translateY(0)';
-                  e.currentTarget.style.boxShadow = '0 4px 15px rgba(245, 87, 108, 0.3)';
-                }}
+              <div style={{
+                background: 'linear-gradient(135deg, #374151 0%, #1f2937 100%)',
+                padding: isMobile ? '1.5rem' : '2rem',
+                borderRadius: '16px',
+                color: 'white',
+                boxShadow: '0 8px 25px rgba(55, 65, 81, 0.25)',
+                border: '1px solid rgba(255, 255, 255, 0.1)',
+                cursor: 'pointer',
+                transition: 'all 0.3s ease',
+                position: 'relative'
+              }}
+              onMouseOver={(e) => {
+                e.currentTarget.style.transform = 'translateY(-4px)';
+                e.currentTarget.style.boxShadow = '0 12px 35px rgba(55, 65, 81, 0.35)';
+              }}
+              onMouseOut={(e) => {
+                e.currentTarget.style.transform = 'translateY(0)';
+                e.currentTarget.style.boxShadow = '0 8px 25px rgba(55, 65, 81, 0.25)';
+              }}
+              onClick={() => window.location.href = '/reference/countries'}
               >
-                <div style={{
-                  width: '50px',
-                  height: '50px',
-                  backgroundColor: 'rgba(255, 255, 255, 0.2)',
-                  borderRadius: '12px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  backdropFilter: 'blur(10px)'
-                }}>
-                  <svg style={{ width: '24px', height: '24px' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
-                  </svg>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem' }}>
+                  <div>
+                    <div style={{ fontSize: '0.875rem', opacity: 0.8, marginBottom: '0.5rem' }}>Quick Action</div>
+                    <div style={{ fontSize: '1.25rem', fontWeight: '700' }}>Edit/View Countries</div>
+                  </div>
+                  <div style={{
+                    width: '60px',
+                    height: '60px',
+                    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+                    borderRadius: '16px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    backdropFilter: 'blur(10px)'
+                  }}>
+                    <svg style={{ width: '30px', height: '30px' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
+                    </svg>
+                  </div>
                 </div>
-                <div>
-                  <div style={{ fontSize: '1.1rem', fontWeight: '600' }}>Manage Countries</div>
-                  <div style={{ fontSize: '0.875rem', opacity: 0.8 }}>View and edit country data</div>
+                <div style={{ fontSize: '0.875rem', opacity: 0.8 }}>
+                  ↗ View and edit country data
                 </div>
-              </Link>
+              </div>
             </div>
           </div>
 
+          {/* Data Visualization Section */}
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: '1fr',
+            gap: isMobile ? '1rem' : '1.5rem',
+            marginBottom: isMobile ? '1.5rem' : '2rem'
+          }}>
+            {/* Countries by Continent Chart */}
+            <div style={{
+              background: 'white',
+              borderRadius: '16px',
+              border: '1px solid #e2e8f0',
+              padding: isMobile ? '1.5rem' : '2rem',
+              boxShadow: '0 4px 20px rgba(0, 0, 0, 0.08)',
+              transform: isLoaded ? 'translateY(0)' : 'translateY(30px)',
+              opacity: isLoaded ? 1 : 0,
+              transition: 'all 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.3s'
+            }}>
+              <h3 style={{
+                fontSize: '1.25rem',
+                fontWeight: '700',
+                color: '#1f2937',
+                marginBottom: '1.5rem',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.5rem'
+              }}>
+                <svg style={{ width: '20px', height: '20px', color: '#1e40af' }} fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/>
+                </svg>
+                Countries by Continent
+              </h3>
+              <div style={{ height: '200px', position: 'relative' }}>
+                {/* Enhanced Bar Chart with Insights */}
+                {countries.length > 0 && (
+                  <div style={{ 
+                    marginBottom: '1rem', 
+                    padding: '0.75rem', 
+                    backgroundColor: '#f8fafc', 
+                    borderRadius: '8px',
+                    fontSize: '0.875rem',
+                    color: '#374151',
+                    fontWeight: '500'
+                  }}>
+                    💡 {(() => {
+                      const continentCounts = { 'Africa': 0, 'Asia': 0, 'Europe': 0, 'Americas': 0 };
+                      countries.forEach(country => {
+                        const countryName = country.name?.toLowerCase() || '';
+                        if (countryName.includes('kenya') || countryName.includes('nigeria') || countryName.includes('south africa') || countryName.includes('egypt') || countryName.includes('ghana')) {
+                          continentCounts['Africa']++;
+                        } else if (countryName.includes('china') || countryName.includes('india') || countryName.includes('japan') || countryName.includes('korea') || countryName.includes('thailand')) {
+                          continentCounts['Asia']++;
+                        } else if (countryName.includes('germany') || countryName.includes('france') || countryName.includes('uk') || countryName.includes('italy') || countryName.includes('spain')) {
+                          continentCounts['Europe']++;
+                        } else if (countryName.includes('usa') || countryName.includes('canada') || countryName.includes('brazil') || countryName.includes('mexico') || countryName.includes('argentina')) {
+                          continentCounts['Americas']++;
+                        } else {
+                          continentCounts['Africa']++;
+                        }
+                      });
+                      const maxContinent = Object.keys(continentCounts).reduce((a, b) => continentCounts[a] > continentCounts[b] ? a : b);
+                      return `${maxContinent} is your most active continent with ${continentCounts[maxContinent]} countries`;
+                    })()}
+                  </div>
+                )}
+                <div style={{ display: 'flex', alignItems: 'end', height: '140px', gap: '12px', justifyContent: 'space-around' }}>
+                  {(() => {
+                    // Count countries by continent based on actual data
+                    const continentCounts = {
+                      'Africa': 0,
+                      'Asia': 0,
+                      'Europe': 0,
+                      'Americas': 0
+                    };
+                    
+                    countries.forEach(country => {
+                      const countryName = country.name?.toLowerCase() || '';
+                      // Simple continent mapping - can be expanded
+                      if (countryName.includes('kenya') || countryName.includes('nigeria') || countryName.includes('south africa') || countryName.includes('egypt') || countryName.includes('ghana')) {
+                        continentCounts['Africa']++;
+                      } else if (countryName.includes('china') || countryName.includes('india') || countryName.includes('japan') || countryName.includes('korea') || countryName.includes('thailand')) {
+                        continentCounts['Asia']++;
+                      } else if (countryName.includes('germany') || countryName.includes('france') || countryName.includes('uk') || countryName.includes('italy') || countryName.includes('spain')) {
+                        continentCounts['Europe']++;
+                      } else if (countryName.includes('usa') || countryName.includes('canada') || countryName.includes('brazil') || countryName.includes('mexico') || countryName.includes('argentina')) {
+                        continentCounts['Americas']++;
+                      } else {
+                        // Default assignment for unknown countries - assume Africa for now since Kenya is there
+                        continentCounts['Africa']++;
+                      }
+                    });
+                    
+                    return [
+                      { name: 'Africa', count: continentCounts['Africa'], color: '#10b981' },
+                      { name: 'Asia', count: continentCounts['Asia'], color: '#3b82f6' },
+                      { name: 'Europe', count: continentCounts['Europe'], color: '#f59e0b' },
+                      { name: 'Americas', count: continentCounts['Americas'], color: '#ef4444' }
+                    ];
+                  })().map((continent, index) => {
+                    const maxHeight = 120;
+                    const height = countries.length > 0 ? Math.max((continent.count / countries.length) * maxHeight, 8) : 8;
+                    return (
+                      <div key={continent.name} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', flex: 1 }}>
+                        <div style={{
+                          width: '100%',
+                          maxWidth: '40px',
+                          height: `${height}px`,
+                          backgroundColor: continent.color,
+                          borderRadius: '4px 4px 0 0',
+                          marginBottom: '8px',
+                          transition: 'all 0.3s ease',
+                          transform: isLoaded ? 'scaleY(1)' : 'scaleY(0)',
+                          transformOrigin: 'bottom',
+                          transitionDelay: `${0.5 + index * 0.1}s`
+                        }}></div>
+                        <div style={{ fontSize: '0.75rem', color: '#6b7280', textAlign: 'center', fontWeight: '500' }}>
+                          {continent.name}
+                        </div>
+                        <div style={{ fontSize: '0.875rem', color: '#1f2937', fontWeight: '600' }}>
+                          {continent.count}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+
           {/* Recent Activity - Enhanced */}
           <div style={{
-            background: 'rgba(255, 255, 255, 0.95)',
-            backdropFilter: 'blur(20px)',
-            borderRadius: '2rem',
-            border: '1px solid rgba(255, 255, 255, 0.2)',
-            padding: '2rem',
-            boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.1)',
+            background: 'white',
+            borderRadius: '16px',
+            border: '1px solid #e2e8f0',
+            padding: isMobile ? '1.5rem' : '2rem',
+            boxShadow: '0 4px 20px rgba(0, 0, 0, 0.08)',
             transform: isLoaded ? 'translateY(0)' : 'translateY(50px)',
             opacity: isLoaded ? 1 : 0,
             transition: 'all 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.6s'
@@ -347,11 +477,9 @@ export default function Dashboard() {
               marginBottom: '1.5rem'
             }}>
               <h2 style={{
-                fontSize: '1.5rem',
+                fontSize: isMobile ? '1.25rem' : '1.5rem',
                 fontWeight: '700',
-                background: 'linear-gradient(135deg, #1f2937 0%, #4f46e5 100%)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
+                color: '#1f2937',
                 margin: 0,
                 letterSpacing: '-0.01em'
               }}>Recent Activity</h2>
@@ -361,9 +489,9 @@ export default function Dashboard() {
               alignItems: 'center',
               gap: '1rem',
               padding: '1.25rem',
-              background: 'linear-gradient(135deg, rgba(79, 70, 229, 0.05) 0%, rgba(59, 130, 246, 0.05) 100%)',
-              borderRadius: '1rem',
-              border: '1px solid rgba(79, 70, 229, 0.1)',
+              background: 'rgba(30, 64, 175, 0.05)',
+              borderRadius: '12px',
+              border: '1px solid rgba(30, 64, 175, 0.1)',
               position: 'relative',
               overflow: 'hidden'
             }}>
@@ -373,14 +501,14 @@ export default function Dashboard() {
                 top: 0,
                 bottom: 0,
                 width: '4px',
-                background: 'linear-gradient(135deg, #4f46e5 0%, #3b82f6 100%)'
+                background: '#1e40af'
               }}></div>
               <div style={{
                 width: '12px',
                 height: '12px',
-                background: 'linear-gradient(135deg, #4f46e5 0%, #3b82f6 100%)',
+                background: '#1e40af',
                 borderRadius: '50%',
-                boxShadow: '0 0 10px rgba(79, 70, 229, 0.5)',
+                boxShadow: '0 0 10px rgba(30, 64, 175, 0.5)',
                 animation: 'pulse 2s infinite'
               }}></div>
               <div style={{ flex: 1 }}>

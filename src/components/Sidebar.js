@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 
 const Sidebar = ({ activeItem, setActiveItem }) => {
   const [userEmail, setUserEmail] = useState('');
@@ -30,9 +31,8 @@ const Sidebar = ({ activeItem, setActiveItem }) => {
       label: 'Dashboard', 
       href: '/dashboard',
       icon: (
-        <svg style={{ width: '1.25rem', height: '1.25rem' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2z" />
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 5a2 2 0 012-2h4a2 2 0 012 2v14l-5-3-5 3V5z" />
+        <svg style={{ width: '1.25rem', height: '1.25rem', transition: 'all 0.3s ease' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
         </svg>
       )
     },
@@ -41,9 +41,8 @@ const Sidebar = ({ activeItem, setActiveItem }) => {
       label: 'Countries', 
       href: '/reference/countries',
       icon: (
-        <svg style={{ width: '1.25rem', height: '1.25rem' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+        <svg style={{ width: '1.25rem', height: '1.25rem', transition: 'all 0.3s ease' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
       )
     }
@@ -64,20 +63,33 @@ const Sidebar = ({ activeItem, setActiveItem }) => {
             top: '1rem',
             left: '1rem',
             zIndex: 1001,
-            backgroundColor: '#4f46e5',
+            background: 'linear-gradient(135deg, #1e40af 0%, #1e3a8a 100%)',
             color: 'white',
             border: 'none',
-            borderRadius: '0.5rem',
-            padding: '0.75rem',
+            borderRadius: '12px',
+            padding: '0.875rem',
             cursor: 'pointer',
-            boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
+            boxShadow: '0 8px 16px -4px rgba(30, 64, 175, 0.4), 0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+            transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+            transform: isMenuOpen ? 'rotate(90deg)' : 'rotate(0deg)',
+            backdropFilter: 'blur(10px)'
+          }}
+          onMouseOver={(e) => {
+            e.target.style.transform = isMenuOpen ? 'rotate(90deg) scale(1.05)' : 'rotate(0deg) scale(1.05)';
+            e.target.style.boxShadow = '0 12px 24px -6px rgba(30, 64, 175, 0.5), 0 8px 16px -4px rgba(0, 0, 0, 0.15)';
+          }}
+          onMouseOut={(e) => {
+            e.target.style.transform = isMenuOpen ? 'rotate(90deg) scale(1)' : 'rotate(0deg) scale(1)';
+            e.target.style.boxShadow = '0 8px 16px -4px rgba(30, 64, 175, 0.4), 0 4px 6px -1px rgba(0, 0, 0, 0.1)';
           }}
         >
-          <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24" style={{
+            transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
+          }}>
             {isMenuOpen ? (
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" />
             ) : (
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M4 6h16M4 12h16M4 18h16" />
             )}
           </svg>
         </button>
@@ -93,8 +105,10 @@ const Sidebar = ({ activeItem, setActiveItem }) => {
             left: 0,
             right: 0,
             bottom: 0,
-            backgroundColor: 'rgba(0, 0, 0, 0.5)',
-            zIndex: 999
+            backgroundColor: 'rgba(0, 0, 0, 0.6)',
+            backdropFilter: 'blur(4px)',
+            zIndex: 999,
+            animation: 'fadeIn 0.3s ease-out'
           }}
         />
       )}
@@ -102,60 +116,54 @@ const Sidebar = ({ activeItem, setActiveItem }) => {
       {/* Sidebar */}
       <div style={{
         position: 'fixed',
-        left: isMobile ? (isMenuOpen ? '0' : '-280px') : '0',
+        left: isMobile ? (isMenuOpen ? '0' : '-300px') : '0',
         top: 0,
         height: '100vh',
-        width: '280px',
-        background: 'linear-gradient(180deg, #667eea 0%, #764ba2 100%)',
+        width: isMobile ? '300px' : '280px',
+        background: 'linear-gradient(180deg, #1e40af 0%, #1e3a8a 100%)',
         display: 'flex',
         flexDirection: 'column',
         zIndex: 1000,
-        boxShadow: '4px 0 20px rgba(0, 0, 0, 0.1)',
-        transition: 'left 0.3s ease-in-out'
+        boxShadow: isMobile ? '8px 0 32px rgba(0, 0, 0, 0.3)' : '4px 0 20px rgba(0, 0, 0, 0.15)',
+        transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
+        transform: isMobile && !isMenuOpen ? 'translateX(-20px)' : 'translateX(0)',
+        backdropFilter: 'blur(10px)'
       }}>
-      {/* Logo/Header */}
-      <div style={{
-        padding: '2rem 1.5rem',
-        borderBottom: '1px solid rgba(255, 255, 255, 0.1)'
-      }}>
+        {/* Logo Section */}
         <div style={{
+          padding: '2rem 1.5rem',
+          borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
           display: 'flex',
           alignItems: 'center',
-          gap: '0.75rem'
+          justifyContent: 'flex-start'
         }}>
           <div style={{
-            width: '2.5rem',
-            height: '2.5rem',
-            backgroundColor: 'rgba(255, 255, 255, 0.2)',
-            borderRadius: '12px',
             display: 'flex',
             alignItems: 'center',
-            justifyContent: 'center',
-            color: 'white',
-            fontWeight: '700',
-            fontSize: '1.25rem',
-            backdropFilter: 'blur(10px)',
-            border: '1px solid rgba(255, 255, 255, 0.2)'
+            gap: '0'
           }}>
-            A
-          </div>
-          <div>
-            <div style={{
+            <Image
+              src="/alama_dark_logo_lt_bnjlIcW.png"
+              alt="Alama Logo"
+              width={40}
+              height={40}
+              style={{
+                objectFit: 'contain',
+                filter: 'brightness(0) invert(1)',
+                marginRight: '-2px'
+              }}
+            />
+            <span style={{
+              color: 'white',
+              fontSize: '1.5rem',
               fontWeight: '700',
-              fontSize: '1.25rem',
-              color: 'white'
+              letterSpacing: '0.1em',
+              marginLeft: '-2px'
             }}>
-              Admin Portal
-            </div>
-            <div style={{
-              fontSize: '0.75rem',
-              color: 'rgba(255, 255, 255, 0.7)'
-            }}>
-              Education Management
-            </div>
+              LAMA
+            </span>
           </div>
         </div>
-      </div>
 
       {/* Navigation Menu */}
       <div style={{
@@ -182,32 +190,68 @@ const Sidebar = ({ activeItem, setActiveItem }) => {
                 display: 'flex',
                 alignItems: 'center',
                 gap: '0.75rem',
-                padding: '0.875rem 1.5rem',
+                padding: '1rem 1.5rem',
                 margin: '0.25rem 1rem',
                 color: activeItem === item.id ? 'white' : 'rgba(255, 255, 255, 0.8)',
-                backgroundColor: activeItem === item.id ? 'rgba(255, 255, 255, 0.15)' : 'transparent',
+                backgroundColor: activeItem === item.id ? 'rgba(255, 255, 255, 0.1)' : 'transparent',
                 textDecoration: 'none',
                 fontSize: '0.875rem',
-                fontWeight: '500',
+                fontWeight: activeItem === item.id ? '600' : '500',
                 borderRadius: '12px',
-                transition: 'all 0.3s ease',
-                backdropFilter: activeItem === item.id ? 'blur(10px)' : 'none',
-                border: activeItem === item.id ? '1px solid rgba(255, 255, 255, 0.2)' : '1px solid transparent'
+                transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                boxShadow: activeItem === item.id ? '0 4px 20px rgba(255, 255, 255, 0.1)' : 'none',
+                border: '1px solid transparent',
+                borderLeft: activeItem === item.id ? '4px solid #60a5fa' : '4px solid transparent',
+                position: 'relative',
+                backdropFilter: activeItem === item.id ? 'blur(10px)' : 'none'
               }}
               onMouseOver={(e) => {
+                const icon = e.currentTarget.querySelector('svg');
                 if (activeItem !== item.id) {
-                  e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
+                  e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.08)';
                   e.currentTarget.style.color = 'white';
+                  e.currentTarget.style.transform = 'translateX(8px)';
+                  e.currentTarget.style.borderLeft = '4px solid rgba(96, 165, 250, 0.5)';
+                  if (icon) {
+                    icon.style.transform = 'scale(1.1) rotate(5deg)';
+                  }
+                } else {
+                  e.currentTarget.style.transform = 'translateX(4px)';
+                  if (icon) {
+                    icon.style.transform = 'scale(1.05)';
+                  }
                 }
               }}
               onMouseOut={(e) => {
+                const icon = e.currentTarget.querySelector('svg');
                 if (activeItem !== item.id) {
                   e.currentTarget.style.backgroundColor = 'transparent';
                   e.currentTarget.style.color = 'rgba(255, 255, 255, 0.8)';
+                  e.currentTarget.style.transform = 'translateX(0)';
+                  e.currentTarget.style.borderLeft = '4px solid transparent';
+                  if (icon) {
+                    icon.style.transform = 'scale(1) rotate(0deg)';
+                  }
+                } else {
+                  e.currentTarget.style.transform = 'translateX(0)';
+                  if (icon) {
+                    icon.style.transform = 'scale(1)';
+                  }
                 }
               }}
             >
-              {item.icon}
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                width: '2rem',
+                height: '2rem',
+                borderRadius: '8px',
+                backgroundColor: activeItem === item.id ? 'rgba(96, 165, 250, 0.2)' : 'transparent',
+                transition: 'all 0.3s ease'
+              }}>
+                {item.icon}
+              </div>
               {item.label}
             </Link>
           ))}
