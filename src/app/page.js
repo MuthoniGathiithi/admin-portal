@@ -125,7 +125,7 @@ export default function LoginPage() {
               <h1 style={{
                 fontSize: isMobile ? '1.8rem' : '2.2rem',
                 fontWeight: '700',
-                margin: '0 0 0.5rem 0',
+                margin: '0',
                 letterSpacing: '-0.02em',
                 background: 'linear-gradient(135deg, #ffffff 0%, #f8f9ff 100%)',
                 WebkitBackgroundClip: 'text',
@@ -134,15 +134,6 @@ export default function LoginPage() {
               }}>
                 Sign In
               </h1>
-              <p style={{
-                fontSize: isMobile ? '0.9rem' : '1rem',
-                lineHeight: '1.5',
-                margin: '0',
-                opacity: 0.85,
-                fontWeight: '400'
-              }}>
-                Sign in to access your admin dashboard
-              </p>
             </div>
 
             {/* Login Form */}
