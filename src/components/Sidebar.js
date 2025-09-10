@@ -120,47 +120,62 @@ const Sidebar = ({ activeItem, setActiveItem }) => {
         top: 0,
         height: '100vh',
         width: isMobile ? '300px' : '280px',
-        background: 'linear-gradient(180deg, #1e40af 0%, #1e3a8a 100%)',
+        background: 'linear-gradient(180deg, #0f172a 0%, #1e293b 100%)',
         display: 'flex',
         flexDirection: 'column',
         zIndex: 1000,
         boxShadow: isMobile ? '8px 0 32px rgba(0, 0, 0, 0.3)' : '4px 0 20px rgba(0, 0, 0, 0.15)',
         transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
         transform: isMobile && !isMenuOpen ? 'translateX(-20px)' : 'translateX(0)',
-        backdropFilter: 'blur(10px)'
+        backdropFilter: 'blur(10px)',
+        borderRight: '1px solid rgba(255, 255, 255, 0.1)'
       }}>
         {/* Logo Section */}
         <div style={{
-          padding: '2rem 1.5rem',
-          borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
+          padding: '2.5rem 1.5rem',
+          borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
           display: 'flex',
           alignItems: 'center',
-          justifyContent: 'flex-start'
+          justifyContent: 'flex-start',
+          background: 'rgba(255, 255, 255, 0.02)'
         }}>
           <div style={{
             display: 'flex',
             alignItems: 'center',
-            gap: '0'
+            gap: '0.5rem'
           }}>
-            <Image
-              src="/alama_dark_logo_lt_bnjlIcW.png"
-              alt="Alama Logo"
-              width={40}
-              height={40}
-              style={{
-                objectFit: 'contain',
-                filter: 'brightness(0) invert(1)',
-                marginRight: '-2px'
-              }}
-            />
+            <div style={{
+              width: '48px',
+              height: '48px',
+              background: 'linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)',
+              borderRadius: '16px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              boxShadow: '0 8px 20px rgba(59, 130, 246, 0.3)'
+            }}>
+              <Image
+                src="/alama_dark_logo_lt_bnjlIcW.png"
+                alt="Alama Logo"
+                width={28}
+                height={28}
+                style={{
+                  objectFit: 'contain',
+                  filter: 'brightness(0) invert(1)'
+                }}
+              />
+            </div>
             <span style={{
               color: 'white',
-              fontSize: '1.5rem',
-              fontWeight: '700',
-              letterSpacing: '0.1em',
-              marginLeft: '-2px'
+              fontSize: '1.6rem',
+              fontWeight: '800',
+              letterSpacing: '0.05em',
+              background: 'linear-gradient(135deg, #ffffff 0%, #e2e8f0 100%)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              backgroundClip: 'text'
             }}>
-              LAMA
+              ALAMA
             </span>
           </div>
         </div>
@@ -168,18 +183,18 @@ const Sidebar = ({ activeItem, setActiveItem }) => {
       {/* Navigation Menu */}
       <div style={{
         flex: 1,
-        padding: '1.5rem 0'
+        padding: '2rem 0'
       }}>
         <div style={{
           fontSize: '0.75rem',
-          fontWeight: '600',
-          color: 'rgba(255, 255, 255, 0.6)',
+          fontWeight: '700',
+          color: 'rgba(255, 255, 255, 0.5)',
           textTransform: 'uppercase',
-          letterSpacing: '0.05em',
+          letterSpacing: '0.1em',
           padding: '0 1.5rem',
-          marginBottom: '1rem'
+          marginBottom: '1.5rem'
         }}>
-          Main Menu
+          Navigation
         </div>
         <nav>
           {menuItems.map((item) => (
@@ -189,36 +204,36 @@ const Sidebar = ({ activeItem, setActiveItem }) => {
               style={{
                 display: 'flex',
                 alignItems: 'center',
-                gap: '0.75rem',
+                gap: '1rem',
                 padding: '1rem 1.5rem',
-                margin: '0.25rem 1rem',
-                color: activeItem === item.id ? 'white' : 'rgba(255, 255, 255, 0.8)',
-                backgroundColor: activeItem === item.id ? 'rgba(255, 255, 255, 0.1)' : 'transparent',
+                margin: '0.5rem 1rem',
+                color: activeItem === item.id ? '#ffffff' : 'rgba(255, 255, 255, 0.7)',
+                backgroundColor: activeItem === item.id ? 'linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)' : 'transparent',
                 textDecoration: 'none',
-                fontSize: '0.875rem',
-                fontWeight: activeItem === item.id ? '600' : '500',
-                borderRadius: '12px',
+                fontSize: '0.9rem',
+                fontWeight: activeItem === item.id ? '700' : '500',
+                borderRadius: '16px',
                 transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                boxShadow: activeItem === item.id ? '0 4px 20px rgba(255, 255, 255, 0.1)' : 'none',
-                border: '1px solid transparent',
-                borderLeft: activeItem === item.id ? '4px solid #60a5fa' : '4px solid transparent',
+                boxShadow: activeItem === item.id ? '0 8px 25px rgba(59, 130, 246, 0.3)' : 'none',
+                border: activeItem === item.id ? '1px solid rgba(59, 130, 246, 0.3)' : '1px solid transparent',
                 position: 'relative',
-                backdropFilter: activeItem === item.id ? 'blur(10px)' : 'none'
+                backdropFilter: activeItem === item.id ? 'blur(10px)' : 'none',
+                background: activeItem === item.id ? 'linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)' : 'transparent'
               }}
               onMouseOver={(e) => {
                 const icon = e.currentTarget.querySelector('svg');
                 if (activeItem !== item.id) {
-                  e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.08)';
-                  e.currentTarget.style.color = 'white';
-                  e.currentTarget.style.transform = 'translateX(8px)';
-                  e.currentTarget.style.borderLeft = '4px solid rgba(96, 165, 250, 0.5)';
+                  e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.05)';
+                  e.currentTarget.style.color = '#ffffff';
+                  e.currentTarget.style.transform = 'translateX(6px)';
+                  e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.1)';
                   if (icon) {
-                    icon.style.transform = 'scale(1.1) rotate(5deg)';
+                    icon.style.transform = 'scale(1.1)';
                   }
                 } else {
-                  e.currentTarget.style.transform = 'translateX(4px)';
+                  e.currentTarget.style.transform = 'translateX(3px) scale(1.02)';
                   if (icon) {
-                    icon.style.transform = 'scale(1.05)';
+                    icon.style.transform = 'scale(1.1)';
                   }
                 }
               }}
@@ -226,14 +241,14 @@ const Sidebar = ({ activeItem, setActiveItem }) => {
                 const icon = e.currentTarget.querySelector('svg');
                 if (activeItem !== item.id) {
                   e.currentTarget.style.backgroundColor = 'transparent';
-                  e.currentTarget.style.color = 'rgba(255, 255, 255, 0.8)';
+                  e.currentTarget.style.color = 'rgba(255, 255, 255, 0.7)';
                   e.currentTarget.style.transform = 'translateX(0)';
-                  e.currentTarget.style.borderLeft = '4px solid transparent';
+                  e.currentTarget.style.borderColor = 'transparent';
                   if (icon) {
-                    icon.style.transform = 'scale(1) rotate(0deg)';
+                    icon.style.transform = 'scale(1)';
                   }
                 } else {
-                  e.currentTarget.style.transform = 'translateX(0)';
+                  e.currentTarget.style.transform = 'translateX(0) scale(1)';
                   if (icon) {
                     icon.style.transform = 'scale(1)';
                   }
@@ -244,10 +259,10 @@ const Sidebar = ({ activeItem, setActiveItem }) => {
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                width: '2rem',
-                height: '2rem',
-                borderRadius: '8px',
-                backgroundColor: activeItem === item.id ? 'rgba(96, 165, 250, 0.2)' : 'transparent',
+                width: '2.5rem',
+                height: '2.5rem',
+                borderRadius: '12px',
+                backgroundColor: activeItem === item.id ? 'rgba(255, 255, 255, 0.15)' : 'rgba(255, 255, 255, 0.05)',
                 transition: 'all 0.3s ease'
               }}>
                 {item.icon}

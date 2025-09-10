@@ -49,8 +49,8 @@ export default function LoginPage() {
     // Save user email to localStorage for profile display
     localStorage.setItem('userEmail', formData.email);
     
-    // Immediate redirect without loading state
-    window.location.href = '/dashboard';
+    // Redirect to reference/countries as shown in wireframe
+    window.location.href = '/reference/countries';
   };
 
   return (

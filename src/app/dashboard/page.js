@@ -4,55 +4,6 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Sidebar from '../../components/Sidebar';
 
-
-const DashboardCard = ({ title, description, href, icon }) => (
-  <Link href={href} style={{ textDecoration: 'none' }}>
-    <div style={{
-      backgroundColor: 'white',
-      padding: '1.5rem',
-      borderRadius: '0.5rem',
-      border: '1px solid #e5e7eb',
-      cursor: 'pointer',
-      transition: 'all 0.2s ease-in-out'
-    }}
-    onMouseOver={(e) => {
-      e.currentTarget.style.borderColor = '#93c5fd';
-      e.currentTarget.style.boxShadow = '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)';
-    }}
-    onMouseOut={(e) => {
-      e.currentTarget.style.borderColor = '#e5e7eb';
-      e.currentTarget.style.boxShadow = 'none';
-    }}>
-      <div style={{
-        display: 'flex',
-        alignItems: 'center',
-        gap: '1rem'
-      }}>
-        <div style={{
-          padding: '0.75rem',
-          backgroundColor: '#eff6ff',
-          borderRadius: '0.5rem'
-        }}>
-          {icon}
-        </div>
-        <div>
-          <h3 style={{
-            fontSize: '1.125rem',
-            fontWeight: '600',
-            color: '#000000',
-            margin: '0 0 0.25rem 0'
-          }}>{title}</h3>
-          <p style={{
-            color: '#6b7280',
-            fontSize: '0.875rem',
-            margin: 0
-          }}>{description}</p>
-        </div>
-      </div>
-    </div>
-  </Link>
-);
-
 export default function Dashboard() {
   const [activeItem, setActiveItem] = useState('dashboard');
   const [isLoaded, setIsLoaded] = useState(false);
@@ -82,7 +33,8 @@ export default function Dashboard() {
   return (
     <div style={{
       minHeight: '100vh',
-      background: 'linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%)'
+      background: 'linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%)',
+      fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
     }}>
       <Sidebar activeItem={activeItem} setActiveItem={setActiveItem} />
       
@@ -91,127 +43,178 @@ export default function Dashboard() {
         padding: isMobile ? '1rem' : '2rem',
         paddingTop: isMobile ? '5rem' : '2rem'
       }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+        <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
 
-          {/* Dashboard Overview */}
+          {/* Header Section */}
           <div style={{
-            marginBottom: '2rem'
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            marginBottom: '2rem',
+            padding: '1.5rem 0'
           }}>
-            <h1 style={{
-              fontSize: isMobile ? '1.5rem' : '2rem',
-              fontWeight: '700',
-              color: '#1f2937',
-              marginBottom: '0.5rem',
-              letterSpacing: '-0.025em',
-              marginLeft: isMobile ? '0' : '-0.5rem'
+            <div>
+              <h1 style={{
+                fontSize: isMobile ? '2rem' : '2.5rem',
+                fontWeight: '800',
+                color: '#0f172a',
+                marginBottom: '0.5rem',
+                letterSpacing: '-0.02em'
+              }}>
+                Welcome Back
+              </h1>
+              <p style={{
+                fontSize: '1.1rem',
+                color: '#64748b',
+                margin: 0
+              }}>Here's what's happening with your educational systems today.</p>
+            </div>
+            <div style={{
+              display: 'flex',
+              gap: '1rem',
+              alignItems: 'center'
             }}>
-              Dashboard
-            </h1>
+              <button style={{
+                padding: '0.75rem 1.5rem',
+                background: 'linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)',
+                color: 'white',
+                border: 'none',
+                borderRadius: '12px',
+                fontSize: '0.875rem',
+                fontWeight: '600',
+                cursor: 'pointer',
+                boxShadow: '0 4px 12px rgba(59, 130, 246, 0.3)',
+                transition: 'all 0.2s ease'
+              }}
+              onClick={() => window.location.href = '/reference/countries/create'}
+              >+ Add Country</button>
+            </div>
           </div>
 
-          {/* Statistics Cards */}
+          {/* Modern Stats Grid */}
           <div style={{
             display: 'grid',
-            gridTemplateColumns: isMobile ? '1fr' : 'repeat(auto-fit, minmax(280px, 1fr))',
-            gap: isMobile ? '1rem' : '1.5rem',
-            marginBottom: isMobile ? '1.5rem' : '2rem'
+            gridTemplateColumns: isMobile ? '1fr' : 'repeat(4, 1fr)',
+            gap: '1.5rem',
+            marginBottom: '3rem'
           }}>
+            {/* Countries Card */}
             <div style={{
-              background: 'linear-gradient(135deg, #1e40af 0%, #1e3a8a 100%)',
-              padding: isMobile ? '1.5rem' : '2rem',
-              borderRadius: '16px',
+              background: 'linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%)',
+              padding: '2rem',
+              borderRadius: '24px',
               color: 'white',
-              boxShadow: '0 8px 25px rgba(30, 64, 175, 0.25)',
-              border: '1px solid rgba(255, 255, 255, 0.1)'
+              boxShadow: '0 20px 40px rgba(14, 165, 233, 0.15)',
+              position: 'relative',
+              overflow: 'hidden',
+              transform: isLoaded ? 'translateY(0)' : 'translateY(20px)',
+              opacity: isLoaded ? 1 : 0,
+              transition: 'all 0.6s ease'
             }}>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem' }}>
-                <div>
-                  <div style={{ fontSize: '0.875rem', opacity: 0.8, marginBottom: '0.5rem' }}>Total Countries</div>
-                  <div style={{ fontSize: '2.5rem', fontWeight: '700' }}>{countries.length}</div>
-                </div>
-                <div style={{
-                  width: '60px',
-                  height: '60px',
-                  backgroundColor: 'rgba(255, 255, 255, 0.2)',
-                  borderRadius: '16px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  backdropFilter: 'blur(10px)'
-                }}>
-                  <svg style={{ width: '30px', height: '30px' }} fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zM11 19.93c-3.94-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
-                  </svg>
-                </div>
-              </div>
-              <div style={{ fontSize: '0.875rem', opacity: 0.8 }}>
-                ↗ Active educational systems
+              <div style={{
+                position: 'absolute',
+                top: '-20px',
+                right: '-20px',
+                width: '80px',
+                height: '80px',
+                background: 'rgba(255, 255, 255, 0.1)',
+                borderRadius: '50%',
+                filter: 'blur(20px)'
+              }} />
+              <div style={{ position: 'relative', zIndex: 1 }}>
+                <div style={{ fontSize: '0.875rem', opacity: 0.9, marginBottom: '0.5rem', fontWeight: '500' }}>Countries</div>
+                <div style={{ fontSize: '3rem', fontWeight: '800', marginBottom: '0.5rem' }}>{countries.length}</div>
+                <div style={{ fontSize: '0.8rem', opacity: 0.8 }}>Educational Systems</div>
               </div>
             </div>
 
+            {/* Institutions Card */}
             <div style={{
-              background: 'linear-gradient(135deg, #374151 0%, #1f2937 100%)',
-              padding: isMobile ? '1.5rem' : '2rem',
-              borderRadius: '16px',
+              background: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)',
+              padding: '2rem',
+              borderRadius: '24px',
               color: 'white',
-              boxShadow: '0 8px 25px rgba(55, 65, 81, 0.25)',
-              border: '1px solid rgba(255, 255, 255, 0.1)'
+              boxShadow: '0 20px 40px rgba(139, 92, 246, 0.15)',
+              position: 'relative',
+              overflow: 'hidden',
+              transform: isLoaded ? 'translateY(0)' : 'translateY(20px)',
+              opacity: isLoaded ? 1 : 0,
+              transition: 'all 0.6s ease 0.1s'
             }}>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem' }}>
-                <div>
-                  <div style={{ fontSize: '0.875rem', opacity: 0.8, marginBottom: '0.5rem' }}>Total Institutions</div>
-                  <div style={{ fontSize: '2.5rem', fontWeight: '700' }}>0</div>
-                </div>
-                <div style={{
-                  width: '60px',
-                  height: '60px',
-                  backgroundColor: 'rgba(255, 255, 255, 0.2)',
-                  borderRadius: '16px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  backdropFilter: 'blur(10px)'
-                }}>
-                  <svg style={{ width: '30px', height: '30px' }} fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M12 3L2 12h3v8h6v-6h2v6h6v-8h3L12 3zm5 6h-2v8h-2v-6H9v6H7v-8H5l7-7 7 7h-2z"/>
-                  </svg>
-                </div>
-              </div>
-              <div style={{ fontSize: '0.875rem', opacity: 0.8 }}>
-                ↗ No institutions registered yet
+              <div style={{
+                position: 'absolute',
+                top: '-20px',
+                right: '-20px',
+                width: '80px',
+                height: '80px',
+                background: 'rgba(255, 255, 255, 0.1)',
+                borderRadius: '50%',
+                filter: 'blur(20px)'
+              }} />
+              <div style={{ position: 'relative', zIndex: 1 }}>
+                <div style={{ fontSize: '0.875rem', opacity: 0.9, marginBottom: '0.5rem', fontWeight: '500' }}>Institutions</div>
+                <div style={{ fontSize: '3rem', fontWeight: '800', marginBottom: '0.5rem' }}>0</div>
+                <div style={{ fontSize: '0.8rem', opacity: 0.8 }}>Registered</div>
               </div>
             </div>
 
+            {/* Students Card */}
             <div style={{
-              background: 'white',
-              padding: isMobile ? '1.5rem' : '2rem',
-              borderRadius: '16px',
-              color: '#1f2937',
-              boxShadow: '0 4px 20px rgba(0, 0, 0, 0.08)',
-              border: '2px solid #1e40af'
+              background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
+              padding: '2rem',
+              borderRadius: '24px',
+              color: 'white',
+              boxShadow: '0 20px 40px rgba(16, 185, 129, 0.15)',
+              position: 'relative',
+              overflow: 'hidden',
+              transform: isLoaded ? 'translateY(0)' : 'translateY(20px)',
+              opacity: isLoaded ? 1 : 0,
+              transition: 'all 0.6s ease 0.2s'
             }}>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem' }}>
-                <div>
-                  <div style={{ fontSize: '0.875rem', opacity: 0.8, marginBottom: '0.5rem' }}>Active Students</div>
-                  <div style={{ fontSize: '2.5rem', fontWeight: '700' }}>0</div>
-                </div>
-                <div style={{
-                  width: '60px',
-                  height: '60px',
-                  backgroundColor: 'rgba(255, 255, 255, 0.2)',
-                  borderRadius: '16px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  backdropFilter: 'blur(10px)'
-                }}>
-                  <svg style={{ width: '30px', height: '30px' }} fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M16 4c0-1.11.89-2 2-2s2 .89 2 2-.89 2-2 2-2-.89-2-2zm4 18v-6h2.5l-2.54-7.63A1.5 1.5 0 0 0 18.5 7.5h-5A1.5 1.5 0 0 0 12.04 8.37L9.5 16H12v6h8zM12.5 11.5c.83 0 1.5-.67 1.5-1.5s-.67-1.5-1.5-1.5S11 9.17 11 10s.67 1.5 1.5 1.5zM5.5 6c1.11 0 2-.89 2-2s-.89-2-2-2-2 .89-2 2 .89 2 2 2zm2 16v-7H9V9.5c0-.28-.22-.5-.5-.5h-3c-.28 0-.5.22-.5.5V15H7v7h.5z"/>
-                  </svg>
-                </div>
+              <div style={{
+                position: 'absolute',
+                top: '-20px',
+                right: '-20px',
+                width: '80px',
+                height: '80px',
+                background: 'rgba(255, 255, 255, 0.1)',
+                borderRadius: '50%',
+                filter: 'blur(20px)'
+              }} />
+              <div style={{ position: 'relative', zIndex: 1 }}>
+                <div style={{ fontSize: '0.875rem', opacity: 0.9, marginBottom: '0.5rem', fontWeight: '500' }}>Students</div>
+                <div style={{ fontSize: '3rem', fontWeight: '800', marginBottom: '0.5rem' }}>0</div>
+                <div style={{ fontSize: '0.8rem', opacity: 0.8 }}>Active</div>
               </div>
-              <div style={{ fontSize: '0.875rem', opacity: 0.8 }}>
-                ↗ No students enrolled yet
+            </div>
+
+            {/* Performance Card */}
+            <div style={{
+              background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
+              padding: '2rem',
+              borderRadius: '24px',
+              color: 'white',
+              boxShadow: '0 20px 40px rgba(245, 158, 11, 0.15)',
+              position: 'relative',
+              overflow: 'hidden',
+              transform: isLoaded ? 'translateY(0)' : 'translateY(20px)',
+              opacity: isLoaded ? 1 : 0,
+              transition: 'all 0.6s ease 0.3s'
+            }}>
+              <div style={{
+                position: 'absolute',
+                top: '-20px',
+                right: '-20px',
+                width: '80px',
+                height: '80px',
+                background: 'rgba(255, 255, 255, 0.1)',
+                borderRadius: '50%',
+                filter: 'blur(20px)'
+              }} />
+              <div style={{ position: 'relative', zIndex: 1 }}>
+                <div style={{ fontSize: '0.875rem', opacity: 0.9, marginBottom: '0.5rem', fontWeight: '500' }}>Performance</div>
+                <div style={{ fontSize: '3rem', fontWeight: '800', marginBottom: '0.5rem' }}>98%</div>
+                <div style={{ fontSize: '0.8rem', opacity: 0.8 }}>System Health</div>
               </div>
             </div>
           </div>

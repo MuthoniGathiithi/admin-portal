@@ -1,4 +1,4 @@
-'use client';
+/home/muthoni-gathiithi/Pictures/Screenshots/Screenshot from 2025-09-08 21-39-29.png'use client';
 
 import Link from 'next/link';
 
