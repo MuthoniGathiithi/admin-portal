@@ -44,7 +44,7 @@ export default function CountriesPage() {
           justifyContent: 'space-between',
           alignItems: 'center',
           marginBottom: 'var(--space-6)'
-        }}>
+        }} className="countries-header">
           <div>
             <h1 style={{
               fontSize: '2rem',
@@ -73,7 +73,7 @@ export default function CountriesPage() {
             display: 'flex',
             gap: 'var(--space-4)',
             alignItems: 'center'
-          }}>
+          }} className="countries-search-bar">
             <div style={{ flex: 1 }}>
               <input
                 type="text"
@@ -115,11 +115,11 @@ export default function CountriesPage() {
               </Link>
             </div>
           ) : (
-            <div style={{ overflow: 'auto' }}>
+            <div style={{ overflow: 'auto' }} className="countries-table-container">
               <table style={{
                 width: '100%',
                 borderCollapse: 'collapse'
-              }}>
+              }} className="countries-table">
                 <thead>
                   <tr style={{
                     borderBottom: '1px solid var(--gray-200)'
@@ -226,7 +226,7 @@ export default function CountriesPage() {
                           display: 'flex',
                           gap: 'var(--space-2)',
                           justifyContent: 'flex-end'
-                        }}>
+                        }} className="countries-actions">
                           <Link
                             href={`/reference/countries/${country.id}`}
                             className="btn btn-secondary"

@@ -8,6 +8,7 @@ import { useRouter, usePathname } from 'next/navigation';
 export default function Sidebar() {
   const [activeMenu, setActiveMenu] = useState(null);
   const [isCollapsed, setIsCollapsed] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const router = useRouter();
   const pathname = usePathname();
   const [activeItem, setActiveItem] = useState(null);
@@ -54,21 +55,67 @@ export default function Sidebar() {
   ];
 
   return (
-    <div style={{
-      width: isCollapsed ? '80px' : '280px',
-      height: '100vh',
-      background: '#ffffff',
-      color: '#1e293b',
-      display: 'flex',
-      flexDirection: 'column',
-      transition: 'width 0.3s ease',
-      position: 'fixed',
-      left: 0,
-      top: 0,
-      zIndex: 1000,
-      borderRight: '1px solid #e2e8f0',
-      boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
-    }}>
+    <>
+      {/* Mobile Menu Button */}
+      <button
+        onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+        style={{
+          display: 'none',
+          position: 'fixed',
+          top: '1rem',
+          left: '1rem',
+          zIndex: 1001,
+          background: '#1e40af',
+          color: 'white',
+          border: 'none',
+          borderRadius: '8px',
+          padding: '0.75rem',
+          cursor: 'pointer',
+          boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
+        }}
+        className="mobile-menu-button"
+      >
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <line x1="3" y1="6" x2="21" y2="6"/>
+          <line x1="3" y1="12" x2="21" y2="12"/>
+          <line x1="3" y1="18" x2="21" y2="18"/>
+        </svg>
+      </button>
+
+      {/* Mobile Overlay */}
+      {isMobileMenuOpen && (
+        <div
+          onClick={() => setIsMobileMenuOpen(false)}
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: 'rgba(0, 0, 0, 0.5)',
+            zIndex: 999,
+            display: 'none'
+          }}
+          className="mobile-overlay"
+        />
+      )}
+
+      <div style={{
+        width: isCollapsed ? '80px' : '280px',
+        height: '100vh',
+        background: '#ffffff',
+        color: '#1e293b',
+        display: 'flex',
+        flexDirection: 'column',
+        transition: 'width 0.3s ease',
+        position: 'fixed',
+        left: 0,
+        top: 0,
+        zIndex: 1000,
+        borderRight: '1px solid #e2e8f0',
+        boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+        transform: isMobileMenuOpen ? 'translateX(0)' : 'translateX(-100%)'
+      }} className={`sidebar ${isMobileMenuOpen ? 'open' : ''}`}>
       {/* Logo Section */}
       <div style={{
         display: 'flex',
@@ -251,5 +298,6 @@ export default function Sidebar() {
         </div>
       </nav>
     </div>
+    </>
   );
 }

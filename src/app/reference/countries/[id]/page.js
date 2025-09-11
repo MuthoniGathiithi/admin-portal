@@ -97,7 +97,7 @@ export default function ViewCountryPage() {
           gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
           gap: '1.5rem',
           marginBottom: '2rem'
-        }}>
+        }} className="country-stats-grid">
           <div style={{
             background: 'linear-gradient(135deg, #1e40af 0%, #1e3a8a 100%)',
             padding: '2rem',
@@ -382,20 +382,18 @@ export default function ViewCountryPage() {
         </div>
 
 
-        {/* Management Sections */}
+        {/* Main Content Grid */}
         <div style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))',
-          gap: '2rem',
-          marginBottom: '2rem'
-        }}>
-          {/* Resources */}
+          gridTemplateColumns: '1fr',
+          gap: '2rem'
+        }} className="country-management-grid">
+          {/* Management Sections */}
           <div style={{
-            background: '#ffffff',
-            padding: '2rem',
-            borderRadius: '16px',
-            border: '1px solid #e2e8f0',
-            boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1)'
+            display: 'grid',
+            gridTemplateColumns: '1fr',
+            gap: '2rem',
+            marginBottom: '2rem'
           }}>
             <div style={{
               display: 'flex',
@@ -497,6 +495,111 @@ export default function ViewCountryPage() {
                   <path d="M12 5v14m-7-7h14"/>
                 </svg>
                 Add Resource
+              </button>
+            </div>
+          </div>
+          {/* Country Details */}
+          <div style={{
+            background: '#ffffff',
+            padding: '2rem',
+            borderRadius: '16px',
+            border: '1px solid #e2e8f0',
+            boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1)'
+          }} className="country-details-card">
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              marginBottom: '1.5rem'
+            }}>
+              <h3 style={{
+                fontSize: '1.25rem',
+                fontWeight: '600',
+                color: '#1e293b',
+                margin: 0,
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.75rem'
+              }}>
+                <div style={{
+                  width: '40px',
+                  height: '40px',
+                  background: '#1e40af',
+                  borderRadius: '10px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2">
+                    <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+                    <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+                  </svg>
+                </div>
+                Country Details
+              </h3>
+              <span style={{
+                background: '#f1f5f9',
+                color: '#64748b',
+                padding: '0.25rem 0.75rem',
+                borderRadius: '12px',
+                fontSize: '0.875rem',
+                fontWeight: '500'
+              }}>0 items</span>
+            </div>
+            
+            <div style={{
+              textAlign: 'center',
+              padding: '2rem 1rem'
+            }}>
+              <div style={{
+                width: '64px',
+                height: '64px',
+                background: '#f8fafc',
+                borderRadius: '50%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                margin: '0 auto 1rem',
+                border: '2px dashed #e2e8f0'
+              }}>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" strokeWidth="2">
+                  <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+                  <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+                </svg>
+              </div>
+              <h4 style={{
+                fontSize: '1rem',
+                fontWeight: '600',
+                color: '#1e293b',
+                margin: 0,
+                marginBottom: '0.5rem'
+              }}>No country details yet</h4>
+              <p style={{
+                fontSize: '0.875rem',
+                color: '#64748b',
+                margin: 0,
+                marginBottom: '1.5rem',
+                lineHeight: '1.5'
+              }}>Get started by adding your first country details.</p>
+              <button 
+                style={{
+                  background: '#1e40af',
+                  color: '#ffffff',
+                  border: 'none',
+                  padding: '0.75rem 1.5rem',
+                  borderRadius: '8px',
+                  fontSize: '0.875rem',
+                  fontWeight: '500',
+                  cursor: 'pointer',
+                  transition: 'all 0.2s ease',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '0.5rem'
+                }}>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M12 5v14m-7-7h14"/>
+                </svg>
+                Add Country Details
               </button>
             </div>
           </div>
@@ -1204,7 +1307,7 @@ export default function ViewCountryPage() {
           border: '1px solid #e2e8f0',
           boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1)',
           marginTop: '2rem'
-        }}>
+        }} className="institution-map">
           <h3 style={{
             fontSize: '1.25rem',
             fontWeight: '600',

@@ -32,7 +32,7 @@ export default function LoginPage() {
       minHeight: '100vh',
       display: 'flex',
       background: '#f8f9fa'
-    }}>
+    }} className="login-container">
       {/* Left Panel - Login Form */}
       <div style={{
         flex: 1.5,
@@ -42,7 +42,7 @@ export default function LoginPage() {
         justifyContent: 'center',
         padding: '3rem',
         maxWidth: '700px'
-      }}>
+      }} className="login-form-panel">
         {/* Login Form */}
         <div style={{
           maxWidth: '600px',
@@ -53,7 +53,7 @@ export default function LoginPage() {
           boxShadow: '0 20px 40px -10px rgba(0, 0, 0, 0.15), 0 15px 20px -5px rgba(0, 0, 0, 0.08)',
           border: '1px solid #f1f5f9',
           margin: '0 auto'
-        }}>
+        }} className="login-form-card">
           <div style={{
             marginBottom: '2rem',
             textAlign: 'center'
@@ -191,7 +191,7 @@ export default function LoginPage() {
         padding: '3rem',
         color: 'white',
         position: 'relative'
-      }}>
+      }} className="login-logo-panel">
         <div style={{
           textAlign: 'center',
           maxWidth: '450px',
@@ -214,7 +214,7 @@ export default function LoginPage() {
               justifyContent: 'center',
               boxShadow: '0 25px 50px rgba(0, 0, 0, 0.25)',
               marginBottom: '2rem'
-            }}>
+            }} className="login-logo-circle">
               <Image
                 src="/alama_dark_logo_lt_bnjlIcW.png"
                 alt="ALAMA Logo"
@@ -224,11 +224,12 @@ export default function LoginPage() {
             </div>
             <h1 style={{
               fontSize: '2rem',
-              fontWeight: '700',
+              fontWeight: '500',
               color: '#ffffff',
               margin: 0,
               lineHeight: '1.2',
-              textAlign: 'center'
+              textAlign: 'center',
+              whiteSpace: 'nowrap'
             }}>Mark 10x Faster with ALAMA AI</h1>
           </div>
         </div>

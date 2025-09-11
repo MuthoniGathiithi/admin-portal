@@ -128,3 +128,168 @@ h1, h2, h3, h4, h5, h6 {
 .h-full { height: 100%; }
 .min-h-screen { min-height: 100vh; }
 .text-center { text-align: center; }
+
+/* Desktop Sidebar - Ensure visibility */
+.sidebar {
+  transform: translateX(0) !important;
+}
+
+.mobile-menu-button {
+  display: none !important;
+}
+
+.mobile-overlay {
+  display: none !important;
+}
+
+/* Mobile Responsive Styles */
+@media (max-width: 768px) {
+  /* Login Page Mobile */
+  .login-container {
+    flex-direction: column !important;
+  }
+  
+  .login-form-panel {
+    flex: 1 !important;
+    padding: 1.5rem !important;
+    max-width: none !important;
+    min-height: auto !important;
+  }
+  
+  .login-form-card {
+    padding: 2rem !important;
+    margin: 1rem 0 !important;
+    border-radius: 12px !important;
+    max-width: none !important;
+  }
+  
+  .login-logo-panel {
+    flex: none !important;
+    min-height: 40vh !important;
+    padding: 2rem 1rem !important;
+  }
+  
+  .login-logo-circle {
+    width: 200px !important;
+    height: 200px !important;
+    margin-bottom: 1rem !important;
+  }
+  
+  .login-logo-circle img {
+    width: 160px !important;
+    height: 160px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .login-form-panel {
+    padding: 1rem !important;
+  }
+  
+  .login-form-card {
+    padding: 1.5rem !important;
+    margin: 0.5rem 0 !important;
+  }
+  
+  .login-logo-panel {
+    min-height: 30vh !important;
+    padding: 1.5rem 1rem !important;
+  }
+  
+  .login-logo-circle {
+    width: 150px !important;
+    height: 150px !important;
+  }
+  
+  .login-logo-circle img {
+    width: 120px !important;
+    height: 120px !important;
+  }
+  
+  /* Sidebar Mobile */
+  .mobile-menu-button {
+    display: block !important;
+  }
+  
+  .mobile-overlay {
+    display: block !important;
+  }
+  
+  .sidebar {
+    transform: translateX(-100%) !important;
+    transition: transform 0.3s ease !important;
+  }
+  
+  .sidebar.open {
+    transform: translateX(0) !important;
+  }
+  
+  /* Main content adjustment for mobile */
+  .main-content {
+    margin-left: 0 !important;
+    padding-top: 4rem !important;
+  }
+  
+  /* Country View Page Mobile */
+  .country-stats-grid {
+    grid-template-columns: 1fr !important;
+    gap: 1rem !important;
+  }
+  
+  .country-management-grid {
+    grid-template-columns: 1fr !important;
+    gap: 1.5rem !important;
+  }
+  
+  .country-details-card {
+    padding: 1.5rem !important;
+  }
+  
+  .country-info-grid {
+    grid-template-columns: 1fr !important;
+    gap: 1rem !important;
+  }
+  
+  .institution-map {
+    height: 250px !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .country-details-card {
+    padding: 1rem !important;
+  }
+  
+  .country-stats-grid {
+    gap: 0.75rem !important;
+  }
+  
+  .country-management-grid {
+    gap: 1rem !important;
+  }
+  
+  /* Countries List Page Mobile */
+  .countries-header {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 1rem !important;
+  }
+  
+  .countries-search-bar {
+    flex-direction: column !important;
+    gap: 1rem !important;
+  }
+  
+  .countries-table-container {
+    overflow-x: auto !important;
+  }
+  
+  .countries-table {
+    min-width: 600px !important;
+  }
+  
+  .countries-actions {
+    flex-direction: column !important;
+    gap: 0.5rem !important;
+  }
+}
