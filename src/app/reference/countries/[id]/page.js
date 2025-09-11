@@ -2,790 +2,1354 @@
 
 import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
+import Layout from '../../../../components/Layout';
 import Link from 'next/link';
-import Sidebar from '../../../../components/Sidebar';
 
-export default function CountryViewPage() {
+export default function ViewCountryPage() {
   const params = useParams();
-  const countryId = params.id;
   const [country, setCountry] = useState(null);
-  const [activeTab, setActiveTab] = useState('curriculars');
+  const [loading, setLoading] = useState(true);
+  const [showInstitutionForm, setShowInstitutionForm] = useState(false);
+  const [showCurriculumForm, setShowCurriculumForm] = useState(false);
+  const [institutionForm, setInstitutionForm] = useState({
+    name: '',
+    type: 'university',
+    address: '',
+    phone: '',
+    email: '',
+    website: ''
+  });
+  const [curriculumForm, setCurriculumForm] = useState({
+    name: '',
+    description: '',
+    level: 'undergraduate',
+    duration: '',
+    credits: ''
+  });
 
   useEffect(() => {
-    // Load country data from localStorage
-    const countries = JSON.parse(localStorage.getItem('countries') || '[]');
-    const foundCountry = countries.find(c => c.id === countryId);
-    setCountry(foundCountry);
-  }, [countryId]);
+    // Simulate API call
+    setTimeout(() => {
+      setCountry({
+        id: params.id,
+        name: 'Kenya',
+        continent: 'Africa',
+        telCode: '+254',
+        flagSvg: null,
+        centerLatitude: -1.2921,
+        centerLongitude: 36.8219
+      });
+      setLoading(false);
+    }, 500);
+  }, [params.id]);
 
-  if (!country) {
+  if (loading) {
     return (
-      <div style={{ minHeight: '100vh', background: 'linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%)' }}>
-        <Sidebar activeItem="countries" />
-        <div style={{ marginLeft: '280px', padding: '2rem' }}>
-          <div style={{ textAlign: 'center', marginTop: '4rem' }}>
-            <h2>Country not found</h2>
-            <Link href="/reference/countries" style={{ color: '#4f46e5', textDecoration: 'none' }}>
-              ← Back to Countries
-            </Link>
-          </div>
+      <Layout breadcrumbs={['Reference', 'Countries', 'Loading...']}>
+        <div style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          height: '50vh',
+          fontSize: '1.125rem',
+          color: '#64748b'
+        }}>
+          Loading country details...
         </div>
-      </div>
+      </Layout>
     );
   }
 
-  const tabs = [
-    { id: 'curriculars', label: 'Curriculars' },
-    { id: 'institutions', label: 'Institutions' },
-    { id: 'resources', label: 'Resources' },
-    { id: 'students', label: 'Students' }
-  ];
-
-  return (
-    <div style={{ minHeight: '100vh', background: 'linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%)' }}>
-      <Sidebar activeItem="countries" />
-      
-      <div style={{ marginLeft: '280px', padding: '2rem' }}>
-        {/* Header */}
-        <div style={{ marginBottom: '2rem' }}>
-          <Link 
-            href="/reference/countries" 
-            style={{ 
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '0.75rem',
-              color: '#667eea',
+  if (!country) {
+    return (
+      <Layout breadcrumbs={['Reference', 'Countries', 'Not Found']}>
+        <div style={{ textAlign: 'center', padding: '2rem' }}>
+          <h1 style={{ fontSize: '2rem', color: '#ef4444', marginBottom: '1rem' }}>
+            Country not found
+          </h1>
+          <Link
+            href="/reference/countries"
+            style={{
+              color: '#1e40af',
               textDecoration: 'none',
-              fontSize: '0.875rem',
-              fontWeight: '600',
-              marginBottom: '1.5rem',
-              padding: '0.75rem 1.5rem',
-              borderRadius: '12px',
-              border: '1px solid rgba(102, 126, 234, 0.2)',
-              backgroundColor: 'white',
-              boxShadow: '0 2px 8px rgba(102, 126, 234, 0.1)',
-              transition: 'all 0.3s ease'
-            }}
-            onMouseOver={(e) => {
-              e.currentTarget.style.transform = 'translateY(-1px)';
-              e.currentTarget.style.boxShadow = '0 4px 15px rgba(102, 126, 234, 0.2)';
-              e.currentTarget.style.backgroundColor = '#f8fafc';
-            }}
-            onMouseOut={(e) => {
-              e.currentTarget.style.transform = 'translateY(0)';
-              e.currentTarget.style.boxShadow = '0 2px 8px rgba(102, 126, 234, 0.1)';
-              e.currentTarget.style.backgroundColor = 'white';
+              fontSize: '1.125rem'
             }}
           >
-            <svg style={{ width: '16px', height: '16px' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-            </svg>
-            Back to Countries
+            ← Back to Countries
           </Link>
-          
-          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1rem' }}>
-            <h1 style={{ 
-              fontSize: '2rem', 
-              fontWeight: '700', 
-              color: '#1f2937',
-              margin: 0 
+        </div>
+      </Layout>
+    );
+  }
+
+  return (
+    <Layout breadcrumbs={['Reference', 'Countries', country.name]}>
+      <div style={{ 
+        maxWidth: '1400px', 
+        margin: '0 auto',
+        padding: '1.5rem',
+        background: '#f8fafc',
+        minHeight: '100vh'
+      }}>
+        {/* Header with Stats Cards */}
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
+          gap: '1.5rem',
+          marginBottom: '2rem'
+        }}>
+          <div style={{
+            background: 'linear-gradient(135deg, #1e40af 0%, #1e3a8a 100%)',
+            padding: '2rem',
+            borderRadius: '16px',
+            color: 'white',
+            position: 'relative',
+            overflow: 'hidden'
+          }}>
+            <div style={{
+              position: 'absolute',
+              top: '-20px',
+              right: '-20px',
+              width: '100px',
+              height: '100px',
+              background: 'rgba(255, 255, 255, 0.1)',
+              borderRadius: '50%'
+            }}></div>
+            <h1 style={{
+              fontSize: '2rem',
+              fontWeight: '600',
+              margin: 0,
+              marginBottom: '0.5rem',
+              position: 'relative',
+              zIndex: 2
             }}>
               {country.name}
             </h1>
-            <span style={{
-              background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
-              color: 'white',
-              padding: '0.375rem 1rem',
-              borderRadius: '20px',
-              fontSize: '0.75rem',
-              fontWeight: '600',
-              boxShadow: '0 2px 8px rgba(16, 185, 129, 0.3)',
-              border: '1px solid rgba(255, 255, 255, 0.2)'
+            <p style={{
+              fontSize: '1rem',
+              opacity: 0.8,
+              margin: 0,
+              position: 'relative',
+              zIndex: 2
             }}>
-              Active
-            </span>
-            <div style={{ marginLeft: 'auto', display: 'flex', gap: '0.75rem' }}>
-              <Link 
-                href={`/reference/countries/${country.id}/edit`}
-                style={{
-                  background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                  color: 'white',
-                  padding: '0.625rem 1.25rem',
-                  borderRadius: '10px',
-                  textDecoration: 'none',
-                  fontSize: '0.875rem',
-                  fontWeight: '600',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '0.5rem',
-                  transition: 'all 0.3s ease',
-                  boxShadow: '0 3px 12px rgba(102, 126, 234, 0.3)',
-                  border: '1px solid rgba(255, 255, 255, 0.1)'
-                }}
-                onMouseOver={(e) => {
-                  e.currentTarget.style.transform = 'translateY(-1px)';
-                  e.currentTarget.style.boxShadow = '0 6px 20px rgba(102, 126, 234, 0.4)';
-                }}
-                onMouseOut={(e) => {
-                  e.currentTarget.style.transform = 'translateY(0)';
-                  e.currentTarget.style.boxShadow = '0 3px 12px rgba(102, 126, 234, 0.3)';
-                }}
-              >
-                Edit Country
-              </Link>
-              <button
-                onClick={() => {
-                  if (confirm(`Are you sure you want to delete ${country.name}?`)) {
-                    const countries = JSON.parse(localStorage.getItem('countries') || '[]');
-                    const updatedCountries = countries.filter(c => c.id !== country.id);
-                    localStorage.setItem('countries', JSON.stringify(updatedCountries));
-                    window.location.href = '/reference/countries';
-                  }
-                }}
-                style={{
-                  background: 'linear-gradient(135deg, #dc2626 0%, #b91c1c 100%)',
-                  color: 'white',
-                  padding: '0.625rem 1.25rem',
-                  borderRadius: '10px',
-                  border: 'none',
-                  fontSize: '0.875rem',
-                  fontWeight: '600',
-                  cursor: 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '0.5rem',
-                  transition: 'all 0.3s ease',
-                  boxShadow: '0 3px 12px rgba(220, 38, 38, 0.3)',
-                  border: '1px solid rgba(255, 255, 255, 0.1)'
-                }}
-                onMouseOver={(e) => {
-                  e.currentTarget.style.transform = 'translateY(-1px)';
-                  e.currentTarget.style.boxShadow = '0 6px 20px rgba(220, 38, 38, 0.4)';
-                }}
-                onMouseOut={(e) => {
-                  e.currentTarget.style.transform = 'translateY(0)';
-                  e.currentTarget.style.boxShadow = '0 3px 12px rgba(220, 38, 38, 0.3)';
-                }}
-              >
-                Delete Country
-              </button>
-            </div>
+              Country Profile
+            </p>
           </div>
-
-          <div style={{ 
-            display: 'grid', 
-            gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', 
-            gap: '1rem',
-            marginBottom: '2rem'
+          
+          <div style={{
+            background: '#ffffff',
+            padding: '2rem',
+            borderRadius: '16px',
+            border: '1px solid #e2e8f0',
+            boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1)'
           }}>
-            <div style={{ 
-              backgroundColor: 'white', 
-              padding: '1rem', 
-              borderRadius: '0.5rem',
-              border: '1px solid #e5e7eb'
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '1rem',
+              marginBottom: '1rem'
             }}>
-              <div style={{ fontSize: '0.875rem', color: '#6b7280', marginBottom: '0.25rem' }}>Continent</div>
-              <div style={{ fontWeight: '600', color: '#1f2937' }}>{country.continent}</div>
-            </div>
-            <div style={{ 
-              backgroundColor: 'white', 
-              padding: '1rem', 
-              borderRadius: '0.5rem',
-              border: '1px solid #e5e7eb'
-            }}>
-              <div style={{ fontSize: '0.875rem', color: '#6b7280', marginBottom: '0.25rem' }}>Tel Code</div>
-              <div style={{ fontWeight: '600', color: '#1f2937' }}>{country.telcode}</div>
-            </div>
-            <div style={{ 
-              backgroundColor: 'white', 
-              padding: '1rem', 
-              borderRadius: '0.5rem',
-              border: '1px solid #e5e7eb'
-            }}>
-              <div style={{ fontSize: '0.875rem', color: '#6b7280', marginBottom: '0.25rem' }}>Latitude</div>
-              <div style={{ fontWeight: '600', color: '#1f2937' }}>{country.centerLat}</div>
-            </div>
-            <div style={{ 
-              backgroundColor: 'white', 
-              padding: '1rem', 
-              borderRadius: '0.5rem',
-              border: '1px solid #e5e7eb'
-            }}>
-              <div style={{ fontSize: '0.875rem', color: '#6b7280', marginBottom: '0.25rem' }}>Longitude</div>
-              <div style={{ fontWeight: '600', color: '#1f2937' }}>{country.centerLongitude}</div>
+              <div style={{
+                width: '48px',
+                height: '48px',
+                background: '#f1f5f9',
+                borderRadius: '12px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center'
+              }}>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1e40af" strokeWidth="2">
+                  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                  <circle cx="12" cy="10" r="3"/>
+                </svg>
+              </div>
+              <div>
+                <h3 style={{
+                  fontSize: '0.875rem',
+                  fontWeight: '500',
+                  color: '#64748b',
+                  margin: 0,
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.05em'
+                }}>Capital</h3>
+                <p style={{
+                  fontSize: '1.25rem',
+                  fontWeight: '600',
+                  color: '#1e293b',
+                  margin: 0
+                }}>Nairobi</p>
+              </div>
             </div>
           </div>
+          
         </div>
 
-        {/* Tabs */}
-        <div style={{ 
-          borderBottom: '1px solid #e5e7eb',
+        {/* Main Content - Country Details */}
+        <div style={{
           marginBottom: '2rem'
         }}>
-          <div style={{ display: 'flex', gap: '2rem' }}>
-            {tabs.map(tab => (
-              <button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
-                style={{
-                  padding: '1rem 1.5rem',
-                  backgroundColor: activeTab === tab.id ? 'rgba(102, 126, 234, 0.1)' : 'transparent',
-                  border: 'none',
-                  borderRadius: '12px',
-                  borderBottom: activeTab === tab.id ? '3px solid #667eea' : '3px solid transparent',
-                  color: activeTab === tab.id ? '#667eea' : '#6b7280',
-                  fontWeight: activeTab === tab.id ? '700' : '500',
+          <div style={{
+            background: '#ffffff',
+            padding: '2rem',
+            borderRadius: '16px',
+            border: '1px solid #e2e8f0',
+            boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1)'
+          }}>
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              marginBottom: '2rem'
+            }}>
+              <h2 style={{
+                fontSize: '1.5rem',
+                fontWeight: '600',
+                color: '#1e293b',
+                margin: 0
+              }}>Country Information</h2>
+              <div style={{
+                display: 'flex',
+                gap: '0.75rem'
+              }}>
+                <Link
+                  href={`/reference/countries/${country.id}/edit`}
+                  style={{
+                    background: '#1e40af',
+                    color: '#ffffff',
+                    padding: '0.75rem 1.5rem',
+                    textDecoration: 'none',
+                    fontWeight: '500',
+                    fontSize: '0.875rem',
+                    borderRadius: '8px',
+                    transition: 'all 0.2s ease',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.5rem'
+                  }}
+                >
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                  </svg>
+                  Edit
+                </Link>
+                <Link
+                  href="/reference/countries"
+                  style={{
+                    background: '#ffffff',
+                    color: '#64748b',
+                    padding: '0.75rem 1.5rem',
+                    textDecoration: 'none',
+                    fontWeight: '500',
+                    fontSize: '0.875rem',
+                    border: '1px solid #e2e8f0',
+                    borderRadius: '8px',
+                    transition: 'all 0.2s ease',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.5rem'
+                  }}
+                >
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <polyline points="15,18 9,12 15,6"/>
+                  </svg>
+                  Back
+                </Link>
+              </div>
+            </div>
+            
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+              gap: '1.5rem'
+            }}>
+              <div style={{
+                padding: '1.5rem',
+                background: '#f8fafc',
+                borderRadius: '12px',
+                border: '1px solid #e2e8f0'
+              }}>
+                <h3 style={{
                   fontSize: '0.875rem',
-                  cursor: 'pointer',
-                  transition: 'all 0.3s ease',
-                  position: 'relative'
-                }}
-                onMouseOver={(e) => {
-                  if (activeTab !== tab.id) {
-                    e.currentTarget.style.backgroundColor = 'rgba(102, 126, 234, 0.05)';
-                    e.currentTarget.style.color = '#667eea';
-                  }
-                }}
-                onMouseOut={(e) => {
-                  if (activeTab !== tab.id) {
-                    e.currentTarget.style.backgroundColor = 'transparent';
-                    e.currentTarget.style.color = '#6b7280';
-                  }
-                }}
-              >
-                {tab.label}
-              </button>
-            ))}
+                  fontWeight: '500',
+                  color: '#64748b',
+                  margin: 0,
+                  marginBottom: '0.5rem',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.05em'
+                }}>Languages</h3>
+                <p style={{
+                  fontSize: '1rem',
+                  fontWeight: '600',
+                  color: '#1e293b',
+                  margin: 0
+                }}>Swahili & English</p>
+              </div>
+              
+              <div style={{
+                padding: '1.5rem',
+                background: '#f8fafc',
+                borderRadius: '12px',
+                border: '1px solid #e2e8f0'
+              }}>
+                <h3 style={{
+                  fontSize: '0.875rem',
+                  fontWeight: '500',
+                  color: '#64748b',
+                  margin: 0,
+                  marginBottom: '0.5rem',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.05em'
+                }}>Currency</h3>
+                <p style={{
+                  fontSize: '1rem',
+                  fontWeight: '600',
+                  color: '#1e293b',
+                  margin: 0
+                }}>Kenyan Shilling (KES)</p>
+              </div>
+              
+              <div style={{
+                padding: '1.5rem',
+                background: '#f8fafc',
+                borderRadius: '12px',
+                border: '1px solid #e2e8f0'
+              }}>
+                <h3 style={{
+                  fontSize: '0.875rem',
+                  fontWeight: '500',
+                  color: '#64748b',
+                  margin: 0,
+                  marginBottom: '0.5rem',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.05em'
+                }}>Time Zone</h3>
+                <p style={{
+                  fontSize: '1rem',
+                  fontWeight: '600',
+                  color: '#1e293b',
+                  margin: 0
+                }}>EAT (UTC+3)</p>
+              </div>
+              
+              <div style={{
+                padding: '1.5rem',
+                background: '#f8fafc',
+                borderRadius: '12px',
+                border: '1px solid #e2e8f0'
+              }}>
+                <h3 style={{
+                  fontSize: '0.875rem',
+                  fontWeight: '500',
+                  color: '#64748b',
+                  margin: 0,
+                  marginBottom: '0.5rem',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.05em'
+                }}>Continent</h3>
+                <p style={{
+                  fontSize: '1rem',
+                  fontWeight: '600',
+                  color: '#1e293b',
+                  margin: 0
+                }}>{country.continent}</p>
+              </div>
+              
+              <div style={{
+                padding: '1.5rem',
+                background: '#f8fafc',
+                borderRadius: '12px',
+                border: '1px solid #e2e8f0'
+              }}>
+                <h3 style={{
+                  fontSize: '0.875rem',
+                  fontWeight: '500',
+                  color: '#64748b',
+                  margin: 0,
+                  marginBottom: '0.5rem',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.05em'
+                }}>Phone Code</h3>
+                <p style={{
+                  fontSize: '1rem',
+                  fontWeight: '600',
+                  color: '#1e293b',
+                  margin: 0
+                }}>{country.telCode}</p>
+              </div>
+            </div>
           </div>
         </div>
 
-        {/* Tab Content */}
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem' }}>
-          {/* Left Column */}
-          <div>
-            {activeTab === 'curriculars' && (
-              <div style={{ 
-                backgroundColor: 'white', 
-                padding: '1.5rem', 
-                borderRadius: '0.75rem',
-                border: '1px solid #e5e7eb'
-              }}>
-                <h3 style={{ 
-                  fontSize: '1.125rem', 
-                  fontWeight: '600', 
-                  color: '#1f2937',
-                  marginBottom: '1rem'
-                }}>
-                  Curriculars Overview
-                </h3>
-                <div style={{ color: '#6b7280', fontSize: '0.875rem', marginBottom: '1rem' }}>
-                  Manage educational curricula and academic programs for {country.name}.
-                </div>
-                <div style={{ 
-                  padding: '2rem', 
-                  background: 'linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%)', 
-                  borderRadius: '12px',
-                  border: '1px solid #e5e7eb',
-                  textAlign: 'center'
-                }}>
-                  <div style={{ fontSize: '0.875rem', color: '#6b7280', marginBottom: '1rem' }}>No curricula programs created yet</div>
-                  <button 
-                    onClick={() => alert('Curriculum management coming soon!')}
-                    style={{
-                    background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                    color: 'white',
-                    padding: '0.75rem 1.5rem',
-                    borderRadius: '10px',
-                    border: 'none',
-                    fontSize: '0.875rem',
-                    fontWeight: '600',
-                    cursor: 'pointer',
-                    transition: 'all 0.3s ease',
-                    boxShadow: '0 3px 12px rgba(102, 126, 234, 0.3)'
-                  }}
-                  onMouseOver={(e) => {
-                    e.currentTarget.style.transform = 'translateY(-1px)';
-                    e.currentTarget.style.boxShadow = '0 6px 20px rgba(102, 126, 234, 0.4)';
-                  }}
-                  onMouseOut={(e) => {
-                    e.currentTarget.style.transform = 'translateY(0)';
-                    e.currentTarget.style.boxShadow = '0 3px 12px rgba(102, 126, 234, 0.3)';
-                  }}>
-                    Add Curriculum
-                  </button>
-                </div>
-              </div>
-            )}
 
-            {activeTab === 'institutions' && (
-              <div style={{ 
-                backgroundColor: 'white', 
-                padding: '1.5rem', 
-                borderRadius: '0.75rem',
-                border: '1px solid #e5e7eb'
-              }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-                  <h3 style={{ 
-                    fontSize: '1.125rem', 
-                    fontWeight: '600', 
-                    color: '#1f2937',
-                    margin: 0
-                  }}>
-                    Institutions
-                  </h3>
-                  <button style={{
-                    background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                    color: 'white',
-                    padding: '0.75rem 1.25rem',
-                    borderRadius: '10px',
-                    border: 'none',
-                    fontSize: '0.875rem',
-                    fontWeight: '600',
-                    cursor: 'pointer',
-                    transition: 'all 0.3s ease',
-                    boxShadow: '0 3px 12px rgba(102, 126, 234, 0.3)',
-                    border: '1px solid rgba(255, 255, 255, 0.1)'
-                  }}
-                  onMouseOver={(e) => {
-                    e.currentTarget.style.transform = 'translateY(-1px)';
-                    e.currentTarget.style.boxShadow = '0 6px 20px rgba(102, 126, 234, 0.4)';
-                  }}
-                  onMouseOut={(e) => {
-                    e.currentTarget.style.transform = 'translateY(0)';
-                    e.currentTarget.style.boxShadow = '0 3px 12px rgba(102, 126, 234, 0.3)';
-                  }}>
-                    Add Institution
-                  </button>
-                </div>
-                <div style={{ color: '#6b7280', fontSize: '0.875rem', marginBottom: '1rem' }}>
-                  Educational institutions registered in {country.name}.
-                </div>
-                <div style={{ 
-                  padding: '2rem', 
-                  background: 'linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%)', 
-                  borderRadius: '12px',
-                  border: '1px solid #e5e7eb',
-                  textAlign: 'center'
-                }}>
-                  <div style={{ fontSize: '0.875rem', color: '#6b7280', marginBottom: '1rem' }}>No institutions registered yet</div>
-                  <button 
-                    onClick={() => alert('Institution management coming soon!')}
-                    style={{
-                    background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                    color: 'white',
-                    padding: '0.75rem 1.5rem',
-                    borderRadius: '10px',
-                    border: 'none',
-                    fontSize: '0.875rem',
-                    fontWeight: '600',
-                    cursor: 'pointer',
-                    transition: 'all 0.3s ease',
-                    boxShadow: '0 3px 12px rgba(102, 126, 234, 0.3)'
-                  }}
-                  onMouseOver={(e) => {
-                    e.currentTarget.style.transform = 'translateY(-1px)';
-                    e.currentTarget.style.boxShadow = '0 6px 20px rgba(102, 126, 234, 0.4)';
-                  }}
-                  onMouseOut={(e) => {
-                    e.currentTarget.style.transform = 'translateY(0)';
-                    e.currentTarget.style.boxShadow = '0 3px 12px rgba(102, 126, 234, 0.3)';
-                  }}>
-                    Add Institution
-                  </button>
-                </div>
-              </div>
-            )}
-
-            {activeTab === 'resources' && (
-              <div style={{ 
-                backgroundColor: 'white', 
-                padding: '1.5rem', 
-                borderRadius: '0.75rem',
-                border: '1px solid #e5e7eb'
-              }}>
-                <h3 style={{ 
-                  fontSize: '1.125rem', 
-                  fontWeight: '600', 
-                  color: '#1f2937',
-                  marginBottom: '1rem'
-                }}>
-                  Educational Resources
-                </h3>
-                <div style={{ color: '#6b7280', fontSize: '0.875rem', marginBottom: '1rem' }}>
-                  Learning materials and resources available in {country.name}.
-                </div>
-                <div style={{ 
-                  padding: '2rem', 
-                  background: 'linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%)', 
-                  borderRadius: '12px',
-                  border: '1px solid #e5e7eb',
-                  textAlign: 'center'
-                }}>
-                  <div style={{ fontSize: '0.875rem', color: '#6b7280', marginBottom: '1rem' }}>No educational resources added yet</div>
-                  <button 
-                    onClick={() => alert('Resource management coming soon!')}
-                    style={{
-                    background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                    color: 'white',
-                    padding: '0.75rem 1.5rem',
-                    borderRadius: '10px',
-                    border: 'none',
-                    fontSize: '0.875rem',
-                    fontWeight: '600',
-                    cursor: 'pointer',
-                    transition: 'all 0.3s ease',
-                    boxShadow: '0 3px 12px rgba(102, 126, 234, 0.3)'
-                  }}
-                  onMouseOver={(e) => {
-                    e.currentTarget.style.transform = 'translateY(-1px)';
-                    e.currentTarget.style.boxShadow = '0 6px 20px rgba(102, 126, 234, 0.4)';
-                  }}
-                  onMouseOut={(e) => {
-                    e.currentTarget.style.transform = 'translateY(0)';
-                    e.currentTarget.style.boxShadow = '0 3px 12px rgba(102, 126, 234, 0.3)';
-                  }}>
-                    Add Resources
-                  </button>
-                </div>
-              </div>
-            )}
-
-            {activeTab === 'students' && (
-              <div style={{ 
-                backgroundColor: 'white', 
-                padding: '1.5rem', 
-                borderRadius: '0.75rem',
-                border: '1px solid #e5e7eb'
-              }}>
-                <h3 style={{ 
-                  fontSize: '1.125rem', 
-                  fontWeight: '600', 
-                  color: '#1f2937',
-                  marginBottom: '1rem'
-                }}>
-                  Student Statistics
-                </h3>
-                <div style={{ color: '#6b7280', fontSize: '0.875rem', marginBottom: '1rem' }}>
-                  Student enrollment and performance data for {country.name}.
-                </div>
-                <div style={{ 
-                  padding: '2rem', 
-                  background: 'linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%)', 
-                  borderRadius: '12px',
-                  border: '1px solid #e5e7eb',
-                  textAlign: 'center'
-                }}>
-                  <div style={{ fontSize: '0.875rem', color: '#6b7280', marginBottom: '1rem' }}>No students enrolled yet</div>
-                  <button 
-                    onClick={() => alert('Student management coming soon!')}
-                    style={{
-                    background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                    color: 'white',
-                    padding: '0.75rem 1.5rem',
-                    borderRadius: '10px',
-                    border: 'none',
-                    fontSize: '0.875rem',
-                    fontWeight: '600',
-                    cursor: 'pointer',
-                    transition: 'all 0.3s ease',
-                    boxShadow: '0 3px 12px rgba(102, 126, 234, 0.3)'
-                  }}
-                  onMouseOver={(e) => {
-                    e.currentTarget.style.transform = 'translateY(-1px)';
-                    e.currentTarget.style.boxShadow = '0 6px 20px rgba(102, 126, 234, 0.4)';
-                  }}
-                  onMouseOut={(e) => {
-                    e.currentTarget.style.transform = 'translateY(0)';
-                    e.currentTarget.style.boxShadow = '0 3px 12px rgba(102, 126, 234, 0.3)';
-                  }}>
-                    Add Students
-                  </button>
-                </div>
-              </div>
-            )}
-          </div>
-
-          {/* Right Column */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-            {/* Institution Registration */}
+        {/* Management Sections */}
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))',
+          gap: '2rem',
+          marginBottom: '2rem'
+        }}>
+          {/* Resources */}
+          <div style={{
+            background: '#ffffff',
+            padding: '2rem',
+            borderRadius: '16px',
+            border: '1px solid #e2e8f0',
+            boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1)'
+          }}>
             <div style={{
-              backgroundColor: 'white', 
-              padding: '2rem', 
-              borderRadius: '20px',
-              border: '1px solid #e5e7eb',
-              boxShadow: '0 8px 25px rgba(0, 0, 0, 0.08)',
-              backdropFilter: 'blur(20px)'
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              marginBottom: '1.5rem'
             }}>
               <h3 style={{
-                fontSize: '1.125rem', 
-                fontWeight: '600', 
-                color: '#1f2937',
-                marginBottom: '1rem'
+                fontSize: '1.25rem',
+                fontWeight: '600',
+                color: '#1e293b',
+                margin: 0,
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.75rem'
               }}>
-                Institution Registration
+                <div style={{
+                  width: '40px',
+                  height: '40px',
+                  background: '#8b5cf6',
+                  borderRadius: '10px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                    <polyline points="14,2 14,8 20,8"/>
+                    <line x1="16" y1="13" x2="8" y2="13"/>
+                    <line x1="16" y1="17" x2="8" y2="17"/>
+                    <polyline points="10,9 9,9 8,9"/>
+                  </svg>
+                </div>
+                Resources
               </h3>
-              <div style={{ color: '#6b7280', fontSize: '0.875rem', marginBottom: '1rem' }}>
-                Register new educational institutions in {country.name}.
-              </div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                <button style={{
-                  background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                  color: 'white',
-                  padding: '1rem 1.25rem',
-                  borderRadius: '12px',
-                  border: 'none',
-                  fontSize: '0.875rem',
-                  fontWeight: '600',
-                  cursor: 'pointer',
-                  width: '100%',
-                  transition: 'all 0.3s ease',
-                  boxShadow: '0 4px 15px rgba(102, 126, 234, 0.3)',
-                  border: '1px solid rgba(255, 255, 255, 0.1)'
-                }}
-                onMouseOver={(e) => {
-                  e.currentTarget.style.transform = 'translateY(-2px)';
-                  e.currentTarget.style.boxShadow = '0 8px 25px rgba(102, 126, 234, 0.4)';
-                }}
-                onMouseOut={(e) => {
-                  e.currentTarget.style.transform = 'translateY(0)';
-                  e.currentTarget.style.boxShadow = '0 4px 15px rgba(102, 126, 234, 0.3)';
-                }}>
-                  Add New Institution
-                </button>
-                <button style={{
-                  backgroundColor: '#10b981',
-                  color: 'white',
-                  padding: '0.75rem 1rem',
-                  borderRadius: '0.5rem',
-                  border: 'none',
-                  fontSize: '0.875rem',
-                  fontWeight: '500',
-                  cursor: 'pointer',
-                  width: '100%'
-                }}>
-                  Manage Existing
-                </button>
-              </div>
+              <span style={{
+                background: '#f1f5f9',
+                color: '#64748b',
+                padding: '0.25rem 0.75rem',
+                borderRadius: '12px',
+                fontSize: '0.875rem',
+                fontWeight: '500'
+              }}>0 items</span>
             </div>
-
-            {/* AI Assessments */}
-            <div style={{ 
-              backgroundColor: 'white', 
-              padding: '1.5rem', 
-              borderRadius: '0.75rem',
-              border: '1px solid #e5e7eb'
+            
+            <div style={{
+              textAlign: 'center',
+              padding: '2rem 1rem'
             }}>
-              <h3 style={{ 
-                fontSize: '1.125rem', 
-                fontWeight: '600', 
-                color: '#1f2937',
-                marginBottom: '1rem'
+              <div style={{
+                width: '64px',
+                height: '64px',
+                background: '#f8fafc',
+                borderRadius: '50%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                margin: '0 auto 1rem',
+                border: '2px dashed #e2e8f0'
               }}>
-                AI Assessments
-              </h3>
-              <div style={{ color: '#6b7280', fontSize: '0.875rem', marginBottom: '1rem' }}>
-                AI-powered educational assessments and analytics.
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" strokeWidth="2">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                  <polyline points="14,2 14,8 20,8"/>
+                  <line x1="16" y1="13" x2="8" y2="13"/>
+                  <line x1="16" y1="17" x2="8" y2="17"/>
+                  <polyline points="10,9 9,9 8,9"/>
+                </svg>
               </div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', marginBottom: '1rem' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.875rem' }}>
-                  <span>Assessment Accuracy</span>
-                  <span style={{ fontWeight: '600' }}>0%</span>
-                </div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.875rem' }}>
-                  <span>Active Assessments</span>
-                  <span style={{ fontWeight: '600' }}>0</span>
-                </div>
-              </div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                <button style={{
-                  backgroundColor: '#10b981',
-                  color: 'white',
-                  padding: '0.75rem',
-                  borderRadius: '0.5rem',
+              <h4 style={{
+                fontSize: '1rem',
+                fontWeight: '600',
+                color: '#1e293b',
+                margin: 0,
+                marginBottom: '0.5rem'
+              }}>No resources yet</h4>
+              <p style={{
+                fontSize: '0.875rem',
+                color: '#64748b',
+                margin: 0,
+                marginBottom: '1.5rem',
+                lineHeight: '1.5'
+              }}>Add educational resources and materials for this country.</p>
+              <button 
+                style={{
+                  background: '#8b5cf6',
+                  color: '#ffffff',
                   border: 'none',
+                  padding: '0.75rem 1.5rem',
+                  borderRadius: '8px',
                   fontSize: '0.875rem',
                   fontWeight: '500',
                   cursor: 'pointer',
-                  width: '100%'
+                  transition: 'all 0.2s ease',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '0.5rem'
                 }}>
-                  View AI Dashboard
-                </button>
-                <button style={{
-                  background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
-                  color: 'white',
-                  padding: '1rem 1.25rem',
-                  borderRadius: '12px',
-                  border: 'none',
-                  fontSize: '0.875rem',
-                  fontWeight: '600',
-                  cursor: 'pointer',
-                  width: '100%',
-                  transition: 'all 0.3s ease',
-                  boxShadow: '0 4px 15px rgba(245, 158, 11, 0.3)',
-                  border: '1px solid rgba(255, 255, 255, 0.1)'
-                }}
-                onMouseOver={(e) => {
-                  e.currentTarget.style.transform = 'translateY(-2px)';
-                  e.currentTarget.style.boxShadow = '0 8px 25px rgba(245, 158, 11, 0.4)';
-                }}
-                onMouseOut={(e) => {
-                  e.currentTarget.style.transform = 'translateY(0)';
-                  e.currentTarget.style.boxShadow = '0 4px 15px rgba(245, 158, 11, 0.3)';
-                }}>
-                  Create Assessment
-                </button>
-              </div>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M12 5v14m-7-7h14"/>
+                </svg>
+                Add Resource
+              </button>
             </div>
+          </div>
+          {/* Curriculums */}
+          <div style={{
+            background: '#ffffff',
+            padding: '2rem',
+            borderRadius: '16px',
+            border: '1px solid #e2e8f0',
+            boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1)'
+          }}>
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              marginBottom: '1.5rem'
+            }}>
+              <h3 style={{
+                fontSize: '1.25rem',
+                fontWeight: '600',
+                color: '#1e293b',
+                margin: 0,
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.75rem'
+              }}>
+                <div style={{
+                  width: '40px',
+                  height: '40px',
+                  background: '#1e40af',
+                  borderRadius: '10px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2">
+                    <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+                    <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+                  </svg>
+                </div>
+                Curriculums
+              </h3>
+              <span style={{
+                background: '#f1f5f9',
+                color: '#64748b',
+                padding: '0.25rem 0.75rem',
+                borderRadius: '12px',
+                fontSize: '0.875rem',
+                fontWeight: '500'
+              }}>0 items</span>
+            </div>
+            
+            <div style={{
+              textAlign: 'center',
+              padding: '2rem 1rem'
+            }}>
+              <div style={{
+                width: '64px',
+                height: '64px',
+                background: '#f8fafc',
+                borderRadius: '50%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                margin: '0 auto 1rem',
+                border: '2px dashed #e2e8f0'
+              }}>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" strokeWidth="2">
+                  <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+                  <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+                </svg>
+              </div>
+              <h4 style={{
+                fontSize: '1rem',
+                fontWeight: '600',
+                color: '#1e293b',
+                margin: 0,
+                marginBottom: '0.5rem'
+              }}>No curriculums yet</h4>
+              <p style={{
+                fontSize: '0.875rem',
+                color: '#64748b',
+                margin: 0,
+                marginBottom: '1.5rem',
+                lineHeight: '1.5'
+              }}>Get started by adding your first curriculum to this country.</p>
+              <button 
+                onClick={() => setShowCurriculumForm(true)}
+                style={{
+                  background: '#1e40af',
+                  color: '#ffffff',
+                  border: 'none',
+                  padding: '0.75rem 1.5rem',
+                  borderRadius: '8px',
+                  fontSize: '0.875rem',
+                  fontWeight: '500',
+                  cursor: 'pointer',
+                  transition: 'all 0.2s ease',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '0.5rem'
+                }}>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M12 5v14m-7-7h14"/>
+                </svg>
+                Add Curriculum
+              </button>
+            </div>
+          </div>
+          
+          {/* Institutions */}
+          <div style={{
+            background: '#ffffff',
+            padding: '2rem',
+            borderRadius: '16px',
+            border: '1px solid #e2e8f0',
+            boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1)'
+          }}>
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              marginBottom: '1.5rem'
+            }}>
+              <h3 style={{
+                fontSize: '1.25rem',
+                fontWeight: '600',
+                color: '#1e293b',
+                margin: 0,
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.75rem'
+              }}>
+                <div style={{
+                  width: '40px',
+                  height: '40px',
+                  background: '#059669',
+                  borderRadius: '10px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2">
+                    <path d="M3 21h18"/>
+                    <path d="M5 21V7l8-4v18"/>
+                    <path d="M19 21V11l-6-4"/>
+                  </svg>
+                </div>
+                Institutions
+              </h3>
+              <span style={{
+                background: '#f1f5f9',
+                color: '#64748b',
+                padding: '0.25rem 0.75rem',
+                borderRadius: '12px',
+                fontSize: '0.875rem',
+                fontWeight: '500'
+              }}>0 items</span>
+            </div>
+            
+            <div style={{
+              textAlign: 'center',
+              padding: '2rem 1rem'
+            }}>
+              <div style={{
+                width: '64px',
+                height: '64px',
+                background: '#f8fafc',
+                borderRadius: '50%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                margin: '0 auto 1rem',
+                border: '2px dashed #e2e8f0'
+              }}>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" strokeWidth="2">
+                  <path d="M3 21h18"/>
+                  <path d="M5 21V7l8-4v18"/>
+                  <path d="M19 21V11l-6-4"/>
+                </svg>
+              </div>
+              <h4 style={{
+                fontSize: '1rem',
+                fontWeight: '600',
+                color: '#1e293b',
+                margin: 0,
+                marginBottom: '0.5rem'
+              }}>No institutions yet</h4>
+              <p style={{
+                fontSize: '0.875rem',
+                color: '#64748b',
+                margin: 0,
+                marginBottom: '1.5rem',
+                lineHeight: '1.5'
+              }}>Add educational institutions to track and manage them.</p>
+              <button 
+                onClick={() => setShowInstitutionForm(true)}
+                style={{
+                  background: '#059669',
+                  color: '#ffffff',
+                  border: 'none',
+                  padding: '0.75rem 1.5rem',
+                  borderRadius: '8px',
+                  fontSize: '0.875rem',
+                  fontWeight: '500',
+                  cursor: 'pointer',
+                  transition: 'all 0.2s ease',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '0.5rem'
+                }}>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M12 5v14m-7-7h14"/>
+                </svg>
+                Add Institution
+              </button>
+            </div>
+          </div>
+        </div>
 
-            {/* Institution Maps - Redesigned */}
-            <div style={{ 
-              backgroundColor: 'white', 
-              padding: '2rem', 
+        {/* Institution Form Modal */}
+        {showInstitutionForm && (
+          <div style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: 'rgba(0, 0, 0, 0.5)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 1000,
+            padding: '1rem'
+          }}>
+            <div style={{
+              background: '#ffffff',
               borderRadius: '16px',
-              border: '1px solid #e2e8f0',
-              boxShadow: '0 4px 20px rgba(0, 0, 0, 0.08)'
+              padding: '2rem',
+              maxWidth: '500px',
+              width: '100%',
+              maxHeight: '90vh',
+              overflowY: 'auto'
             }}>
               <div style={{
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'space-between',
-                marginBottom: '1.5rem'
+                marginBottom: '2rem'
               }}>
-                <h3 style={{ 
-                  fontSize: '1.25rem', 
-                  fontWeight: '700', 
-                  color: '#1f2937',
+                <h2 style={{
+                  fontSize: '1.5rem',
+                  fontWeight: '600',
+                  color: '#1e293b',
                   margin: 0
-                }}>
-                  Institution Maps
-                </h3>
-                <div style={{
-                  background: '#1e40af',
-                  color: 'white',
-                  padding: '0.375rem 0.75rem',
-                  borderRadius: '20px',
-                  fontSize: '0.75rem',
-                  fontWeight: '600'
-                }}>
-                  0 Locations
-                </div>
+                }}>Add New Institution</h2>
+                <button 
+                  onClick={() => setShowInstitutionForm(false)}
+                  style={{
+                    background: 'none',
+                    border: 'none',
+                    fontSize: '1.5rem',
+                    color: '#64748b',
+                    cursor: 'pointer',
+                    padding: '0.5rem',
+                    borderRadius: '50%'
+                  }}
+                >
+                  ×
+                </button>
               </div>
               
-              {/* Enhanced Map Container */}
-              <div style={{ 
-                background: 'linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%)', 
-                height: '240px', 
-                borderRadius: '12px',
-                marginBottom: '1.5rem',
+              <form onSubmit={(e) => {
+                e.preventDefault();
+                console.log('Institution form submitted:', institutionForm);
+                setShowInstitutionForm(false);
+                setInstitutionForm({ name: '', type: 'university', address: '', phone: '', email: '', website: '' });
+              }}>
+                <div style={{ display: 'grid', gap: '1.5rem' }}>
+                  <div>
+                    <label style={{
+                      display: 'block',
+                      fontSize: '0.875rem',
+                      fontWeight: '500',
+                      color: '#374151',
+                      marginBottom: '0.5rem'
+                    }}>Institution Name</label>
+                    <input
+                      type="text"
+                      required
+                      value={institutionForm.name}
+                      onChange={(e) => setInstitutionForm({...institutionForm, name: e.target.value})}
+                      style={{
+                        width: '100%',
+                        padding: '0.75rem',
+                        border: '1px solid #d1d5db',
+                        borderRadius: '8px',
+                        fontSize: '0.875rem',
+                        outline: 'none'
+                      }}
+                    />
+                  </div>
+                  
+                  <div>
+                    <label style={{
+                      display: 'block',
+                      fontSize: '0.875rem',
+                      fontWeight: '500',
+                      color: '#374151',
+                      marginBottom: '0.5rem'
+                    }}>Institution Type</label>
+                    <select
+                      value={institutionForm.type}
+                      onChange={(e) => setInstitutionForm({...institutionForm, type: e.target.value})}
+                      style={{
+                        width: '100%',
+                        padding: '0.75rem',
+                        border: '1px solid #d1d5db',
+                        borderRadius: '8px',
+                        fontSize: '0.875rem',
+                        outline: 'none'
+                      }}
+                    >
+                      <option value="university">University</option>
+                      <option value="college">College</option>
+                      <option value="school">School</option>
+                      <option value="institute">Institute</option>
+                    </select>
+                  </div>
+                  
+                  <div>
+                    <label style={{
+                      display: 'block',
+                      fontSize: '0.875rem',
+                      fontWeight: '500',
+                      color: '#374151',
+                      marginBottom: '0.5rem'
+                    }}>Address</label>
+                    <textarea
+                      required
+                      value={institutionForm.address}
+                      onChange={(e) => setInstitutionForm({...institutionForm, address: e.target.value})}
+                      rows={3}
+                      style={{
+                        width: '100%',
+                        padding: '0.75rem',
+                        border: '1px solid #d1d5db',
+                        borderRadius: '8px',
+                        fontSize: '0.875rem',
+                        outline: 'none',
+                        resize: 'vertical'
+                      }}
+                    />
+                  </div>
+                  
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                    <div>
+                      <label style={{
+                        display: 'block',
+                        fontSize: '0.875rem',
+                        fontWeight: '500',
+                        color: '#374151',
+                        marginBottom: '0.5rem'
+                      }}>Phone</label>
+                      <input
+                        type="tel"
+                        value={institutionForm.phone}
+                        onChange={(e) => setInstitutionForm({...institutionForm, phone: e.target.value})}
+                        style={{
+                          width: '100%',
+                          padding: '0.75rem',
+                          border: '1px solid #d1d5db',
+                          borderRadius: '8px',
+                          fontSize: '0.875rem',
+                          outline: 'none'
+                        }}
+                      />
+                    </div>
+                    
+                    <div>
+                      <label style={{
+                        display: 'block',
+                        fontSize: '0.875rem',
+                        fontWeight: '500',
+                        color: '#374151',
+                        marginBottom: '0.5rem'
+                      }}>Email</label>
+                      <input
+                        type="email"
+                        value={institutionForm.email}
+                        onChange={(e) => setInstitutionForm({...institutionForm, email: e.target.value})}
+                        style={{
+                          width: '100%',
+                          padding: '0.75rem',
+                          border: '1px solid #d1d5db',
+                          borderRadius: '8px',
+                          fontSize: '0.875rem',
+                          outline: 'none'
+                        }}
+                      />
+                    </div>
+                  </div>
+                  
+                  <div>
+                    <label style={{
+                      display: 'block',
+                      fontSize: '0.875rem',
+                      fontWeight: '500',
+                      color: '#374151',
+                      marginBottom: '0.5rem'
+                    }}>Website</label>
+                    <input
+                      type="url"
+                      value={institutionForm.website}
+                      onChange={(e) => setInstitutionForm({...institutionForm, website: e.target.value})}
+                      style={{
+                        width: '100%',
+                        padding: '0.75rem',
+                        border: '1px solid #d1d5db',
+                        borderRadius: '8px',
+                        fontSize: '0.875rem',
+                        outline: 'none'
+                      }}
+                    />
+                  </div>
+                </div>
+                
+                <div style={{
+                  display: 'flex',
+                  gap: '1rem',
+                  marginTop: '2rem',
+                  justifyContent: 'flex-end'
+                }}>
+                  <button
+                    type="button"
+                    onClick={() => setShowInstitutionForm(false)}
+                    style={{
+                      background: '#ffffff',
+                      color: '#64748b',
+                      border: '1px solid #e2e8f0',
+                      padding: '0.75rem 1.5rem',
+                      borderRadius: '8px',
+                      fontSize: '0.875rem',
+                      fontWeight: '500',
+                      cursor: 'pointer'
+                    }}
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    style={{
+                      background: '#059669',
+                      color: '#ffffff',
+                      border: 'none',
+                      padding: '0.75rem 1.5rem',
+                      borderRadius: '8px',
+                      fontSize: '0.875rem',
+                      fontWeight: '500',
+                      cursor: 'pointer'
+                    }}
+                  >
+                    Add Institution
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
+
+        {/* Curriculum Form Modal */}
+        {showCurriculumForm && (
+          <div style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: 'rgba(0, 0, 0, 0.5)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 1000,
+            padding: '1rem'
+          }}>
+            <div style={{
+              background: '#ffffff',
+              borderRadius: '16px',
+              padding: '2rem',
+              maxWidth: '500px',
+              width: '100%',
+              maxHeight: '90vh',
+              overflowY: 'auto'
+            }}>
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                marginBottom: '2rem'
+              }}>
+                <h2 style={{
+                  fontSize: '1.5rem',
+                  fontWeight: '600',
+                  color: '#1e293b',
+                  margin: 0
+                }}>Add New Curriculum</h2>
+                <button 
+                  onClick={() => setShowCurriculumForm(false)}
+                  style={{
+                    background: 'none',
+                    border: 'none',
+                    fontSize: '1.5rem',
+                    color: '#64748b',
+                    cursor: 'pointer',
+                    padding: '0.5rem',
+                    borderRadius: '50%'
+                  }}
+                >
+                  ×
+                </button>
+              </div>
+              
+              <form onSubmit={(e) => {
+                e.preventDefault();
+                console.log('Curriculum form submitted:', curriculumForm);
+                setShowCurriculumForm(false);
+                setCurriculumForm({ name: '', description: '', level: 'undergraduate', duration: '', credits: '' });
+              }}>
+                <div style={{ display: 'grid', gap: '1.5rem' }}>
+                  <div>
+                    <label style={{
+                      display: 'block',
+                      fontSize: '0.875rem',
+                      fontWeight: '500',
+                      color: '#374151',
+                      marginBottom: '0.5rem'
+                    }}>Curriculum Name</label>
+                    <input
+                      type="text"
+                      required
+                      value={curriculumForm.name}
+                      onChange={(e) => setCurriculumForm({...curriculumForm, name: e.target.value})}
+                      style={{
+                        width: '100%',
+                        padding: '0.75rem',
+                        border: '1px solid #d1d5db',
+                        borderRadius: '8px',
+                        fontSize: '0.875rem',
+                        outline: 'none'
+                      }}
+                    />
+                  </div>
+                  
+                  <div>
+                    <label style={{
+                      display: 'block',
+                      fontSize: '0.875rem',
+                      fontWeight: '500',
+                      color: '#374151',
+                      marginBottom: '0.5rem'
+                    }}>Description</label>
+                    <textarea
+                      required
+                      value={curriculumForm.description}
+                      onChange={(e) => setCurriculumForm({...curriculumForm, description: e.target.value})}
+                      rows={3}
+                      style={{
+                        width: '100%',
+                        padding: '0.75rem',
+                        border: '1px solid #d1d5db',
+                        borderRadius: '8px',
+                        fontSize: '0.875rem',
+                        outline: 'none',
+                        resize: 'vertical'
+                      }}
+                    />
+                  </div>
+                  
+                  <div>
+                    <label style={{
+                      display: 'block',
+                      fontSize: '0.875rem',
+                      fontWeight: '500',
+                      color: '#374151',
+                      marginBottom: '0.5rem'
+                    }}>Level</label>
+                    <select
+                      value={curriculumForm.level}
+                      onChange={(e) => setCurriculumForm({...curriculumForm, level: e.target.value})}
+                      style={{
+                        width: '100%',
+                        padding: '0.75rem',
+                        border: '1px solid #d1d5db',
+                        borderRadius: '8px',
+                        fontSize: '0.875rem',
+                        outline: 'none'
+                      }}
+                    >
+                      <option value="undergraduate">Undergraduate</option>
+                      <option value="graduate">Graduate</option>
+                      <option value="postgraduate">Postgraduate</option>
+                      <option value="certificate">Certificate</option>
+                      <option value="diploma">Diploma</option>
+                    </select>
+                  </div>
+                  
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                    <div>
+                      <label style={{
+                        display: 'block',
+                        fontSize: '0.875rem',
+                        fontWeight: '500',
+                        color: '#374151',
+                        marginBottom: '0.5rem'
+                      }}>Duration</label>
+                      <input
+                        type="text"
+                        placeholder="e.g., 4 years"
+                        value={curriculumForm.duration}
+                        onChange={(e) => setCurriculumForm({...curriculumForm, duration: e.target.value})}
+                        style={{
+                          width: '100%',
+                          padding: '0.75rem',
+                          border: '1px solid #d1d5db',
+                          borderRadius: '8px',
+                          fontSize: '0.875rem',
+                          outline: 'none'
+                        }}
+                      />
+                    </div>
+                    
+                    <div>
+                      <label style={{
+                        display: 'block',
+                        fontSize: '0.875rem',
+                        fontWeight: '500',
+                        color: '#374151',
+                        marginBottom: '0.5rem'
+                      }}>Credits</label>
+                      <input
+                        type="number"
+                        value={curriculumForm.credits}
+                        onChange={(e) => setCurriculumForm({...curriculumForm, credits: e.target.value})}
+                        style={{
+                          width: '100%',
+                          padding: '0.75rem',
+                          border: '1px solid #d1d5db',
+                          borderRadius: '8px',
+                          fontSize: '0.875rem',
+                          outline: 'none'
+                        }}
+                      />
+                    </div>
+                  </div>
+                </div>
+                
+                <div style={{
+                  display: 'flex',
+                  gap: '1rem',
+                  marginTop: '2rem',
+                  justifyContent: 'flex-end'
+                }}>
+                  <button
+                    type="button"
+                    onClick={() => setShowCurriculumForm(false)}
+                    style={{
+                      background: '#ffffff',
+                      color: '#64748b',
+                      border: '1px solid #e2e8f0',
+                      padding: '0.75rem 1.5rem',
+                      borderRadius: '8px',
+                      fontSize: '0.875rem',
+                      fontWeight: '500',
+                      cursor: 'pointer'
+                    }}
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    style={{
+                      background: '#1e40af',
+                      color: '#ffffff',
+                      border: 'none',
+                      padding: '0.75rem 1.5rem',
+                      borderRadius: '8px',
+                      fontSize: '0.875rem',
+                      fontWeight: '500',
+                      cursor: 'pointer'
+                    }}
+                  >
+                    Add Curriculum
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
+
+        {/* Institution Map Section */}
+        <div style={{
+          background: '#ffffff',
+          padding: '2rem',
+          borderRadius: '16px',
+          border: '1px solid #e2e8f0',
+          boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1)',
+          marginTop: '2rem'
+        }}>
+          <h3 style={{
+            fontSize: '1.25rem',
+            fontWeight: '600',
+            color: '#1e293b',
+            margin: 0,
+            marginBottom: '1rem',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '0.75rem'
+          }}>
+            <div style={{
+              width: '40px',
+              height: '40px',
+              background: '#1e40af',
+              borderRadius: '10px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center'
+            }}>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                <circle cx="12" cy="10" r="3"/>
+              </svg>
+            </div>
+            Institution Map
+          </h3>
+          
+          {/* Interactive Map Container */}
+          <div style={{
+            width: '100%',
+            height: '400px',
+            background: 'linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%)',
+            borderRadius: '12px',
+            border: '2px dashed #cbd5e1',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            position: 'relative',
+            overflow: 'hidden'
+          }}>
+            {/* Map Background Pattern */}
+            <div style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              backgroundImage: `
+                linear-gradient(rgba(148, 163, 184, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(148, 163, 184, 0.1) 1px, transparent 1px)
+              `,
+              backgroundSize: '20px 20px'
+            }}></div>
+            
+            {/* Map Content */}
+            <div style={{
+              textAlign: 'center',
+              zIndex: 1
+            }}>
+              <div style={{
+                width: '64px',
+                height: '64px',
+                background: '#ffffff',
+                borderRadius: '50%',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                flexDirection: 'column',
-                gap: '1rem',
-                border: '2px dashed #cbd5e1',
-                position: 'relative',
-                overflow: 'hidden'
+                margin: '0 auto 1rem',
+                border: '2px solid #1e40af',
+                boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
               }}>
-                {/* Map Icon */}
-                <div style={{
-                  width: '60px',
-                  height: '60px',
-                  backgroundColor: '#1e40af',
-                  borderRadius: '50%',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  marginBottom: '0.5rem'
-                }}>
-                  <svg style={{ width: '30px', height: '30px', color: 'white' }} fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
-                  </svg>
-                </div>
-                <div style={{
-                  textAlign: 'center'
-                }}>
-                  <div style={{ 
-                    fontSize: '1rem', 
-                    fontWeight: '600',
-                    color: '#1f2937',
-                    marginBottom: '0.25rem'
-                  }}>Interactive Map View</div>
-                  <div style={{ 
-                    fontSize: '0.875rem',
-                    color: '#6b7280'
-                  }}>Showing institutions in {country.name}</div>
-                </div>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1e40af" strokeWidth="2">
+                  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                  <circle cx="12" cy="10" r="3"/>
+                </svg>
               </div>
-              
-              {/* Action Buttons Grid */}
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
-                <button style={{
-                  background: '#1e40af',
-                  color: 'white',
-                  padding: '1rem',
-                  borderRadius: '12px',
-                  border: 'none',
-                  fontSize: '0.875rem',
-                  fontWeight: '600',
-                  cursor: 'pointer',
-                  transition: 'all 0.2s ease',
-                  boxShadow: '0 4px 12px rgba(30, 64, 175, 0.3)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  gap: '0.5rem'
-                }}
-                onMouseOver={(e) => {
-                  e.currentTarget.style.transform = 'translateY(-2px)';
-                  e.currentTarget.style.boxShadow = '0 6px 16px rgba(30, 64, 175, 0.4)';
-                  e.currentTarget.style.backgroundColor = '#1e3a8a';
-                }}
-                onMouseOut={(e) => {
-                  e.currentTarget.style.transform = 'translateY(0)';
-                  e.currentTarget.style.boxShadow = '0 4px 12px rgba(30, 64, 175, 0.3)';
-                  e.currentTarget.style.backgroundColor = '#1e40af';
-                }}>
-                  <svg style={{ width: '16px', height: '16px' }} fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/>
-                  </svg>
-                  View Map
-                </button>
-                <button style={{
-                  background: '#374151',
-                  color: 'white',
-                  padding: '1rem',
-                  borderRadius: '12px',
-                  border: 'none',
-                  fontSize: '0.875rem',
-                  fontWeight: '600',
-                  cursor: 'pointer',
-                  transition: 'all 0.2s ease',
-                  boxShadow: '0 4px 12px rgba(55, 65, 81, 0.3)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  gap: '0.5rem'
-                }}
-                onMouseOver={(e) => {
-                  e.currentTarget.style.transform = 'translateY(-2px)';
-                  e.currentTarget.style.boxShadow = '0 6px 16px rgba(55, 65, 81, 0.4)';
-                  e.currentTarget.style.backgroundColor = '#1f2937';
-                }}
-                onMouseOut={(e) => {
-                  e.currentTarget.style.transform = 'translateY(0)';
-                  e.currentTarget.style.boxShadow = '0 4px 12px rgba(55, 65, 81, 0.3)';
-                  e.currentTarget.style.backgroundColor = '#374151';
-                }}>
-                  <svg style={{ width: '16px', height: '16px' }} fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M12 4v16m8-8H4"/>
-                  </svg>
-                  Add Location
-                </button>
-              </div>
+              <h4 style={{
+                fontSize: '1rem',
+                fontWeight: '600',
+                color: '#1e293b',
+                margin: 0,
+                marginBottom: '0.5rem'
+              }}>Interactive Institution Map</h4>
+              <p style={{
+                fontSize: '0.875rem',
+                color: '#64748b',
+                margin: 0,
+                lineHeight: '1.5',
+                maxWidth: '300px'
+              }}>View and manage institutions across {country.name} on an interactive map</p>
+            </div>
+            
+          </div>
+          
+          {/* Map Legend */}
+          <div style={{
+            marginTop: '1rem',
+            display: 'flex',
+            justifyContent: 'center',
+            gap: '1rem',
+            fontSize: '0.75rem'
+          }}>
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.5rem'
+            }}>
+              <div style={{
+                width: '8px',
+                height: '8px',
+                background: '#059669',
+                borderRadius: '50%'
+              }}></div>
+              <span style={{ color: '#64748b' }}>Universities</span>
+            </div>
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.5rem'
+            }}>
+              <div style={{
+                width: '8px',
+                height: '8px',
+                background: '#dc2626',
+                borderRadius: '50%'
+              }}></div>
+              <span style={{ color: '#64748b' }}>Colleges</span>
+            </div>
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.5rem'
+            }}>
+              <div style={{
+                width: '8px',
+                height: '8px',
+                background: '#f59e0b',
+                borderRadius: '50%'
+              }}></div>
+              <span style={{ color: '#64748b' }}>Schools</span>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </Layout>
   );
 }
