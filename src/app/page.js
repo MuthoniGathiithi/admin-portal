@@ -35,51 +35,49 @@ export default function LoginPage() {
     }} className="login-container">
       {/* Left Panel - Login Form */}
       <div style={{
-        flex: 1.5,
+        flex: 1,
         background: '#ffffff',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',
-        padding: '3rem',
-        maxWidth: '700px'
+        padding: '2rem'
       }} className="login-form-panel">
         {/* Login Form */}
         <div style={{
-          maxWidth: '600px',
+          maxWidth: '400px',
           width: '100%',
           background: '#ffffff',
-          padding: '4rem',
-          borderRadius: '16px',
-          boxShadow: '0 20px 40px -10px rgba(0, 0, 0, 0.15), 0 15px 20px -5px rgba(0, 0, 0, 0.08)',
-          border: '1px solid #f1f5f9',
+          padding: '2.5rem',
+          borderRadius: '12px',
+          boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+          border: '1px solid #e5e7eb',
           margin: '0 auto'
         }} className="login-form-card">
           <div style={{
-            marginBottom: '2rem',
-            textAlign: 'center'
+            marginBottom: '1.5rem',
+            textAlign: 'left'
           }}>
             <h2 style={{
-              fontSize: '1.875rem',
+              fontSize: '1.5rem',
               fontWeight: '600',
-              color: '#1e293b',
+              color: '#111827',
               marginBottom: '0.5rem'
             }}>
               Welcome back
             </h2>
             <p style={{
-              color: '#64748b',
+              color: '#6b7280',
               fontSize: '0.875rem',
-              margin: 0,
-              lineHeight: '1.5'
+              margin: 0
             }}>
-              Please enter your credentials to access the admin portal
+              Sign in to your account
             </p>
           </div>
 
           <form onSubmit={handleLogin} style={{
             display: 'flex',
             flexDirection: 'column',
-            gap: '4rem'
+            gap: '1.25rem'
           }}>
             <div>
               <label style={{
@@ -89,7 +87,7 @@ export default function LoginPage() {
                 fontWeight: '500',
                 color: '#374151'
               }}>
-                Email Address
+                Email
               </label>
               <input
                 type="email"
@@ -98,17 +96,16 @@ export default function LoginPage() {
                 style={{
                   width: '100%',
                   padding: '0.75rem',
-                  border: '1px solid #e2e8f0',
+                  border: '1px solid #d1d5db',
                   borderRadius: '6px',
-                  fontSize: '1rem',
-                  transition: 'border-color 0.2s',
+                  fontSize: '0.875rem',
                   outline: 'none',
                   backgroundColor: '#ffffff'
                 }}
-                placeholder="your.email@company.com"
+                placeholder="Enter your email"
                 required
-                onFocus={(e) => e.target.style.borderColor = '#3182ce'}
-                onBlur={(e) => e.target.style.borderColor = '#e2e8f0'}
+                onFocus={(e) => e.target.style.borderColor = '#3b82f6'}
+                onBlur={(e) => e.target.style.borderColor = '#d1d5db'}
               />
             </div>
 
@@ -129,17 +126,16 @@ export default function LoginPage() {
                 style={{
                   width: '100%',
                   padding: '0.75rem',
-                  border: '1px solid #e2e8f0',
+                  border: '1px solid #d1d5db',
                   borderRadius: '6px',
-                  fontSize: '1rem',
-                  transition: 'border-color 0.2s',
+                  fontSize: '0.875rem',
                   outline: 'none',
                   backgroundColor: '#ffffff'
                 }}
                 placeholder="Enter your password"
                 required
-                onFocus={(e) => e.target.style.borderColor = '#3182ce'}
-                onBlur={(e) => e.target.style.borderColor = '#e2e8f0'}
+                onFocus={(e) => e.target.style.borderColor = '#3b82f6'}
+                onBlur={(e) => e.target.style.borderColor = '#d1d5db'}
               />
             </div>
 
@@ -148,33 +144,18 @@ export default function LoginPage() {
               disabled={isLoading}
               style={{
                 width: '100%',
-                padding: '0.875rem',
-                background: isLoading ? '#9ca3af' : '#1e40af',
+                padding: '0.75rem',
+                background: isLoading ? '#9ca3af' : '#3b82f6',
                 color: 'white',
                 border: 'none',
-                borderRadius: '8px',
+                borderRadius: '6px',
                 fontSize: '0.875rem',
                 fontWeight: '500',
                 cursor: isLoading ? 'not-allowed' : 'pointer',
-                transition: 'all 0.2s ease',
-                boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)'
-              }}
-              onMouseOver={(e) => {
-                if (!isLoading) {
-                  e.target.style.background = '#1e3a8a';
-                  e.target.style.transform = 'translateY(-1px)';
-                  e.target.style.boxShadow = '0 4px 6px -1px rgba(0, 0, 0, 0.1)';
-                }
-              }}
-              onMouseOut={(e) => {
-                if (!isLoading) {
-                  e.target.style.background = '#1e40af';
-                  e.target.style.transform = 'translateY(0)';
-                  e.target.style.boxShadow = '0 1px 2px 0 rgba(0, 0, 0, 0.05)';
-                }
+                marginTop: '0.5rem'
               }}
             >
-              {isLoading ? 'Signing in...' : 'Sign In'}
+              {isLoading ? 'Signing in...' : 'Sign in'}
             </button>
           </form>
         </div>
@@ -183,19 +164,16 @@ export default function LoginPage() {
       {/* Right Panel - Logo and Branding */}
       <div style={{
         flex: 1,
-        background: 'linear-gradient(135deg, #1e40af 0%, #1e3a8a 100%)',
+        background: 'linear-gradient(135deg, #3b4de8 0%, #2d3de8 100%)',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
-        padding: '3rem',
-        color: 'white',
-        position: 'relative'
+        padding: '2rem',
+        color: 'white'
       }} className="login-logo-panel">
         <div style={{
-          textAlign: 'center',
-          maxWidth: '450px',
-          zIndex: 2
+          textAlign: 'center'
         }}>
           {/* Logo Section */}
           <div style={{
@@ -205,32 +183,36 @@ export default function LoginPage() {
             justifyContent: 'center'
           }}>
             <div style={{
-              width: '490px',
-              height: '490px',
+              width: '120px',
+              height: '120px',
               background: '#ffffff',
               borderRadius: '50%',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              boxShadow: '0 25px 50px rgba(0, 0, 0, 0.25)',
-              marginBottom: '2rem'
+              marginBottom: '1.5rem',
+              boxShadow: '0 8px 25px rgba(0, 0, 0, 0.15)'
             }} className="login-logo-circle">
               <Image
                 src="/alama_dark_logo_lt_bnjlIcW.png"
                 alt="ALAMA Logo"
-                width={470}
-                height={470}
+                width={80}
+                height={80}
               />
             </div>
             <h1 style={{
-              fontSize: '2rem',
-              fontWeight: '500',
+              fontSize: '1.75rem',
+              fontWeight: '600',
               color: '#ffffff',
               margin: 0,
-              lineHeight: '1.2',
-              textAlign: 'center',
-              whiteSpace: 'nowrap'
-            }}>Mark 10x Faster with ALAMA AI</h1>
+              lineHeight: '1.3'
+            }}>ALAMA</h1>
+            <p style={{
+              fontSize: '1rem',
+              color: 'rgba(255, 255, 255, 0.8)',
+              margin: '0.5rem 0 0 0',
+              fontWeight: '400'
+            }}>Admin Portal</p>
           </div>
         </div>
       </div>
