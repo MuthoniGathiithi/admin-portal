@@ -7,7 +7,7 @@ import './globals.css';
 
 
 export default function LoginPage() {
-  const [email, setEmail] = useState('');
+  const [userId, setUserId] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
@@ -15,9 +15,8 @@ export default function LoginPage() {
   const handleLogin = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-    if (email) {
-      localStorage.setItem('userEmail', email);
-      localStorage.setItem('userName', email.split('@')[0].replace(/[._]/g, ' ').replace(/\b\w/g, l => l.toUpperCase()));
+    if (userId) {
+      localStorage.setItem('userId', userId);
     }
     setTimeout(() => {
       setIsLoading(false);
@@ -26,35 +25,34 @@ export default function LoginPage() {
   };
 
   return (
-    <main className="login-main">
-      {/* Left Panel - Login Form */}
-      <section className="login-left-panel">
-        <div className="login-card">
-          <header className="login-header">
-            <h2>Welcome back</h2>
-            <p>Sign in to your account</p>
+    <main className="alama-login-main">
+      {/* Left Panel - Admin Portal Login */}
+      <section className="alama-login-left">
+        <div className="alama-login-card">
+          <header className="alama-login-header">
+            <h2>Admin Portal</h2>
           </header>
-          <form onSubmit={handleLogin} className="login-form" aria-label="Login form">
-            <div className="form-group">
-              <label htmlFor="email">Email</label>
+          <form onSubmit={handleLogin} className="alama-login-form" aria-label="Admin login form">
+            <div className="alama-form-group">
+              <label htmlFor="userId">User ID</label>
               <input
-                id="email"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="Enter your email"
+                id="userId"
+                type="text"
+                value={userId}
+                onChange={(e) => setUserId(e.target.value)}
+                placeholder="User ID"
                 required
-                autoComplete="email"
+                autoComplete="username"
               />
             </div>
-            <div className="form-group">
+            <div className="alama-form-group">
               <label htmlFor="password">Password</label>
               <input
                 id="password"
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder="Enter your password"
+                placeholder="Password"
                 required
                 autoComplete="current-password"
               />
@@ -62,28 +60,31 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={isLoading}
-              className="login-btn"
+              className="alama-login-btn"
               aria-busy={isLoading}
             >
-              {isLoading ? 'Signing in...' : 'Sign in'}
+              {isLoading ? 'Signing in...' : 'SIGN IN'}
             </button>
+            <div className="alama-login-footer">
+              <a href="#" className="alama-forgot">Forgot Password?</a>
+            </div>
           </form>
         </div>
       </section>
       {/* Right Panel - Logo and Branding */}
-      <section className="login-right-panel">
-        <div className="login-branding">
-          <div className="login-logo-circle">
+      <section className="alama-login-right">
+        <div className="alama-login-branding">
+          <div className="alama-logo-circle">
             <Image
               src="/alama_dark_logo_lt_bnjlIcW.png"
               alt="ALAMA Logo"
-              width={80}
-              height={80}
+              width={100}
+              height={100}
               priority
             />
           </div>
-          <h1>ALAMA</h1>
-          <p>Admin Portal</p>
+          <h1 className="alama-title">ALAMA AI</h1>
+          <p className="alama-subtitle">Mark 10X Faster</p>
         </div>
       </section>
     </main>
