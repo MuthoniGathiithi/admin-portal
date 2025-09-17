@@ -34,72 +34,74 @@ export default function LoginPage() {
       alignItems: 'center',
       justifyContent: 'center',
       background: '#f5f5f5',
-      fontFamily: 'Arial, sans-serif'
-    }} className="login-container">
+      fontFamily: 'Arial, sans-serif',
+      padding: '20px'
+    }}>
       
       {/* Main Login Card */}
       <div style={{
         display: 'flex',
-        width: '900px',
-        height: '500px',
+        width: '800px',
+        maxWidth: '90vw',
+        height: '450px',
         background: '#ffffff',
         borderRadius: '8px',
         overflow: 'hidden',
-        border: '1px solid #e0e0e0'
-      }} className="login-card">
+        border: '1px solid #ddd'
+      }}>
         
         {/* Left Panel - Blue Section with Logo */}
         <div style={{
-          flex: 1,
+          width: '50%',
           background: '#2c5aa0',
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
           justifyContent: 'center',
           color: 'white',
-          padding: '2rem'
-        }} className="login-left-panel">
+          padding: '40px 20px'
+        }}>
           
           {/* Logo Circle */}
           <div style={{
-            width: '120px',
-            height: '120px',
+            width: '100px',
+            height: '100px',
             background: '#ffffff',
             borderRadius: '50%',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            marginBottom: '1.5rem'
+            marginBottom: '20px'
           }}>
             <Image
               src="/alama_dark_logo_lt_bnjlIcW.png"
               alt="ALAMA Logo"
-              width={80}
-              height={80}
+              width={60}
+              height={60}
             />
           </div>
           
           {/* Title and Subtitle */}
           <h1 style={{
-            fontSize: '2rem',
+            fontSize: '1.8rem',
             fontWeight: 'bold',
-            margin: '0 0 0.5rem 0',
+            margin: '0 0 8px 0',
             textAlign: 'center'
           }}>
             ALAMA
           </h1>
           <p style={{
-            fontSize: '1rem',
-            margin: 0,
+            fontSize: '0.9rem',
+            margin: '0 0 15px 0',
             textAlign: 'center',
-            color: '#87ceeb'
+            color: '#b8d4f0'
           }}>
             Advancing Knowledge, Driving Change
           </p>
           <p style={{
-            fontSize: '1.2rem',
+            fontSize: '1.1rem',
             fontWeight: '600',
-            margin: '1rem 0 0 0',
+            margin: 0,
             textAlign: 'center',
             color: '#87ceeb'
           }}>
@@ -109,36 +111,32 @@ export default function LoginPage() {
 
         {/* Right Panel - Login Form */}
         <div style={{
-          flex: 1,
-          padding: '3rem 2.5rem',
+          width: '50%',
+          padding: '40px 30px',
           display: 'flex',
           flexDirection: 'column',
-          justifyContent: 'center'
-        }} className="login-right-panel">
+          justifyContent: 'center',
+          background: '#ffffff'
+        }}>
           
           <h2 style={{
-            fontSize: '1.5rem',
+            fontSize: '1.4rem',
             fontWeight: 'bold',
             color: '#333333',
-            marginBottom: '0.5rem',
+            marginBottom: '30px',
             textAlign: 'center'
           }}>
             Admin Portal
           </h2>
           
-          <form onSubmit={handleLogin} style={{
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '1rem',
-            marginTop: '1.5rem'
-          }}>
+          <form onSubmit={handleLogin}>
             
             {/* User ID Field */}
-            <div>
+            <div style={{ marginBottom: '20px' }}>
               <label style={{
                 display: 'block',
-                marginBottom: '0.5rem',
-                fontSize: '0.9rem',
+                marginBottom: '8px',
+                fontSize: '0.85rem',
                 color: '#555555',
                 fontWeight: '500'
               }}>
@@ -150,7 +148,7 @@ export default function LoginPage() {
                 onChange={(e) => setEmail(e.target.value)}
                 style={{
                   width: '100%',
-                  padding: '0.75rem',
+                  padding: '12px',
                   border: '1px solid #cccccc',
                   borderRadius: '4px',
                   fontSize: '0.9rem',
@@ -164,11 +162,11 @@ export default function LoginPage() {
             </div>
 
             {/* Password Field */}
-            <div>
+            <div style={{ marginBottom: '25px' }}>
               <label style={{
                 display: 'block',
-                marginBottom: '0.5rem',
-                fontSize: '0.9rem',
+                marginBottom: '8px',
+                fontSize: '0.85rem',
                 color: '#555555',
                 fontWeight: '500'
               }}>
@@ -180,7 +178,7 @@ export default function LoginPage() {
                 onChange={(e) => setPassword(e.target.value)}
                 style={{
                   width: '100%',
-                  padding: '0.75rem',
+                  padding: '12px',
                   border: '1px solid #cccccc',
                   borderRadius: '4px',
                   fontSize: '0.9rem',
@@ -199,7 +197,7 @@ export default function LoginPage() {
               disabled={isLoading}
               style={{
                 width: '100%',
-                padding: '0.75rem',
+                padding: '12px',
                 background: isLoading ? '#9ca3af' : '#2c5aa0',
                 color: 'white',
                 border: 'none',
@@ -207,7 +205,7 @@ export default function LoginPage() {
                 fontSize: '0.9rem',
                 fontWeight: '600',
                 cursor: isLoading ? 'not-allowed' : 'pointer',
-                marginTop: '1rem'
+                marginBottom: '15px'
               }}
             >
               {isLoading ? 'Signing in...' : 'SIGN IN'}
@@ -216,11 +214,11 @@ export default function LoginPage() {
             {/* Forgot Password Link */}
             <div style={{
               textAlign: 'center',
-              marginTop: '1rem'
+              marginBottom: '20px'
             }}>
               <a href="#" style={{
                 color: '#2c5aa0',
-                fontSize: '0.85rem',
+                fontSize: '0.8rem',
                 textDecoration: 'none'
               }}>
                 Forgot Password?
@@ -229,11 +227,11 @@ export default function LoginPage() {
             
             {/* Footer Text */}
             <p style={{
-              fontSize: '0.75rem',
+              fontSize: '0.7rem',
               color: '#888888',
               textAlign: 'center',
-              marginTop: '1.5rem',
-              lineHeight: '1.4'
+              lineHeight: '1.3',
+              margin: 0
             }}>
               iCampus is now working. You can reset your password using your registered email.
             </p>
