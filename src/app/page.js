@@ -41,9 +41,9 @@ export default function LoginPage() {
       {/* Main Login Card */}
       <div style={{
         display: 'flex',
-        width: '800px',
+        width: '900px',
         maxWidth: '90vw',
-        height: '450px',
+        height: '500px',
         background: '#ffffff',
         borderRadius: '8px',
         overflow: 'hidden',
@@ -62,7 +62,28 @@ export default function LoginPage() {
           padding: '40px 20px'
         }}>
           
-          {/* Logo Circle */}
+          {/* Title First */}
+          <h1 style={{
+            fontSize: '2rem',
+            fontWeight: 'bold',
+            margin: '0 0 15px 0',
+            textAlign: 'center'
+          }}>
+            ALAMA
+          </h1>
+          
+          {/* Subtitle Second */}
+          <p style={{
+            fontSize: '1.1rem',
+            fontWeight: '600',
+            margin: '0 0 25px 0',
+            textAlign: 'center',
+            color: '#87ceeb'
+          }}>
+            MARK 10x FASTER
+          </p>
+          
+          {/* Logo Circle Last */}
           <div style={{
             width: '100px',
             height: '100px',
@@ -70,8 +91,7 @@ export default function LoginPage() {
             borderRadius: '50%',
             display: 'flex',
             alignItems: 'center',
-            justifyContent: 'center',
-            marginBottom: '20px'
+            justifyContent: 'center'
           }}>
             <Image
               src="/alama_dark_logo_lt_bnjlIcW.png"
@@ -80,33 +100,6 @@ export default function LoginPage() {
               height={60}
             />
           </div>
-          
-          {/* Title and Subtitle */}
-          <h1 style={{
-            fontSize: '1.8rem',
-            fontWeight: 'bold',
-            margin: '0 0 8px 0',
-            textAlign: 'center'
-          }}>
-            ALAMA
-          </h1>
-          <p style={{
-            fontSize: '0.9rem',
-            margin: '0 0 15px 0',
-            textAlign: 'center',
-            color: '#b8d4f0'
-          }}>
-            Advancing Knowledge, Driving Change
-          </p>
-          <p style={{
-            fontSize: '1.1rem',
-            fontWeight: '600',
-            margin: 0,
-            textAlign: 'center',
-            color: '#87ceeb'
-          }}>
-            MARK 10x FASTER
-          </p>
         </div>
 
         {/* Right Panel - Login Form */}
@@ -225,16 +218,6 @@ export default function LoginPage() {
               </a>
             </div>
             
-            {/* Footer Text */}
-            <p style={{
-              fontSize: '0.7rem',
-              color: '#888888',
-              textAlign: 'center',
-              lineHeight: '1.3',
-              margin: 0
-            }}>
-              iCampus is now working. You can reset your password using your registered email.
-            </p>
           </form>
         </div>
       </div>
