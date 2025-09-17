@@ -1,16 +1,34 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter, usePathname } from 'next/navigation';
 
-export default function Sidebar() {
+export default function Sidebar({ isMobileMenuOpen, setIsMobileMenuOpen }) {
   const [activeMenu, setActiveMenu] = useState(null);
   const [isCollapsed, setIsCollapsed] = useState(false);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const router = useRouter();
   const pathname = usePathname();
+
+  // Close mobile menu when clicking on a link
+  const handleLinkClick = () => {
+    if (setIsMobileMenuOpen) {
+      setIsMobileMenuOpen(false);
+    }
+  };
+
+  // Close mobile menu on window resize to desktop
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 768 && setIsMobileMenuOpen) {
+        setIsMobileMenuOpen(false);
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [setIsMobileMenuOpen]);
 
   const menuItems = [
     {
@@ -69,49 +87,53 @@ export default function Sidebar() {
   return (
     <>
       <style jsx>{`
-        @media (max-width: 768px) {
-          .mobile-menu-button {
-            display: block !important;
-          }
-          .mobile-overlay {
-            display: block !important;
-          }
+        .sidebar {
+          transition: transform 0.3s ease;
+        }
+        
+        /* Desktop - Large screens */
+        @media (min-width: 1025px) {
           .sidebar {
+            transform: translateX(0) !important;
+            position: fixed !important;
+            width: 280px !important;
+          }
+        }
+        
+        /* Tablet - Medium screens */
+        @media (min-width: 769px) and (max-width: 1024px) {
+          .sidebar {
+            transform: translateX(0) !important;
+            position: fixed !important;
+            width: 240px !important;
+          }
+        }
+        
+        /* Large Mobile - Small tablets */
+        @media (min-width: 481px) and (max-width: 768px) {
+          .sidebar {
+            position: fixed !important;
+            width: 280px !important;
             transform: ${isMobileMenuOpen ? 'translateX(0)' : 'translateX(-100%)'} !important;
+            z-index: 1000 !important;
+          }
+        }
+        
+        /* Small Mobile */
+        @media (max-width: 480px) {
+          .sidebar {
+            position: fixed !important;
+            width: 100vw !important;
+            transform: ${isMobileMenuOpen ? 'translateX(0)' : 'translateX(-100%)'} !important;
+            z-index: 1000 !important;
           }
         }
       `}</style>
 
-      {/* Mobile Menu Button */}
-      <button
-        onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-        style={{
-          display: 'none',
-          position: 'fixed',
-          top: '1rem',
-          left: '1rem',
-          zIndex: 1001,
-          background: '#1e293b',
-          color: 'white',
-          border: 'none',
-          borderRadius: '12px',
-          padding: '0.75rem',
-          cursor: 'pointer',
-          boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
-        }}
-        className="mobile-menu-button"
-      >
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-          <line x1="3" y1="6" x2="21" y2="6"/>
-          <line x1="3" y1="12" x2="21" y2="12"/>
-          <line x1="3" y1="18" x2="21" y2="18"/>
-        </svg>
-      </button>
-
       {/* Mobile Overlay */}
       {isMobileMenuOpen && (
         <div
-          onClick={() => setIsMobileMenuOpen(false)}
+          onClick={() => setIsMobileMenuOpen && setIsMobileMenuOpen(false)}
           style={{
             position: 'fixed',
             top: 0,
@@ -119,8 +141,7 @@ export default function Sidebar() {
             right: 0,
             bottom: 0,
             background: 'rgba(0, 0, 0, 0.5)',
-            zIndex: 999,
-            display: 'none'
+            zIndex: 999
           }}
           className="mobile-overlay"
         />
@@ -133,14 +154,14 @@ export default function Sidebar() {
         color: '#ffffff',
         display: 'flex',
         flexDirection: 'column',
-        transition: 'width 0.3s ease',
+        transition: 'all 0.3s ease',
         position: 'fixed',
         left: 0,
         top: 0,
         zIndex: 1000,
         boxShadow: '0 10px 25px rgba(0, 0, 0, 0.15)',
-        transform: isMobileMenuOpen ? 'translateX(0)' : 'translateX(-100%)'
-      }} className={`sidebar ${isMobileMenuOpen ? 'open' : ''}`}>
+        backdropFilter: 'blur(10px)'
+      }} className="sidebar">
       
       {/* Logo Section */}
       <div style={{
@@ -195,31 +216,34 @@ export default function Sidebar() {
             
             return (
               <div key={item.id} style={{ marginBottom: '0.5rem', padding: '0 1.5rem' }}>
-                <Link href={item.href} style={{ textDecoration: 'none' }}>
+                <Link href={item.href} style={{ textDecoration: 'none' }} onClick={handleLinkClick}>
                   <div style={{
                     display: 'flex',
                     alignItems: 'center',
                     gap: '0.75rem',
                     padding: '0.875rem 1rem',
                     borderRadius: '12px',
-                    background: 'transparent',
+                    background: isActive ? 'rgba(255, 255, 255, 0.15)' : 'transparent',
                     cursor: 'pointer',
                     transition: 'all 0.2s ease',
                     color: isActive ? '#ffffff' : 'rgba(255, 255, 255, 0.85)',
                     position: 'relative',
                     borderLeft: isActive ? '3px solid #ffffff' : '3px solid transparent',
-                    marginLeft: '-3px'
+                    marginLeft: '-3px',
+                    backdropFilter: isActive ? 'blur(10px)' : 'none'
                   }}
                   onMouseEnter={(e) => {
                     if (!isActive) {
-                      e.target.style.background = 'rgba(255, 255, 255, 0.05)';
+                      e.target.style.background = 'rgba(255, 255, 255, 0.1)';
                       e.target.style.color = '#ffffff';
+                      e.target.style.backdropFilter = 'blur(10px)';
                     }
                   }}
                   onMouseLeave={(e) => {
                     if (!isActive) {
                       e.target.style.background = 'transparent';
                       e.target.style.color = 'rgba(255, 255, 255, 0.85)';
+                      e.target.style.backdropFilter = 'none';
                     }
                   }}
                   >

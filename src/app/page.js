@@ -69,9 +69,9 @@ export default function LoginPage() {
         }
         
         .focus-ring:focus {
-          outline: 2px solid #6366f1 !important;
-          outline-offset: 2px !important;
-          border-color: #6366f1 !important;
+          outline: none !important;
+          border-color: #1e293b !important;
+          box-shadow: 0 0 0 2px rgba(30, 41, 59, 0.2) !important;
         }
         
         .error-field {
