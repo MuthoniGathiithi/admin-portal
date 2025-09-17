@@ -15,29 +15,49 @@ export default function CreateCountryPage() {
     centerLongitude: ''
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [error, setError] = useState('');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
+    setError('');
 
-    // Get existing countries
-    const existingCountries = JSON.parse(localStorage.getItem('countries') || '[]');
-    
-    // Create new country with ID
-    const newCountry = {
-      ...formData,
-      id: Date.now() // Simple ID generation
-    };
+    try {
+      // Get existing countries
+      const existingCountries = JSON.parse(localStorage.getItem('countries') || '[]');
+      
+      // Check if country already exists
+      const existingCountry = existingCountries.find(c => 
+        c.name.toLowerCase() === formData.name.toLowerCase()
+      );
+      
+      if (existingCountry) {
+        throw new Error('A country with this name already exists');
+      }
+      
+      // Create new country with ID
+      const newCountry = {
+        ...formData,
+        id: Date.now() // Simple ID generation
+      };
 
-    // Save to localStorage
-    const updatedCountries = [...existingCountries, newCountry];
-    localStorage.setItem('countries', JSON.stringify(updatedCountries));
+      // Save to localStorage
+      const updatedCountries = [...existingCountries, newCountry];
+      localStorage.setItem('countries', JSON.stringify(updatedCountries));
 
-    // Simulate API call delay
-    setTimeout(() => {
+      // Show success message
+      setShowSuccess(true);
+      
+      // Redirect after showing success
+      setTimeout(() => {
+        router.push('/reference/countries');
+      }, 1500);
+    } catch (err) {
+      setError(err.message || 'Failed to create country. Please try again.');
+    } finally {
       setIsSubmitting(false);
-      router.push('/reference/countries');
-    }, 500);
+    }
   };
 
   const handleChange = async (e) => {
@@ -50,83 +70,157 @@ export default function CreateCountryPage() {
 
     // Auto-fill country data when name is entered
     if (name === 'name' && value.length > 2) {
-      try {
-        const response = await fetch(`https://restcountries.com/v3.1/name/${value}?fullText=true`);
-        if (response.ok) {
-          const [countryData] = await response.json();
-          if (countryData) {
-            // Use PNG flag for better compatibility, fallback to SVG
-            const flagUrl = countryData.flags?.png || countryData.flags?.svg || '';
-            const telCode = countryData.idd?.root ? 
-              countryData.idd.root + (countryData.idd.suffixes?.[0] || '') : '';
+      // Debounce the API call
+      const timeoutId = setTimeout(async () => {
+        try {
+          const response = await fetch(`https://restcountries.com/v3.1/name/${value}?fullText=false`);
+          if (response.ok) {
+            const countryDataArray = await response.json();
+            // Find exact match or closest match
+            const countryData = countryDataArray.find(country => 
+              country.name?.common?.toLowerCase() === value.toLowerCase()
+            ) || countryDataArray[0];
             
-            setFormData(prev => ({
-              ...prev,
-              name: countryData.name?.common || value,
-              flagSvg: flagUrl,
-              continent: countryData.continents?.[0] || '',
-              telCode: telCode,
-              centerLatitude: countryData.latlng?.[0]?.toString() || '',
-              centerLongitude: countryData.latlng?.[1]?.toString() || ''
-            }));
+            if (countryData) {
+              // Use PNG flag for better compatibility, fallback to SVG
+              const flagUrl = countryData.flags?.png || countryData.flags?.svg || '';
+              const telCode = countryData.idd?.root ? 
+                countryData.idd.root + (countryData.idd.suffixes?.[0] || '') : '';
+              
+              setFormData(prev => ({
+                ...prev,
+                name: countryData.name?.common || value,
+                flagSvg: flagUrl,
+                continent: countryData.continents?.[0] || '',
+                telCode: telCode,
+                centerLatitude: countryData.latlng?.[0]?.toString() || '',
+                centerLongitude: countryData.latlng?.[1]?.toString() || ''
+              }));
+            }
           }
+        } catch (error) {
+          console.log('Could not auto-fill country data:', error);
+          // Keep the manually entered name even if API fails
+          setFormData(prev => ({
+            ...prev,
+            name: value
+          }));
         }
-      } catch (error) {
-        console.log('Could not auto-fill country data:', error);
-        // Keep the manually entered name even if API fails
-        setFormData(prev => ({
-          ...prev,
-          name: value
-        }));
-      }
+      }, 500); // 500ms debounce
+      
+      return () => clearTimeout(timeoutId);
     }
   };
 
   return (
     <Layout breadcrumbs={['Reference', 'Countries', 'Create']}>
-      <div style={{ maxWidth: '600px', margin: '0 auto' }}>
+      <div style={{ maxWidth: '700px', margin: '0 auto' }}>
         {/* Header */}
-        <div style={{ marginBottom: 'var(--space-6)' }}>
+        <div style={{ marginBottom: '2rem' }}>
           <h1 style={{
-            fontSize: '2rem',
+            fontSize: '2.25rem',
             fontWeight: '700',
-            color: 'var(--gray-900)',
-            marginBottom: 'var(--space-2)'
+            color: '#111827',
+            marginBottom: '0.5rem',
+            letterSpacing: '-0.025em'
           }}>
             Add New Country
           </h1>
-          <p style={{
-            color: 'var(--gray-600)',
-            margin: 0
-          }}>
-            Enter the country name and other details will auto-fill
-          </p>
         </div>
 
+        {/* Success Toast */}
+        {showSuccess && (
+          <div style={{
+            position: 'fixed',
+            top: '2rem',
+            right: '2rem',
+            background: '#10b981',
+            color: 'white',
+            padding: '1rem 1.5rem',
+            borderRadius: '8px',
+            boxShadow: '0 10px 25px rgba(0, 0, 0, 0.15)',
+            zIndex: 1000,
+            display: 'flex',
+            alignItems: 'center',
+            gap: '0.5rem',
+            animation: 'slideIn 0.3s ease-out'
+          }}>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M20 6L9 17l-5-5"/>
+            </svg>
+            Country added successfully!
+          </div>
+        )}
+
+        {/* Error Alert */}
+        {error && (
+          <div style={{
+            background: '#fef2f2',
+            border: '1px solid #fecaca',
+            borderRadius: '8px',
+            padding: '1rem',
+            marginBottom: '1.5rem',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '0.5rem'
+          }}>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ef4444" strokeWidth="2">
+              <circle cx="12" cy="12" r="10"/>
+              <line x1="15" y1="9" x2="9" y2="15"/>
+              <line x1="9" y1="9" x2="15" y2="15"/>
+            </svg>
+            <span style={{ color: '#dc2626', fontSize: '0.875rem', fontWeight: '500' }}>
+              {error}
+            </span>
+          </div>
+        )}
+
         {/* Form */}
-        <div className="card">
+        <div style={{
+          background: '#ffffff',
+          borderRadius: '8px',
+          padding: '2rem',
+          border: '1px solid #e1e5e9',
+          boxShadow: 'none'
+        }}>
           <form onSubmit={handleSubmit} style={{
             display: 'flex',
             flexDirection: 'column',
-            gap: 'var(--space-4)'
+            gap: '1.25rem'
           }}>
             <div>
               <label style={{
                 display: 'block',
-                marginBottom: 'var(--space-2)',
+                marginBottom: '0.375rem',
                 fontSize: '0.875rem',
                 fontWeight: '500',
-                color: 'var(--gray-700)'
+                color: '#1f2937'
               }}>
-                Country Name *
+                Country Name <span style={{ color: '#ef4444' }}>*</span>
               </label>
               <input
                 type="text"
                 name="name"
                 value={formData.name}
                 onChange={handleChange}
-                className="input"
-                placeholder="Enter country name"
+                style={{
+                  width: '100%',
+                  padding: '0.75rem 0.875rem',
+                  border: '1px solid #d1d5db',
+                  borderRadius: '6px',
+                  fontSize: '0.875rem',
+                  background: '#ffffff',
+                  transition: 'border-color 0.15s ease',
+                  outline: 'none',
+                  fontFamily: 'inherit'
+                }}
+                onFocus={(e) => {
+                  e.target.style.borderColor = '#3b82f6';
+                }}
+                onBlur={(e) => {
+                  e.target.style.borderColor = '#d1d5db';
+                }}
+                placeholder="Your country name..."
                 required
               />
             </div>
@@ -134,24 +228,51 @@ export default function CreateCountryPage() {
             <div>
               <label style={{
                 display: 'block',
-                marginBottom: 'var(--space-2)',
+                marginBottom: '0.375rem',
                 fontSize: '0.875rem',
                 fontWeight: '500',
-                color: 'var(--gray-700)'
+                color: '#1f2937'
               }}>
-                Flag SVG URL *
+                Flag Image URL <span style={{ color: '#ef4444' }}>*</span>
               </label>
               <input
                 type="url"
                 name="flagSvg"
                 value={formData.flagSvg}
                 onChange={handleChange}
-                className="input"
-                placeholder="https://flagcdn.com/w320/ke.png"
+                style={{
+                  width: '100%',
+                  padding: '0.75rem 0.875rem',
+                  border: '1px solid #d1d5db',
+                  borderRadius: '6px',
+                  fontSize: '0.875rem',
+                  background: '#ffffff',
+                  transition: 'border-color 0.15s ease',
+                  outline: 'none',
+                  fontFamily: 'inherit'
+                }}
+                onFocus={(e) => {
+                  e.target.style.borderColor = '#3b82f6';
+                }}
+                onBlur={(e) => {
+                  e.target.style.borderColor = '#d1d5db';
+                }}
+                placeholder="Flag image URL..."
                 required
               />
               {formData.flagSvg && (
-                <div style={{ marginTop: 'var(--space-2)' }}>
+                <div style={{ 
+                  marginTop: '0.75rem',
+                  padding: '0.75rem',
+                  background: '#f9fafb',
+                  borderRadius: '6px',
+                  border: '1px solid #e5e7eb'
+                }}>
+                  <p style={{
+                    fontSize: '0.75rem',
+                    color: '#6b7280',
+                    margin: '0 0 0.5rem 0'
+                  }}>Flag Preview:</p>
                   <img 
                     src={formData.flagSvg} 
                     alt="Flag preview" 
@@ -160,7 +281,7 @@ export default function CreateCountryPage() {
                       height: '40px', 
                       objectFit: 'cover', 
                       borderRadius: '4px',
-                      border: '1px solid var(--gray-200)',
+                      border: '1px solid #e5e7eb',
                       display: 'block'
                     }}
                     onError={(e) => {
@@ -171,115 +292,230 @@ export default function CreateCountryPage() {
               )}
             </div>
 
-            <div>
-              <label style={{
-                display: 'block',
-                marginBottom: 'var(--space-2)',
-                fontSize: '0.875rem',
-                fontWeight: '500',
-                color: 'var(--gray-700)'
-              }}>
-                Continent *
-              </label>
-              <input
-                type="text"
-                name="continent"
-                value={formData.continent}
-                onChange={handleChange}
-                className="input"
-                placeholder="Africa"
-                required
-              />
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: '1fr 1fr',
+              gap: '1rem'
+            }}>
+              <div>
+                <label style={{
+                  display: 'block',
+                  marginBottom: '0.375rem',
+                  fontSize: '0.875rem',
+                  fontWeight: '500',
+                  color: '#1f2937'
+                }}>
+                  Continent <span style={{ color: '#ef4444' }}>*</span>
+                </label>
+                <input
+                  type="text"
+                  name="continent"
+                  value={formData.continent}
+                  onChange={handleChange}
+                  style={{
+                    width: '100%',
+                    padding: '0.75rem 0.875rem',
+                    border: '1px solid #d1d5db',
+                    borderRadius: '6px',
+                    fontSize: '0.875rem',
+                    background: '#ffffff',
+                    transition: 'border-color 0.15s ease',
+                    outline: 'none',
+                    fontFamily: 'inherit'
+                  }}
+                  onFocus={(e) => {
+                    e.target.style.borderColor = '#3b82f6';
+                  }}
+                  onBlur={(e) => {
+                    e.target.style.borderColor = '#d1d5db';
+                  }}
+                  placeholder="Continent name..."
+                  required
+                />
+              </div>
+
+              <div>
+                <label style={{
+                  display: 'block',
+                  marginBottom: '0.375rem',
+                  fontSize: '0.875rem',
+                  fontWeight: '500',
+                  color: '#1f2937'
+                }}>
+                  Phone Number <span style={{ color: '#ef4444' }}>*</span>
+                </label>
+                <input
+                  type="text"
+                  name="telCode"
+                  value={formData.telCode}
+                  onChange={handleChange}
+                  style={{
+                    width: '100%',
+                    padding: '0.75rem 0.875rem',
+                    border: '1px solid #d1d5db',
+                    borderRadius: '6px',
+                    fontSize: '0.875rem',
+                    background: '#ffffff',
+                    transition: 'border-color 0.15s ease',
+                    outline: 'none',
+                    fontFamily: 'inherit'
+                  }}
+                  onFocus={(e) => {
+                    e.target.style.borderColor = '#3b82f6';
+                  }}
+                  onBlur={(e) => {
+                    e.target.style.borderColor = '#d1d5db';
+                  }}
+                  placeholder="Type phone number..."
+                  required
+                />
+              </div>
             </div>
 
-            <div>
-              <label style={{
-                display: 'block',
-                marginBottom: 'var(--space-2)',
-                fontSize: '0.875rem',
-                fontWeight: '500',
-                color: 'var(--gray-700)'
-              }}>
-                Telephone Code *
-              </label>
-              <input
-                type="text"
-                name="telCode"
-                value={formData.telCode}
-                onChange={handleChange}
-                className="input"
-                placeholder="+254"
-                required
-              />
-            </div>
-
-            <div>
-              <label style={{
-                display: 'block',
-                marginBottom: 'var(--space-2)',
-                fontSize: '0.875rem',
-                fontWeight: '500',
-                color: 'var(--gray-700)'
-              }}>
-                Center Latitude *
-              </label>
-              <input
-                type="number"
-                step="any"
-                name="centerLatitude"
-                value={formData.centerLatitude}
-                onChange={handleChange}
-                className="input"
-                placeholder="-1.286389"
-                required
-              />
-            </div>
-
-            <div>
-              <label style={{
-                display: 'block',
-                marginBottom: 'var(--space-2)',
-                fontSize: '0.875rem',
-                fontWeight: '500',
-                color: 'var(--gray-700)'
-              }}>
-                Center Longitude *
-              </label>
-              <input
-                type="number"
-                step="any"
-                name="centerLongitude"
-                value={formData.centerLongitude}
-                onChange={handleChange}
-                className="input"
-                placeholder="36.817223"
-                required
-              />
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: '1fr 1fr',
+              gap: '1rem'
+            }}>
+              <div>
+                <label style={{
+                  display: 'block',
+                  marginBottom: '0.375rem',
+                  fontSize: '0.875rem',
+                  fontWeight: '500',
+                  color: '#1f2937'
+                }}>
+                  Latitude <span style={{ color: '#ef4444' }}>*</span>
+                </label>
+                <input
+                  type="number"
+                  step="any"
+                  name="centerLatitude"
+                  value={formData.centerLatitude}
+                  onChange={handleChange}
+                  style={{
+                    width: '100%',
+                    padding: '0.75rem 0.875rem',
+                    border: '1px solid #d1d5db',
+                    borderRadius: '6px',
+                    fontSize: '0.875rem',
+                    background: '#ffffff',
+                    transition: 'border-color 0.15s ease',
+                    outline: 'none',
+                    fontFamily: 'inherit'
+                  }}
+                  onFocus={(e) => {
+                    e.target.style.borderColor = '#3b82f6';
+                  }}
+                  onBlur={(e) => {
+                    e.target.style.borderColor = '#d1d5db';
+                  }}
+                  placeholder="Latitude..."
+                  required
+                />
+              </div>
+              <div>
+                <label style={{
+                  display: 'block',
+                  marginBottom: '0.375rem',
+                  fontSize: '0.875rem',
+                  fontWeight: '500',
+                  color: '#1f2937'
+                }}>
+                  Longitude <span style={{ color: '#ef4444' }}>*</span>
+                </label>
+                <input
+                  type="number"
+                  step="any"
+                  name="centerLongitude"
+                  value={formData.centerLongitude}
+                  onChange={handleChange}
+                  style={{
+                    width: '100%',
+                    padding: '0.75rem 0.875rem',
+                    border: '1px solid #d1d5db',
+                    borderRadius: '6px',
+                    fontSize: '0.875rem',
+                    background: '#ffffff',
+                    transition: 'border-color 0.15s ease',
+                    outline: 'none',
+                    fontFamily: 'inherit'
+                  }}
+                  onFocus={(e) => {
+                    e.target.style.borderColor = '#3b82f6';
+                  }}
+                  onBlur={(e) => {
+                    e.target.style.borderColor = '#d1d5db';
+                  }}
+                  placeholder="Longitude..."
+                  required
+                />
+              </div>
             </div>
 
             {/* Form Actions */}
             <div style={{
               display: 'flex',
-              gap: 'var(--space-3)',
-              marginTop: 'var(--space-4)',
-              paddingTop: 'var(--space-4)',
-              borderTop: '1px solid var(--gray-200)'
+              gap: '0.75rem',
+              marginTop: '1.5rem',
+              paddingTop: '1.5rem',
+              borderTop: '1px solid #e5e7eb'
             }}>
               <button
                 type="button"
                 onClick={() => router.push('/reference/countries')}
-                className="btn btn-secondary"
-                style={{ flex: 1 }}
+                style={{
+                  flex: 1,
+                  padding: '0.75rem 1rem',
+                  background: '#ffffff',
+                  color: '#6b7280',
+                  border: '1px solid #d1d5db',
+                  borderRadius: '6px',
+                  fontSize: '0.875rem',
+                  fontWeight: '500',
+                  cursor: 'pointer',
+                  transition: 'all 0.15s ease',
+                  fontFamily: 'inherit'
+                }}
+                onMouseEnter={(e) => {
+                  e.target.style.background = '#f9fafb';
+                  e.target.style.borderColor = '#9ca3af';
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.background = '#ffffff';
+                  e.target.style.borderColor = '#d1d5db';
+                }}
               >
                 Cancel
               </button>
               <button
                 type="submit"
-                className="btn btn-primary"
                 disabled={isSubmitting}
-                style={{ flex: 1 }}
+                style={{
+                  flex: 2,
+                  padding: '0.75rem 1rem',
+                  background: isSubmitting ? '#9ca3af' : 'linear-gradient(180deg, #1e293b 0%, #0f172a 100%)',
+                  color: '#ffffff',
+                  border: 'none',
+                  borderRadius: '6px',
+                  fontSize: '0.875rem',
+                  fontWeight: '500',
+                  cursor: isSubmitting ? 'not-allowed' : 'pointer',
+                  transition: 'all 0.15s ease',
+                  fontFamily: 'inherit'
+                }}
+                onMouseEnter={(e) => {
+                  if (!isSubmitting) {
+                    e.target.style.background = 'linear-gradient(180deg, #0f172a 0%, #020617 100%)';
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (!isSubmitting) {
+                    e.target.style.background = 'linear-gradient(180deg, #1e293b 0%, #0f172a 100%)';
+                  }
+                }}
               >
-                {isSubmitting ? 'Saving...' : 'Save Country'}
+                {isSubmitting ? 'Creating...' : 'Create Country'}
               </button>
             </div>
           </form>

@@ -71,49 +71,73 @@ export default function EditCountryPage() {
 
   return (
     <Layout breadcrumbs={['Reference', 'Countries', formData.name, 'Edit']}>
-      <div style={{ maxWidth: '600px', margin: '0 auto' }}>
+      <div style={{ maxWidth: '700px', margin: '0 auto' }}>
         {/* Header */}
-        <div style={{ marginBottom: 'var(--space-6)' }}>
+        <div style={{ marginBottom: '2rem' }}>
           <h1 style={{
-            fontSize: '2rem',
+            fontSize: '2.25rem',
             fontWeight: '700',
-            color: 'var(--gray-900)',
-            marginBottom: 'var(--space-2)'
+            color: '#111827',
+            marginBottom: '0.5rem',
+            letterSpacing: '-0.025em'
           }}>
             Edit Country
           </h1>
           <p style={{
-            color: 'var(--gray-600)',
+            fontSize: '1.1rem',
+            color: '#6b7280',
             margin: 0
           }}>
-            Update the details for {formData.name}
+            Update the details for <strong style={{ color: '#374151' }}>{formData.name}</strong>
           </p>
         </div>
 
         {/* Form */}
-        <div className="card">
+        <div style={{
+          background: '#ffffff',
+          borderRadius: '8px',
+          padding: '2rem',
+          border: '1px solid #e1e5e9',
+          boxShadow: 'none'
+        }}>
           <form onSubmit={handleSubmit} style={{
             display: 'flex',
             flexDirection: 'column',
-            gap: 'var(--space-4)'
+            gap: '1.25rem'
           }}>
             <div>
               <label style={{
                 display: 'block',
-                marginBottom: 'var(--space-2)',
+                marginBottom: '0.375rem',
                 fontSize: '0.875rem',
                 fontWeight: '500',
-                color: 'var(--gray-700)'
+                color: '#1f2937'
               }}>
-                Country Name *
+                Country Name <span style={{ color: '#ef4444' }}>*</span>
               </label>
               <input
                 type="text"
                 name="name"
                 value={formData.name}
                 onChange={handleChange}
-                className="input"
-                placeholder="Enter country name"
+                style={{
+                  width: '100%',
+                  padding: '0.75rem 0.875rem',
+                  border: '1px solid #d1d5db',
+                  borderRadius: '6px',
+                  fontSize: '0.875rem',
+                  background: '#ffffff',
+                  transition: 'border-color 0.15s ease',
+                  outline: 'none',
+                  fontFamily: 'inherit'
+                }}
+                onFocus={(e) => {
+                  e.target.style.borderColor = '#3b82f6';
+                }}
+                onBlur={(e) => {
+                  e.target.style.borderColor = '#d1d5db';
+                }}
+                placeholder="Your country name..."
                 required
               />
             </div>
@@ -121,142 +145,294 @@ export default function EditCountryPage() {
             <div>
               <label style={{
                 display: 'block',
-                marginBottom: 'var(--space-2)',
+                marginBottom: '0.375rem',
                 fontSize: '0.875rem',
                 fontWeight: '500',
-                color: 'var(--gray-700)'
+                color: '#1f2937'
               }}>
-                Flag SVG URL *
+                Flag Image URL <span style={{ color: '#ef4444' }}>*</span>
               </label>
               <input
                 type="url"
                 name="flagSvg"
                 value={formData.flagSvg}
                 onChange={handleChange}
-                className="input"
-                placeholder="https://flagcdn.com/w320/ke.png"
+                style={{
+                  width: '100%',
+                  padding: '0.75rem 0.875rem',
+                  border: '1px solid #d1d5db',
+                  borderRadius: '6px',
+                  fontSize: '0.875rem',
+                  background: '#ffffff',
+                  transition: 'border-color 0.15s ease',
+                  outline: 'none',
+                  fontFamily: 'inherit'
+                }}
+                onFocus={(e) => {
+                  e.target.style.borderColor = '#3b82f6';
+                }}
+                onBlur={(e) => {
+                  e.target.style.borderColor = '#d1d5db';
+                }}
+                placeholder="Flag image URL..."
                 required
               />
               {formData.flagSvg && (
-                <div style={{ marginTop: 'var(--space-2)' }}>
+                <div style={{ 
+                  marginTop: '0.75rem',
+                  padding: '0.75rem',
+                  background: '#f9fafb',
+                  borderRadius: '6px',
+                  border: '1px solid #e5e7eb'
+                }}>
+                  <p style={{
+                    fontSize: '0.75rem',
+                    color: '#6b7280',
+                    margin: '0 0 0.5rem 0'
+                  }}>Current Flag:</p>
                   <img 
                     src={formData.flagSvg} 
                     alt="Flag preview" 
-                    style={{ width: '60px', height: '40px', objectFit: 'cover', borderRadius: '4px' }}
+                    style={{ 
+                      width: '60px', 
+                      height: '40px', 
+                      objectFit: 'cover', 
+                      borderRadius: '4px',
+                      border: '1px solid #e5e7eb',
+                      display: 'block'
+                    }}
+                    onError={(e) => {
+                      e.target.style.display = 'none';
+                    }}
                   />
                 </div>
               )}
             </div>
 
-            <div>
-              <label style={{
-                display: 'block',
-                marginBottom: 'var(--space-2)',
-                fontSize: '0.875rem',
-                fontWeight: '500',
-                color: 'var(--gray-700)'
-              }}>
-                Continent *
-              </label>
-              <input
-                type="text"
-                name="continent"
-                value={formData.continent}
-                onChange={handleChange}
-                className="input"
-                placeholder="Africa"
-                required
-              />
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: '1fr 1fr',
+              gap: '1rem'
+            }}>
+              <div>
+                <label style={{
+                  display: 'block',
+                  marginBottom: '0.375rem',
+                  fontSize: '0.875rem',
+                  fontWeight: '500',
+                  color: '#1f2937'
+                }}>
+                  Continent <span style={{ color: '#ef4444' }}>*</span>
+                </label>
+                <input
+                  type="text"
+                  name="continent"
+                  value={formData.continent}
+                  onChange={handleChange}
+                  style={{
+                    width: '100%',
+                    padding: '0.75rem 0.875rem',
+                    border: '1px solid #d1d5db',
+                    borderRadius: '6px',
+                    fontSize: '0.875rem',
+                    background: '#ffffff',
+                    transition: 'border-color 0.15s ease',
+                    outline: 'none',
+                    fontFamily: 'inherit'
+                  }}
+                  onFocus={(e) => {
+                    e.target.style.borderColor = '#3b82f6';
+                  }}
+                  onBlur={(e) => {
+                    e.target.style.borderColor = '#d1d5db';
+                  }}
+                  placeholder="Continent name..."
+                  required
+                />
+              </div>
+
+              <div>
+                <label style={{
+                  display: 'block',
+                  marginBottom: '0.375rem',
+                  fontSize: '0.875rem',
+                  fontWeight: '500',
+                  color: '#1f2937'
+                }}>
+                  Phone Number <span style={{ color: '#ef4444' }}>*</span>
+                </label>
+                <input
+                  type="text"
+                  name="telCode"
+                  value={formData.telCode}
+                  onChange={handleChange}
+                  style={{
+                    width: '100%',
+                    padding: '0.75rem 0.875rem',
+                    border: '1px solid #d1d5db',
+                    borderRadius: '6px',
+                    fontSize: '0.875rem',
+                    background: '#ffffff',
+                    transition: 'border-color 0.15s ease',
+                    outline: 'none',
+                    fontFamily: 'inherit'
+                  }}
+                  onFocus={(e) => {
+                    e.target.style.borderColor = '#3b82f6';
+                  }}
+                  onBlur={(e) => {
+                    e.target.style.borderColor = '#d1d5db';
+                  }}
+                  placeholder="Type phone number..."
+                  required
+                />
+              </div>
             </div>
 
-            <div>
-              <label style={{
-                display: 'block',
-                marginBottom: 'var(--space-2)',
-                fontSize: '0.875rem',
-                fontWeight: '500',
-                color: 'var(--gray-700)'
-              }}>
-                Telephone Code *
-              </label>
-              <input
-                type="text"
-                name="telCode"
-                value={formData.telCode}
-                onChange={handleChange}
-                className="input"
-                placeholder="+254"
-                required
-              />
-            </div>
-
-            <div>
-              <label style={{
-                display: 'block',
-                marginBottom: 'var(--space-2)',
-                fontSize: '0.875rem',
-                fontWeight: '500',
-                color: 'var(--gray-700)'
-              }}>
-                Center Latitude *
-              </label>
-              <input
-                type="number"
-                step="any"
-                name="centerLatitude"
-                value={formData.centerLatitude}
-                onChange={handleChange}
-                className="input"
-                placeholder="-1.286389"
-                required
-              />
-            </div>
-
-            <div>
-              <label style={{
-                display: 'block',
-                marginBottom: 'var(--space-2)',
-                fontSize: '0.875rem',
-                fontWeight: '500',
-                color: 'var(--gray-700)'
-              }}>
-                Center Longitude *
-              </label>
-              <input
-                type="number"
-                step="any"
-                name="centerLongitude"
-                value={formData.centerLongitude}
-                onChange={handleChange}
-                className="input"
-                placeholder="36.817223"
-                required
-              />
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: '1fr 1fr',
+              gap: '1rem'
+            }}>
+              <div>
+                <label style={{
+                  display: 'block',
+                  marginBottom: '0.375rem',
+                  fontSize: '0.875rem',
+                  fontWeight: '500',
+                  color: '#1f2937'
+                }}>
+                  Latitude <span style={{ color: '#ef4444' }}>*</span>
+                </label>
+                <input
+                  type="number"
+                  step="any"
+                  name="centerLatitude"
+                  value={formData.centerLatitude}
+                  onChange={handleChange}
+                  style={{
+                    width: '100%',
+                    padding: '0.75rem 0.875rem',
+                    border: '1px solid #d1d5db',
+                    borderRadius: '6px',
+                    fontSize: '0.875rem',
+                    background: '#ffffff',
+                    transition: 'border-color 0.15s ease',
+                    outline: 'none',
+                    fontFamily: 'inherit'
+                  }}
+                  onFocus={(e) => {
+                    e.target.style.borderColor = '#3b82f6';
+                  }}
+                  onBlur={(e) => {
+                    e.target.style.borderColor = '#d1d5db';
+                  }}
+                  placeholder="Latitude..."
+                  required
+                />
+              </div>
+              <div>
+                <label style={{
+                  display: 'block',
+                  marginBottom: '0.375rem',
+                  fontSize: '0.875rem',
+                  fontWeight: '500',
+                  color: '#1f2937'
+                }}>
+                  Longitude <span style={{ color: '#ef4444' }}>*</span>
+                </label>
+                <input
+                  type="number"
+                  step="any"
+                  name="centerLongitude"
+                  value={formData.centerLongitude}
+                  onChange={handleChange}
+                  style={{
+                    width: '100%',
+                    padding: '0.75rem 0.875rem',
+                    border: '1px solid #d1d5db',
+                    borderRadius: '6px',
+                    fontSize: '0.875rem',
+                    background: '#ffffff',
+                    transition: 'border-color 0.15s ease',
+                    outline: 'none',
+                    fontFamily: 'inherit'
+                  }}
+                  onFocus={(e) => {
+                    e.target.style.borderColor = '#3b82f6';
+                  }}
+                  onBlur={(e) => {
+                    e.target.style.borderColor = '#d1d5db';
+                  }}
+                  placeholder="Longitude..."
+                  required
+                />
+              </div>
             </div>
 
             {/* Form Actions */}
             <div style={{
               display: 'flex',
-              gap: 'var(--space-3)',
-              marginTop: 'var(--space-4)',
-              paddingTop: 'var(--space-4)',
-              borderTop: '1px solid var(--gray-200)'
+              gap: '0.75rem',
+              marginTop: '1.5rem',
+              paddingTop: '1.5rem',
+              borderTop: '1px solid #e5e7eb'
             }}>
               <button
                 type="button"
                 onClick={() => router.push(`/reference/countries/${params.id}`)}
-                className="btn btn-secondary"
-                style={{ flex: 1 }}
+                style={{
+                  flex: 1,
+                  padding: '0.75rem 1rem',
+                  background: '#ffffff',
+                  color: '#6b7280',
+                  border: '1px solid #d1d5db',
+                  borderRadius: '6px',
+                  fontSize: '0.875rem',
+                  fontWeight: '500',
+                  cursor: 'pointer',
+                  transition: 'all 0.15s ease',
+                  fontFamily: 'inherit'
+                }}
+                onMouseEnter={(e) => {
+                  e.target.style.background = '#f9fafb';
+                  e.target.style.borderColor = '#9ca3af';
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.background = '#ffffff';
+                  e.target.style.borderColor = '#d1d5db';
+                }}
               >
                 Cancel
               </button>
               <button
                 type="submit"
-                className="btn btn-primary"
                 disabled={isSubmitting}
-                style={{ flex: 1 }}
+                style={{
+                  flex: 2,
+                  padding: '0.75rem 1rem',
+                  background: isSubmitting ? '#9ca3af' : 'linear-gradient(180deg, #1e293b 0%, #0f172a 100%)',
+                  color: '#ffffff',
+                  border: 'none',
+                  borderRadius: '6px',
+                  fontSize: '0.875rem',
+                  fontWeight: '500',
+                  cursor: isSubmitting ? 'not-allowed' : 'pointer',
+                  transition: 'all 0.15s ease',
+                  fontFamily: 'inherit'
+                }}
+                onMouseEnter={(e) => {
+                  if (!isSubmitting) {
+                    e.target.style.background = 'linear-gradient(180deg, #0f172a 0%, #020617 100%)';
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (!isSubmitting) {
+                    e.target.style.background = 'linear-gradient(180deg, #1e293b 0%, #0f172a 100%)';
+                  }
+                }}
               >
-                {isSubmitting ? 'Saving...' : 'Save Changes'}
+                {isSubmitting ? 'Updating...' : 'Update Country'}
               </button>
             </div>
           </form>

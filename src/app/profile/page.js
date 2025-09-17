@@ -33,15 +33,15 @@ export default function ProfilePage() {
         maxWidth: '800px',
         margin: '0 auto',
         padding: '2rem',
-        background: '#f8fafc',
-        minHeight: '100vh'
+        fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, sans-serif'
       }}>
         <div style={{
-          background: '#ffffff',
-          borderRadius: '16px',
+          background: 'rgba(255, 255, 255, 0.9)',
+          backdropFilter: 'blur(10px)',
+          borderRadius: '20px',
           padding: '2rem',
-          border: '1px solid #e2e8f0',
-          boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1)'
+          border: '1px solid rgba(255, 255, 255, 0.2)',
+          boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)'
         }}>
           {/* Profile Header */}
           <div style={{
@@ -50,7 +50,7 @@ export default function ProfilePage() {
             gap: '2rem',
             marginBottom: '2rem',
             padding: '2rem',
-            background: 'linear-gradient(135deg, #1e40af 0%, #1e3a8a 100%)',
+            background: 'linear-gradient(180deg, #1e293b 0%, #0f172a 100%)',
             borderRadius: '12px',
             color: 'white'
           }}>
@@ -194,8 +194,8 @@ export default function ProfilePage() {
                     }}>{user.role}</p>
                   </div>
                   <span style={{
-                    background: '#f0fdf4',
-                    color: '#166534',
+                    background: '#dcfce7',
+                    color: '#15803d',
                     padding: '0.25rem 0.75rem',
                     borderRadius: '12px',
                     fontSize: '0.75rem',
@@ -298,7 +298,7 @@ export default function ProfilePage() {
                   <p style={{
                     fontSize: '1.5rem',
                     fontWeight: '600',
-                    color: '#1e40af',
+                    color: '#6366f1',
                     margin: 0
                   }}>1</p>
                 </div>
@@ -310,9 +310,11 @@ export default function ProfilePage() {
           <div style={{
             marginTop: '2rem',
             padding: '2rem',
-            background: '#f8fafc',
-            borderRadius: '12px',
-            border: '1px solid #e2e8f0'
+            background: 'rgba(255, 255, 255, 0.7)',
+            backdropFilter: 'blur(10px)',
+            borderRadius: '16px',
+            border: '1px solid rgba(255, 255, 255, 0.3)',
+            boxShadow: '0 4px 16px rgba(0, 0, 0, 0.05)'
           }}>
             <h2 style={{
               fontSize: '1.25rem',
@@ -328,19 +330,30 @@ export default function ProfilePage() {
               gap: '1rem'
             }}>
               <button style={{
-                background: '#1e40af',
+                background: 'linear-gradient(180deg, #1e293b 0%, #0f172a 100%)',
                 color: '#ffffff',
                 border: 'none',
-                padding: '1rem',
-                borderRadius: '8px',
+                padding: '1rem 1.5rem',
+                borderRadius: '12px',
                 fontSize: '0.875rem',
-                fontWeight: '500',
+                fontWeight: '600',
                 cursor: 'pointer',
                 transition: 'all 0.2s ease',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                gap: '0.5rem'
+                gap: '0.5rem',
+                boxShadow: '0 4px 12px rgba(30, 41, 59, 0.3)'
+              }}
+              onMouseEnter={(e) => {
+                e.target.style.transform = 'translateY(-2px)';
+                e.target.style.background = 'linear-gradient(180deg, #0f172a 0%, #020617 100%)';
+                e.target.style.boxShadow = '0 8px 25px rgba(30, 41, 59, 0.4)';
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.transform = 'translateY(0)';
+                e.target.style.background = 'linear-gradient(180deg, #1e293b 0%, #0f172a 100%)';
+                e.target.style.boxShadow = '0 4px 12px rgba(30, 41, 59, 0.3)';
               }}>
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                   <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
@@ -352,19 +365,32 @@ export default function ProfilePage() {
               <button 
                 onClick={() => window.location.href = '/settings'}
                 style={{
-                  background: '#ffffff',
-                  color: '#1e40af',
-                  border: '1px solid #1e40af',
-                  padding: '1rem',
-                  borderRadius: '8px',
+                  background: 'rgba(255, 255, 255, 0.9)',
+                  color: '#1e293b',
+                  border: '1px solid #1e293b',
+                  padding: '1rem 1.5rem',
+                  borderRadius: '12px',
                   fontSize: '0.875rem',
-                  fontWeight: '500',
+                  fontWeight: '600',
                   cursor: 'pointer',
                   transition: 'all 0.2s ease',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  gap: '0.5rem'
+                  gap: '0.5rem',
+                  boxShadow: '0 2px 8px rgba(30, 41, 59, 0.1)'
+                }}
+                onMouseEnter={(e) => {
+                  e.target.style.background = '#1e293b';
+                  e.target.style.color = '#ffffff';
+                  e.target.style.transform = 'translateY(-2px)';
+                  e.target.style.boxShadow = '0 8px 25px rgba(30, 41, 59, 0.3)';
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.background = 'rgba(255, 255, 255, 0.9)';
+                  e.target.style.color = '#1e293b';
+                  e.target.style.transform = 'translateY(0)';
+                  e.target.style.boxShadow = '0 2px 8px rgba(30, 41, 59, 0.1)';
                 }}
               >
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">

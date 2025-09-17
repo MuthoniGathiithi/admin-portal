@@ -68,15 +68,15 @@ export default function SettingsPage() {
         maxWidth: '800px',
         margin: '0 auto',
         padding: '2rem',
-        background: '#f8fafc',
-        minHeight: '100vh'
+        fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, sans-serif'
       }}>
         <div style={{
-          background: '#ffffff',
-          borderRadius: '16px',
+          background: 'rgba(255, 255, 255, 0.9)',
+          backdropFilter: 'blur(10px)',
+          borderRadius: '20px',
           padding: '2rem',
-          border: '1px solid #e2e8f0',
-          boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1)'
+          border: '1px solid rgba(255, 255, 255, 0.2)',
+          boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)'
         }}>
           <div style={{
             display: 'flex',
@@ -87,7 +87,7 @@ export default function SettingsPage() {
             <div style={{
               width: '48px',
               height: '48px',
-              background: '#1e40af',
+              background: 'linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)',
               borderRadius: '12px',
               display: 'flex',
               alignItems: 'center',
@@ -116,9 +116,11 @@ export default function SettingsPage() {
           {/* Password Change Section */}
           <div style={{
             padding: '2rem',
-            background: '#f8fafc',
-            borderRadius: '12px',
-            border: '1px solid #e2e8f0'
+            background: 'rgba(255, 255, 255, 0.7)',
+            backdropFilter: 'blur(10px)',
+            borderRadius: '16px',
+            border: '1px solid rgba(255, 255, 255, 0.3)',
+            boxShadow: '0 4px 16px rgba(0, 0, 0, 0.05)'
           }}>
             <h2 style={{
               fontSize: '1.25rem',
@@ -153,7 +155,7 @@ export default function SettingsPage() {
                 marginBottom: '1.5rem',
                 background: messageType === 'success' ? '#f0fdf4' : '#fef2f2',
                 border: `1px solid ${messageType === 'success' ? '#bbf7d0' : '#fecaca'}`,
-                color: messageType === 'success' ? '#166534' : '#dc2626',
+                color: messageType === 'success' ? '#15803d' : '#6366f1',
                 fontSize: '0.875rem'
               }}>
                 {message}
@@ -189,7 +191,7 @@ export default function SettingsPage() {
                       outline: 'none',
                       transition: 'border-color 0.2s ease'
                     }}
-                    onFocus={(e) => e.target.style.borderColor = '#1e40af'}
+                    onFocus={(e) => e.target.style.borderColor = '#6366f1'}
                     onBlur={(e) => e.target.style.borderColor = '#d1d5db'}
                   />
                 </div>
@@ -218,7 +220,7 @@ export default function SettingsPage() {
                       outline: 'none',
                       transition: 'border-color 0.2s ease'
                     }}
-                    onFocus={(e) => e.target.style.borderColor = '#1e40af'}
+                    onFocus={(e) => e.target.style.borderColor = '#6366f1'}
                     onBlur={(e) => e.target.style.borderColor = '#d1d5db'}
                   />
                 </div>
@@ -247,7 +249,7 @@ export default function SettingsPage() {
                       outline: 'none',
                       transition: 'border-color 0.2s ease'
                     }}
-                    onFocus={(e) => e.target.style.borderColor = '#1e40af'}
+                    onFocus={(e) => e.target.style.borderColor = '#6366f1'}
                     onBlur={(e) => e.target.style.borderColor = '#d1d5db'}
                   />
                 </div>
@@ -261,7 +263,7 @@ export default function SettingsPage() {
                     type="submit"
                     disabled={isLoading}
                     style={{
-                      background: isLoading ? '#9ca3af' : '#1e40af',
+                      background: isLoading ? '#9ca3af' : 'linear-gradient(180deg, #1e293b 0%, #0f172a 100)',
                       color: '#ffffff',
                       border: 'none',
                       padding: '0.75rem 1.5rem',
@@ -301,11 +303,11 @@ export default function SettingsPage() {
                       setMessage('');
                     }}
                     style={{
-                      background: '#ffffff',
-                      color: '#64748b',
-                      border: '1px solid #e2e8f0',
+                      background: 'rgba(255, 255, 255, 0.9)',
+                      color: '#1e293b',
+                      border: '1px solid #1e293b',
                       padding: '0.75rem 1.5rem',
-                      borderRadius: '8px',
+                      borderRadius: '12px',
                       fontSize: '0.875rem',
                       fontWeight: '500',
                       cursor: 'pointer',
@@ -323,9 +325,11 @@ export default function SettingsPage() {
           <div style={{
             marginTop: '2rem',
             padding: '2rem',
-            background: '#f8fafc',
-            borderRadius: '12px',
-            border: '1px solid #e2e8f0'
+            background: 'rgba(255, 255, 255, 0.7)',
+            backdropFilter: 'blur(10px)',
+            borderRadius: '16px',
+            border: '1px solid rgba(255, 255, 255, 0.3)',
+            boxShadow: '0 4px 16px rgba(0, 0, 0, 0.05)'
           }}>
             <h2 style={{
               fontSize: '1.25rem',
@@ -352,15 +356,16 @@ export default function SettingsPage() {
                 justifyContent: 'space-between',
                 alignItems: 'center',
                 padding: '1rem',
-                background: '#ffffff',
-                borderRadius: '8px',
-                border: '1px solid #e2e8f0'
+                background: 'rgba(255, 255, 255, 0.8)',
+                borderRadius: '12px',
+                border: '1px solid rgba(255, 255, 255, 0.4)',
+                boxShadow: '0 2px 8px rgba(0, 0, 0, 0.03)'
               }}>
                 <div>
                   <p style={{
                     fontSize: '0.875rem',
                     fontWeight: '500',
-                    color: '#1e293b',
+                    color: '#111827',
                     margin: 0
                   }}>Email</p>
                   <p style={{
@@ -370,14 +375,23 @@ export default function SettingsPage() {
                   }}>{userEmail}</p>
                 </div>
                 <button style={{
-                  background: '#f8fafc',
-                  color: '#1e40af',
-                  border: '1px solid #e2e8f0',
+                  background: 'rgba(255, 255, 255, 0.9)',
+                  color: '#6366f1',
+                  border: '1px solid #6366f1',
                   padding: '0.5rem 1rem',
-                  borderRadius: '6px',
+                  borderRadius: '8px',
                   fontSize: '0.75rem',
                   fontWeight: '500',
-                  cursor: 'pointer'
+                  cursor: 'pointer',
+                  transition: 'all 0.2s ease'
+                }}
+                onMouseEnter={(e) => {
+                  e.target.style.background = '#1e293b';
+                  e.target.style.color = '#ffffff';
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.background = 'rgba(255, 255, 255, 0.9)';
+                  e.target.style.color = '#1e293b';
                 }}>
                   Edit
                 </button>
@@ -388,15 +402,16 @@ export default function SettingsPage() {
                 justifyContent: 'space-between',
                 alignItems: 'center',
                 padding: '1rem',
-                background: '#ffffff',
-                borderRadius: '8px',
-                border: '1px solid #e2e8f0'
+                background: 'rgba(255, 255, 255, 0.8)',
+                borderRadius: '12px',
+                border: '1px solid rgba(255, 255, 255, 0.4)',
+                boxShadow: '0 2px 8px rgba(0, 0, 0, 0.03)'
               }}>
                 <div>
                   <p style={{
                     fontSize: '0.875rem',
                     fontWeight: '500',
-                    color: '#1e293b',
+                    color: '#111827',
                     margin: 0
                   }}>Role</p>
                   <p style={{
@@ -406,8 +421,8 @@ export default function SettingsPage() {
                   }}>Administrator</p>
                 </div>
                 <span style={{
-                  background: '#f0fdf4',
-                  color: '#166534',
+                  background: '#dcfce7',
+                  color: '#15803d',
                   padding: '0.25rem 0.75rem',
                   borderRadius: '12px',
                   fontSize: '0.75rem',
