@@ -195,9 +195,41 @@ export default function CountriesPage() {
           ) : filteredCountries.length === 0 ? (
             <div style={{ textAlign: 'center', padding: 'var(--space-8)' }}>
               <p style={{ color: 'var(--gray-500)', marginBottom: 'var(--space-4)' }}>
-                {searchTerm || filterRegion ? 'No countries match your filters' : 'No countries found'}
+                {searchTerm || filterRegion ? 'No countries match your filters' : 'No country added'}
               </p>
-              <Link href="/reference/countries/create" className="btn btn-primary">
+              <Link 
+                href="/reference/countries/create" 
+                style={{
+                  background: 'linear-gradient(180deg, #1e293b 0%, #0f172a 100%)',
+                  color: 'white',
+                  textDecoration: 'none',
+                  border: 'none',
+                  borderRadius: '12px',
+                  padding: '0.75rem 1.5rem',
+                  fontSize: '0.875rem',
+                  fontWeight: '600',
+                  cursor: 'pointer',
+                  transition: 'all 0.2s ease',
+                  boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '0.5rem'
+                }}
+                onMouseEnter={(e) => {
+                  e.target.style.background = 'linear-gradient(180deg, #0f172a 0%, #020617 100%)';
+                  e.target.style.transform = 'translateY(-1px)';
+                  e.target.style.boxShadow = '0 6px 8px -1px rgba(0, 0, 0, 0.15)';
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.background = 'linear-gradient(180deg, #1e293b 0%, #0f172a 100%)';
+                  e.target.style.transform = 'translateY(0)';
+                  e.target.style.boxShadow = '0 4px 6px -1px rgba(0, 0, 0, 0.1)';
+                }}
+              >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <line x1="12" y1="5" x2="12" y2="19"/>
+                  <line x1="5" y1="12" x2="19" y2="12"/>
+                </svg>
                 Add First Country
               </Link>
             </div>
